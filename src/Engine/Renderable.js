@@ -15,6 +15,7 @@ Renderable.prototype.draw = function(){
 	var gl = gEngine.Core.getGL();
 	//activate it before you draw
 	this.mShader.activateShader(this.mColor);
+	//(typeOfDrawing, offset, count)
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0 , 4);
 };
 

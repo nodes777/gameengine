@@ -6,6 +6,8 @@
 
 Renderable.js lets us defing new instances of shading rectangles using an Renderable Constructor
 
+Whats a Renderable? Just a rect for now?
+
 # Chapter 3.2: Transforming Renderables
 
 * Draw Multiple Renderables in different locastions and sizes
@@ -51,4 +53,21 @@ Example: (x,y) -> (x+tx, y+ty)
         y,
         z, //z is 3rd dimension usually 1
         1] // last value is saved for something we learn later
+
+p' for a translation:
+
+p' = Txp = Tp
+
+## Matrix Operator Concatenation
+    * Matrix operators can be combined into a single operator
+    * Scale, Rotate, and Translate:
+    p' = TRSp
+    * also you can define your own combinations of operators:
+    M = TRS
+    p' = Mp
+    * ORDER OF OPERATIONS IS IMPORTANT
+
+## The glMatrix Library
+* Fucking get a library for this shit mate!
+* http://glMatrix.net
 
