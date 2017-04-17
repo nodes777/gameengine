@@ -4,15 +4,11 @@
  *
  * Notice:  although in a different file, we have access to
  *          global variables defined in WebGL.js: gGL
- *
- *          In the same way, the global variable gSimpleShader defined in this
- *          file will be accessible to any other javascript source code in
- *          our project.
  */
 /*jslint node: true, vars: true, evil: true */
 /*global gGL: false, alert: false, loadAndCompileShader: false,
-    gSquareVertexBuffer: false, document: false */
- /* find out more about jslint: http://www.jslint.com/help.html */
+    gSquareVertexBuffer: false, document: false, gEngine: false,
+    XMLHttpRequest */
 
 "use strict";
 
@@ -24,6 +20,8 @@ function SimpleShader(vertexShaderID, fragmentShaderID) {
 	this.mPixelColor = null;
     // reference to SquareVertexPosition in shader
     this.mShaderVertexPositionAttribute = null;
+	// reference to model transform
+	this.mModelTransform = null;
 
     var gl = gEngine.Core.getGL();
 
@@ -65,7 +63,10 @@ function SimpleShader(vertexShaderID, fragmentShaderID) {
         0,              // number of bytes to skip in between elements
         0);             // offsets to the first element
 
+	// Step G: Gets a reference to the uniform variables:
 	this.mPixelColor = gl.getUniformLocation(this.mCompiledShader, "uPixelColor");
+	this.mModelTransform = gl.getUniformLocation(this.mCompiledShader, "uModelTransform");
+
 }
 
 // Returns a complied shader from a shader in the dom.
@@ -87,7 +88,7 @@ SimpleShader.prototype._loadAndCompileShader = function(filepath, shaderType) {
     shaderSource = xmlReq.responseText;
 
 	if (shaderSource === null) {
-	    alert("WARNING: Loading of:" + filePath + " Failed!");
+	    alert("WARNING: Loading of:" + filepath + " Failed!");
 	    return null;
 	}
 
@@ -115,6 +116,17 @@ SimpleShader.prototype.activateShader = function(pixelColor) {
     gl.enableVertexAttribArray(this.mShaderVertexPositionAttribute);
 	//uniform4fv (A WebGLUniformLocation object containing the location of the uniform, newVal for uniform)
 	gl.uniform4fv(this.mPixelColor, pixelColor);
+};
+
+// Loads a per-object model transform to the shader
+SimpleShader.prototype.loadObjectTransform = function(modelTransform){
+	var gl = gEngine.Core.getGL();
+
+	// Copy the ModelTransform to the vertex shader location
+	// As identified by mModelTransform
+	// Or the uModelTransform operator in the vertex shader
+	// uniformMatrix4fv(location, transpose(false), value(float32));
+	gl.uniformMatrix4fv(this.mModelTransform, false, modelTransform);
 };
 
 SimpleShader.prototype.getShader = function() { return this.mCompiledShader; };

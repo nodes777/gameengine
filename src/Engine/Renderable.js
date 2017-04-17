@@ -1,6 +1,9 @@
 /*
 * Renderable Constructor
 */
+/*jslint node: true, vars: true, evil: true */
+/*global gGL: false, loadAndCompileShader: false,
+    gSquareVertexBuffer: false, document: false, gEngine: false,*/
 
 //A renderable contructor, that takes a SimpleShader from ShaderSupport.js
 "use strict";
@@ -10,11 +13,14 @@ function Renderable (shader){
 	this.mColor = [1, 1, 1, 1];  
 }
 
-Renderable.prototype.draw = function(){
+Renderable.prototype.draw = function(modelTransform){
 	//gets the web context
 	var gl = gEngine.Core.getGL();
 	//activate it before you draw
 	this.mShader.activateShader(this.mColor);
+	// vertices of the unit square are processed by the vertex shader
+	// the uModelTransform will contain the proper operator for transforming
+	this.mShader.loadObjectTransform(modelTransform);
 	//(typeOfDrawing, offset, count)
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0 , 4);
 };
