@@ -71,3 +71,6 @@ p' = Txp = Tp
 * Fucking get a library for this shit mate!
 * http://glMatrix.net
 
+## Transform Object
+* To abstract out the transformations
+* 
