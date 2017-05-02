@@ -73,4 +73,5 @@ p' = Txp = Tp
 
 ## Transform Object
 * To abstract out the transformations
+* The Transform object abstracts out the matrix operations so we can use them on Renderables
 * 
