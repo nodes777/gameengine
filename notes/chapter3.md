@@ -74,4 +74,52 @@ p' = Txp = Tp
 ## Transform Object
 * To abstract out the transformations
 * The Transform object abstracts out the matrix operations so we can use them on Renderables
-* 
+
+## View, Projections, and Viewports
+* How do we handle representing the world?
+* Two Coordinate Systems
+    - Model Space: 1x1 square in vertex buffer
+        + Unique for each geometric object
+        + defines the geometry of each model
+    - Nomarlized Device Coordinates (NDC): WebGL
+        + Bound to +-1
+        + Shown in Canvas
+* Modeling Transform: opertaion that transforms models from Model Space to NDC
+
+Model Space -> WebGL NDC -> Canvas Coords
+
+World Coordinate System: solves the problem of -1 to +1 scale
+    * Must transform WC to NDC - The View-Projection Transform
+
+### The View-Transform operator:
+    * uses 2 glMatrix lib funcs:
+    * mat4.lookAt(viewMatrix, // defines the center
+        [centerX, centerY, 10], //center of WC
+        [centerX, centerY, 0],
+        [0, 1, 0]); // orientation
+    * mat4.ortho(projMatrix, // defines the dimension of the WC
+        -distToLeft, // dist from (centerX, centerY) to left of WC
+        distToRight,
+        -distToBottom,
+        distToTop,
+        0, // Z distant to near plane
+        1000); //z distant to far plane
+The View-Transform operator (vpMatrix) is the concatenation of the View and Projection matrices
+    * vpMatrix = projMatrix*viewMatrix
+ ### The Viewport
+    * An area to be drawn to
+    * WebGl default is the entire canvas
+        - Can override
+    * gl.viewport(
+    x,     // x position of bottom-left corner of the area to be drawn
+    y,     // y position of bottom-left corner of the area to be drawn
+    width, // width of the area to be drawn
+    height // height of the area to be drawn
+    );
+    * WC -View-Projection Transfrom> WebGL NDC -Fixed Mapping> Viewport inside Canvas
+
+## Chapter 3.4 Viewport Project
+    * Understand Coordinate Systems
+    * Define and draw subregions on canvas
+    * Understand View and Projection transforms
+    * Drawing in the user defined World Coordinate System

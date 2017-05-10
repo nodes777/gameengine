@@ -4,6 +4,7 @@
 /*jslint node: true, vars: true, evil: true */
 /*global gGL: false, loadAndCompileShader: false,
     gSquareVertexBuffer: false, document: false, gEngine: false,*/
+"use strict";
 
  function Transform(){
  	//vec.fromValues()???
@@ -12,7 +13,7 @@
  	//Scaling
  	this.mScale = vec2.fromValues(1,1);
  	//Rotation in radians
- 	this.mRoatationInRad = 0.0;
+ 	this.mRotationInRad = 0.0;
  }
 
  // Position getters and setters
@@ -94,16 +95,19 @@ Transform.prototype.getRotationInRad = function () {  return this.mRotationInRad
 Transform.prototype.getRotationInDegree = function () { return this.mRotationInRad * 180.0 / Math.PI; };
 
 //Return a TRS matrix
-Transform.prototype.getXform = function() {
-	// Create blank identity matrix
-	var matrix = mat4.create();
+Transform.prototype.getXform = function () {
+    // Creates a blank identity matrix
+    var matrix = mat4.create();
 
-	// Functions from loaded webgl library
-	mat4.translate(matrix, matrix, vec3.fromValues(this.getXPos(), this.getYPos(), 0.0));
+    // The matrices that WebGL uses are transposed, thus the typical matrix
+    // operations must be in reverse.
 
-	mat4.rotateZ(matrix, matrix, this.getRotationInRad());
+    // Step A: compute translation, for now z is always at 0.0
+    mat4.translate(matrix, matrix, vec3.fromValues(this.getXPos(), this.getYPos(), 0.0));
+    // Step B: concatenate with rotation.
+    mat4.rotateZ(matrix, matrix, this.getRotationInRad());
+    // Step C: concatenate with scaling
+    mat4.scale(matrix, matrix, vec3.fromValues(this.getWidth(), this.getHeight(), 1.0));
 
-	mat4.scale(matrix, matrix, vec3.fromValues(this.getWidth(), this.getHeight(), 1.0));
-
-	return matrix;
+    return matrix;
 };

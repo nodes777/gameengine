@@ -12,7 +12,7 @@
 
 "use strict";
 
-function SimpleShader(vertexShaderID, fragmentShaderID) {
+function SimpleShader(vertexShaderPath, fragmentShaderPath) {
     // instance variables (Convention: all instance variables: mVariables)
 	// reference to the compiled shader in webgl context
     this.mCompiledShader = null;
@@ -22,20 +22,20 @@ function SimpleShader(vertexShaderID, fragmentShaderID) {
     this.mShaderVertexPositionAttribute = null;
 	// reference to model transform
 	this.mModelTransform = null;
+	// refence to View-Projection transform operator in SimpleVS.glsl
+	this.mViewProjTransform = null;
 
     var gl = gEngine.Core.getGL();
 
     // Step A: load and compile vertex and fragment shaders
-    var vertexShader = this._loadAndCompileShader(vertexShaderID, gl.VERTEX_SHADER);
-    var fragmentShader = this._loadAndCompileShader(fragmentShaderID,
-        gl.FRAGMENT_SHADER);
+    var vertexShader = this._loadAndCompileShader(vertexShaderPath, gl.VERTEX_SHADER);
+    var fragmentShader = this._loadAndCompileShader(fragmentShaderPath, gl.FRAGMENT_SHADER);
 
-    // Step B: Create and link the shaders into a program.
-	// native GLSL funcs
-    this.mCompiledShader = gl.createProgram();
-    gl.attachShader(this.mCompiledShader, vertexShader);
-    gl.attachShader(this.mCompiledShader, fragmentShader);
-    gl.linkProgram(this.mCompiledShader);
+    // Step B: Create and link the shaders into a program.
+    this.mCompiledShader = gl.createProgram();
+    gl.attachShader(this.mCompiledShader, vertexShader);
+    gl.attachShader(this.mCompiledShader, fragmentShader);
+    gl.linkProgram(this.mCompiledShader);
 
     // Step C: check for error
     if (!gl.getProgramParameter(this.mCompiledShader, gl.LINK_STATUS)) {
@@ -66,7 +66,7 @@ function SimpleShader(vertexShaderID, fragmentShaderID) {
 	// Step G: Gets a reference to the uniform variables:
 	this.mPixelColor = gl.getUniformLocation(this.mCompiledShader, "uPixelColor");
 	this.mModelTransform = gl.getUniformLocation(this.mCompiledShader, "uModelTransform");
-
+	this.mViewProjTransform = gl.getUniformLocation(this.mCompiledShader, "uViewProjTransform");
 }
 
 // Returns a complied shader from a shader in the dom.
@@ -110,9 +110,10 @@ SimpleShader.prototype._loadAndCompileShader = function(filepath, shaderType) {
     return compiledShader;
 };
 
-SimpleShader.prototype.activateShader = function(pixelColor) {
+SimpleShader.prototype.activateShader = function(pixelColor, vpMatrix) {
     var gl = gEngine.Core.getGL();
     gl.useProgram(this.mCompiledShader);
+	gl.uniformMatrix4fv(this.mViewProjTransform, false, vpMatrix);
     gl.enableVertexAttribArray(this.mShaderVertexPositionAttribute);
 	//uniform4fv (A WebGLUniformLocation object containing the location of the uniform, newVal for uniform)
 	gl.uniform4fv(this.mPixelColor, pixelColor);
