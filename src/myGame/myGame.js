@@ -1,6 +1,10 @@
 function myGame(htmlCanvasID){
     gEngine.Core.initializeWebGL(htmlCanvasID);
-    var gl = gEngine.Core.getGL();
+    this.mCamera = new Camera(
+        vec2.fromValues(20, 60),   // center of the WC
+            20,                    // width of WC
+            [20, 40, 600, 300]     // viewport (orgX, orgY, width, height)
+         );
     //simpleSHader(vertexSHaderID, fragmentShaderID)
     this.mConstColorShader = new SimpleShader("src/GLSLShaders/SimpleVS.glsl", "src/GLSLShaders/simpleFS.glsl");
 
@@ -25,60 +29,8 @@ function myGame(htmlCanvasID){
     // clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1]);
 
-    // Set the viewport, a given func
-    gl.viewport(
-        20,     // x position of bottom-left corner of the area to be drawn
-        40,     // y position of bottom-left corner of the area to be drawn
-        600,    // width of the area to be drawn
-        300     // height of the area to be drawn
-    );
-
-    // Step E2: set up the corresponding scissor area to limit clear area
-    // a given func
-    gl.scissor(
-        20,     // x position of bottom-left corner of the area to be drawn
-        40,     // y position of bottom-left corner of the area to be drawn
-        600,    // width of the area to be drawn
-        300     // height of the area to be drawn
-    );
-
-    // Step E3: enable the scissor area, clear, and then disable the scissor area
-    gl.enable(gl.SCISSOR_TEST);
-    gEngine.Core.clearCanvas([0.8, 0.8, 0.8, 1.0]);  // clear the scissor area
-    gl.disable(gl.SCISSOR_TEST);
-
-    //Define the WC by setting up the View-Projection transform operator.
-    // Step F: Set up View and Projection matrices
-    var viewMatrix = mat4.create();
-    var projMatrix = mat4.create();
-
-    // Step F1: define the view matrix
-    mat4.lookAt(viewMatrix, //defines the center
-        [20, 60, 10],   // camera position
-        [20, 60, 0],    // look at position
-        [0, 1, 0]);     // orientation
-
-    // Step F2: define the projection matrix
-    mat4.ortho(projMatrix, //defines the dimesion of the WC
-        -10,   // distance to left of WC
-         10,   // distance to right of WC
-        -5,    // distance to bottom of WC
-         5,    // distance to top of WC
-         0,    // z-distance to near plane
-         1000  // z-distance to far plane
-    );
-
-
-    /* lookAt and ortho define the following:
-        Center: (20,60)
-        Top-left corner: (10, 65)
-        Top-right corner: (30, 65)
-        Bottom-right corner: (30, 55)
-        Bottom-left corner: (10, 55)
-    */
-    // Step F3: concatenate to form the View-Projection operator
-    var vpMatrix = mat4.create();
-    mat4.multiply(vpMatrix, projMatrix, viewMatrix);
+    this.mCamera.setupViewProjection();
+    var vpMatrix = this.mCamera.getVPMatrix();
 
     // Step G: Draw the blue square, order of operations counts
     // Centre Blue, slightly rotated square

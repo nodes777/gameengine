@@ -81,7 +81,7 @@ p' = Txp = Tp
     - Model Space: 1x1 square in vertex buffer
         + Unique for each geometric object
         + defines the geometry of each model
-    - Nomarlized Device Coordinates (NDC): WebGL
+    - Normalized Device Coordinates (NDC): WebGL
         + Bound to +-1
         + Shown in Canvas
 * Modeling Transform: opertaion that transforms models from Model Space to NDC
@@ -123,3 +123,10 @@ The View-Transform operator (vpMatrix) is the concatenation of the View and Proj
     * Define and draw subregions on canvas
     * Understand View and Projection transforms
     * Drawing in the user defined World Coordinate System
+
+
+## Chapter 3.5 The Camera Object
+    * Encapsulates View Projection and viewport setup code
+    * glViewport() specifies a transformation from normalized projection space to screen space. Polygons are clipped to the edge of projection space, but other draw operations like glClear() are not. So, you use glViewport() to determine the location and size of the screen space viewport region, but the rasterizer can still occasionally render pixels outside that region.
+
+    
