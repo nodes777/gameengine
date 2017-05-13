@@ -1,0 +1,23 @@
+# Chapter 4: Common Components of Video Games
+	* Control Renderable object's pos, size and rotation to do movement
+	* Recieve keyboard input to animate Renderables
+	* Async loading and unloading of assets
+	* Define, load, and execute a simple game level
+	* Change game level by adding a new scene
+	* Work with sound
+
+## 4.1 Game Loop Project
+
+	```elapsedTime = now;
+previousLoop = now;
+while(game running) {
+    elapsedTime += now - previousLoop;
+    previousLoop = now;
+
+    input();
+    while( elapsedTime >= UPDATE_TIME_RATE ) {
+        update();
+        elapsedTime -= UPDATE_TIME_RATE;
+    }
+    draw();
+}```
