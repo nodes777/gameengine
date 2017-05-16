@@ -34,6 +34,7 @@ gEngine.GameLoop = (function(){
 	        // Update only every Milliseconds per frame.
 	        // If lag larger then update frames, update until caught up.
 	        while ((mLagTime >= kMPF) && mIsLoopRunning) {
+				gEngine.Input.update();
 				// call MyGame.update()
 	            this.update();      
 				// decrease lag by (lag minus frames per millisec)

@@ -19,8 +19,8 @@ function MyGame(htmlCanvasID) {
     // The camera to view the scene
     this.mCamera = null;
 
-    // Initialize the webGL Context
-    gEngine.Core.initializeWebGL(htmlCanvasID);
+    // Initialize the game engine, passing in the canvas element
+    gEngine.Core.initializeEngineCore(htmlCanvasID);
 
     // Initialize the game
     this.initialize();
@@ -63,26 +63,27 @@ MyGame.prototype.initialize = function() {
 
 MyGame.prototype.update = function() {
     // For this very simple game, let’s move the white square and pulse the red
-    // Step A: move the white square
     var whiteXform = this.mWhiteSq.getXform();
     var deltaX = 0.05;
-    // 30 is the right-bound of the window
-    // WHY NO CURLY BRACES?????
-    if (whiteXform.getXPos() > 30){
-            whiteXform.setPosition(10, 60);
-    }
-        whiteXform.incXPosBy(deltaX);
-        whiteXform.incRotationByDegree(1);
-        
 
-    // Step B: pulse the red square
+    // Step A: test for white square movement
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
+        if (whiteXform.getXPos() > 30)  // the right-bound of the window
+            whiteXform.setPosition(10, 60);
+        whiteXform.incXPosBy(deltaX);
+    }
+
+    // Step  B: test for white square rotation
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Up))
+        whiteXform.incRotationByDegree(1);
+
     var redXform = this.mRedSq.getXform();
-
-    if (redXform.getWidth() > 5) {
-        redXform.setSize(2, 2);
-    }
-        redXform.incSizeBy(0.05);
-
+    // Step  C: test for pulsing the red square
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)) {
+        if (redXform.getWidth() > 5)
+            redXform.setSize(2, 2);
+        redXform.incSizeBy(0.05);
+    }
 };
 
 MyGame.prototype.draw = function() {

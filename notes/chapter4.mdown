@@ -21,3 +21,17 @@ while(game running) {
     }
     draw();
 }```
+
+Notice that when the loop is running quickly, it is entirely possible for the _runLoop() function to be called multiple times within a single kMPF interval. With the given _runLoop() implementation, the draw() function will be called multiples times without any update() function calls. This way, the game loop can end up drawing the same game state multiple times.
+
+* http://gameprogrammingpatterns.com/game-loop.html#play-catch-up
+* http://gafferongames.com/game-physics/fix-your-timestep/
+
+## 4.2 Keyboard Input
+
+* To implement an engine component to receive keyboard input
+* To understand the difference between key state (if a key is released or pressed) and key event (when the key state changes)
+* To understand how to integrate the input component in the game loop
+
+## Resource Management
+

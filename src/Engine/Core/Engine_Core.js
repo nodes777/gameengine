@@ -15,21 +15,23 @@ gEngine.Core = (function() {
     };
 
     // initialize the WebGL, the vertex buffer and compile the shaders
-    var initializeWebGL =   function(htmlCanvasID) {    
-        var canvas =  document.getElementById(htmlCanvasID);
+    var _initializeWebGL = function (htmlCanvasID) {
+            var canvas = document.getElementById(htmlCanvasID);
 
-        // Get the standard or experimental webgl and binds to the Canvas area
-        // store the results to the instance variable mGL      
-        mGL =  canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+            // Get the standard or experimental webgl and binds to the Canvas area
+            // store the results to the instance variable mGL
+            mGL = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 
-            
-        if (mGL === null) {        
-            document.write("<br><b>WebGL is not supported!</b>");        
-            return;    
-        }
+            if (mGL === null) {
+                document.write("<br><b>WebGL is not supported!</b>");
+                return;
+            }
+        };
 
-        // now initialize the VertexBuffer       
-        return gEngine.VertexBuffer.initialize();
+    var initializeEngineCore = function (htmlCanvasID) {
+        _initializeWebGL(htmlCanvasID);
+        gEngine.VertexBuffer.initialize();
+        gEngine.Input.initialize();
     };
 
     // Clears the draw area and draws one square
@@ -44,7 +46,7 @@ gEngine.Core = (function() {
     //Contains the functions and variables that will be accessible
     var mPublic = {
         getGL: getGL,
-        initializeWebGL: initializeWebGL,
+        initializeEngineCore: initializeEngineCore,
         clearCanvas: clearCanvas
     };
 
