@@ -28,8 +28,8 @@ function SimpleShader(vertexShaderPath, fragmentShaderPath) {
     var gl = gEngine.Core.getGL();
 
     // Step A: load and compile vertex and fragment shaders
-    var vertexShader = this._loadAndCompileShader(vertexShaderPath, gl.VERTEX_SHADER);
-    var fragmentShader = this._loadAndCompileShader(fragmentShaderPath, gl.FRAGMENT_SHADER);
+    var vertexShader = this._compileShader(vertexShaderPath, gl.VERTEX_SHADER);
+    var fragmentShader = this._compileShader(fragmentShaderPath, gl.FRAGMENT_SHADER);
 
     // Step B: Create and link the shaders into a program.
     this.mCompiledShader = gl.createProgram();
@@ -71,21 +71,12 @@ function SimpleShader(vertexShaderPath, fragmentShaderPath) {
 
 // Returns a complied shader from a shader in the dom.
 // The id is the id of the script in the html tag.
-SimpleShader.prototype._loadAndCompileShader = function(filepath, shaderType) {
+SimpleShader.prototype._compileShader = function(filepath, shaderType) {
     var shaderText, shaderSource, compiledShader;
     var gl = gEngine.Core.getGL();
 
     // Step A: Get the shader source from the folder
-    var xmlReq = new XMLHttpRequest();
-	xmlReq.open('GET', filepath, false);
-
-	try {
-		xmlReq.send();
-	} catch (error){
-		alert("Failed to Load shader: "+ filepath);
-		return null;
-	}
-    shaderSource = xmlReq.responseText;
+    shaderSource = gEngine.ResourceMap.retrieveAsset(filepath);
 
 	if (shaderSource === null) {
 	    alert("WARNING: Loading of:" + filepath + " Failed!");

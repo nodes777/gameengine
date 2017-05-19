@@ -35,3 +35,19 @@ Notice that when the loop is running quickly, it is entirely possible for the _r
 
 ## Resource Management
 
+* To understand the handling of asynchronous loading
+* To build an infrastructure that supports future resource loading and accessing
+* To experience asynchronous resource loading via loading of the GLSL shader files
+
+### TextFileLoader object
+	* The ResourceMap.asyncLoadRequested(fileName) function is called to register a new asynchronous XMLHttpRequest loading request. Take note of how these two classes collaborate; ResourceMap registers that there is one outstanding load operation, while TextFileLoader is performing the actual loading operation.
+	* The ResourceMap.asyncLoadCompleted() function is called and passed the loaded results when it becomes available. In this way, the ResourceMap entry identified by fileName will have its MapEntry.mAsset set to reference fileContent, the loaded asset.
+
+### Default Resources
+	* Some things we need always, like the GLSL shader files
+	* We should load them during engine initialization
+	* mConstColorShader is a SimpleShader that can be shared for all instances of Renderables
+
+### Async load isnt happening and error isnt throwing
+	* Textfileloader file
+	* req.onload never fires

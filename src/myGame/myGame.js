@@ -19,9 +19,6 @@ function MyGame(htmlCanvasID) {
     // The camera to view the scene
     this.mCamera = null;
 
-    // Initialize the game engine, passing in the canvas element
-    gEngine.Core.initializeEngineCore(htmlCanvasID);
-
     // Initialize the game
     this.initialize();
 }
@@ -37,9 +34,7 @@ MyGame.prototype.initialize = function() {
             // sets the background to dark gray
 
     // Step  B: create the shader
-    this.mConstColorShader = new SimpleShader(
-            "src/GLSLShaders/SimpleVS.glsl",  // Path to the VertexShader
-            "src/GLSLShaders/SimpleFS.glsl"); // Path to the FragmentShader
+    this.mConstColorShader = gEngine.DefaultResources.getConstColorShader();
 
     // Step  C: Create the renderable objects:
     this.mWhiteSq = new Renderable(this.mConstColorShader);

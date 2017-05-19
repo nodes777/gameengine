@@ -17,6 +17,7 @@ gEngine.Core = (function() {
     // initialize the WebGL, the vertex buffer and compile the shaders
     var _initializeWebGL = function (htmlCanvasID) {
             var canvas = document.getElementById(htmlCanvasID);
+            console.log("_initializeWebGL called");
 
             // Get the standard or experimental webgl and binds to the Canvas area
             // store the results to the instance variable mGL
@@ -28,14 +29,26 @@ gEngine.Core = (function() {
             }
         };
 
-    var initializeEngineCore = function (htmlCanvasID) {
-        _initializeWebGL(htmlCanvasID);
-        gEngine.VertexBuffer.initialize();
-        gEngine.Input.initialize();
+    var initializeEngineCore = function (htmlCanvasID, myGame) {
+        console.log("initializing core");
+            _initializeWebGL(htmlCanvasID);
+            gEngine.VertexBuffer.initialize();
+            gEngine.Input.initialize();
+            gEngine.DefaultResources.initialize(function() { 
+                // myGame defined in index.html
+                startScene(myGame);
+            });
+    };
+
+    var startScene = function(myGame) {
+        // Called in this way to keep correct context
+        myGame.initialize.call(myGame);
+        // start the game loop after initialization
+        gEngine.GameLoop.start(myGame);
     };
 
     // Clears the draw area and draws one square
-    var clearCanvas =   function(color) {
+    var clearCanvas = function(color) {
     	// set the color to be cleared
         mGL.clearColor(color[0], color[1], color[2], color[3]);
 
