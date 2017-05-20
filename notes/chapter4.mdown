@@ -51,3 +51,7 @@ Notice that when the loop is running quickly, it is entirely possible for the _r
 ### Async load isnt happening and error isnt throwing
 	* Textfileloader file
 	* req.onload never fires
+	* mNumOustandingLoads never decrements
+	** The diff is in textfileloader and resourcemap
+	*** textfileloader never had send req
+	*** resourcemap had funcs in the wrong order :(

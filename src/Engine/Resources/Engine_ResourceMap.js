@@ -1,3 +1,11 @@
+/*
+ * File: Engine_ResourceMap.js 
+ */
+/*jslint node: true, vars: true, evil: true */
+/*global gEngine: false, alert: false */
+
+"use strict"
+
 var gEngine = gEngine || { };
 
 gEngine.ResourceMap = (function(){
@@ -14,6 +22,21 @@ gEngine.ResourceMap = (function(){
 	// callback when all textures loaded
 	var mLoadCompleteCallback = null;
 
+	var asyncLoadRequested = function (rName){
+		// placeholder for the resource to be loaded
+		mResourceMap[rName] = new MapEntry(rName);
+		++mNumOutstandingLoads;
+	};
+
+	var asyncLoadCompleted = function(rName, loadedAsset){
+		if (!isAssetLoaded(rName)){
+			alert("gEngine.asyncLoadCompleted: [" + rName + "] not in map!");
+		}
+			mResourceMap[rName].mAsset = loadedAsset;
+			--mNumOutstandingLoads;
+			_checkForAllLoadCompleted();
+	};
+
 	var _checkForAllLoadCompleted = function(){
 		// ensures the loadCompleteCallback only occurs once
 		// this isnt being called because the mNumOustandingLoads is still 2
@@ -29,21 +52,6 @@ gEngine.ResourceMap = (function(){
 	    mLoadCompleteCallback = func;
 	    // in case all loading are done
 	    _checkForAllLoadCompleted();
-	};
-
-	var asyncLoadRequested = function (rName){
-		// placeholder for the resource to be loaded
-		mResourceMap[rName] = new MapEntry(rName);
-		++mNumOutstandingLoads;
-	};
-
-	var asyncLoadCompleted = function(rName, loadedAsset){
-		if (!isAssetLoaded(rName)){
-			alert("gEngine.asyncLoadCompleted: [" + rName + "] not in map!");
-			mResourceMap[rName].mAsset = loadedAsset;
-			--mNumOutstandingLoads;
-			_checkForAllLoadCompleted();
-		}
 	};
 
 	var retrieveAsset = function (rName) {
