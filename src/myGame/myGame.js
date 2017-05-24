@@ -4,7 +4,7 @@
  */
 /*jslint node: true, vars: true */
 /*global gEngine: false, SimpleShader: false, Renderable: false, Camera: false, mat4: false, vec3: false, vec2: false */
-/* find out more about jslint: http://www.jslint.com/help.html */
+/* global Array: false, SceneFileParser: false */
 
 "use strict";
 
@@ -12,7 +12,7 @@ function MyGame(htmlCanvasID) {
     // scene file name
     this.kSceneFile = "assets/scene.xml";
     // all squares as Renderables
-    this.mSqSet = new Array();
+    this.mSqSet = [];
 
     // The camera to view the scene
     this.mCamera = null;
@@ -23,36 +23,16 @@ MyGame.prototype.initialize = function() {
     var sceneParser = new SceneFileParser(this.kSceneFile);
     // Step A: parse the camera
     this.mCamera = sceneParser.parseCamera();
-
+    console.log(this.mSqSet);
     // Step  B: parse for all the squares
     sceneParser.parseSquares(this.mSqSet);
 
-    
-    this.mConstColorShader = gEngine.DefaultResources.getConstColorShader();
-
-    // Step  C: Create the renderable objects:
-    this.mWhiteSq = new Renderable(this.mConstColorShader);
-    this.mWhiteSq.setColor([1, 1, 1, 1]);
-    this.mRedSq = new Renderable(this.mConstColorShader);
-    this.mRedSq.setColor([1, 0, 0, 1]);
-
-    // Step  D: Initialize the white renderable object: centred, 5x5, rotated
-    this.mWhiteSq.getXform().setPosition(20, 60);
-    this.mWhiteSq.getXform().setRotationInRad(0.2); // In Radian
-    this.mWhiteSq.getXform().setSize(5, 5);
-
-    // Step  E: Initialize the red renderable object: centered 2x2
-    this.mRedSq.getXform().setPosition(20, 60);
-    this.mRedSq.getXform().setSize(2, 2);
-
-    // Step F: Start the game loop running
-    //
-    gEngine.GameLoop.start(this);
 };
 
 MyGame.prototype.update = function() {
     // For this very simple game, let’s move the white square and pulse the red
     var whiteXform = this.mSqSet[0].getXform();
+        console.log(this.mSqSet);
     var deltaX = 0.05;
 
     // Step A: test for white square movement
@@ -95,4 +75,4 @@ MyGame.prototype.loadScene = function(){
 /**@function - delete mResourceMap[rName]*/
 MyGame.prototype.unloadScene = function(){
     gEngine.TextFileLoader.unloadScene(this.kSceneFile);
-}
+};

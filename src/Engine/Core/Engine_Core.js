@@ -11,6 +11,7 @@ gEngine.Core = (function() {
 
     //Accessor of the webgl context
     var getGL = function() {
+        console.log("Called getGL: "+ mGL);
         return mGL;
     };
 
@@ -21,13 +22,21 @@ gEngine.Core = (function() {
             // Get the standard or experimental webgl and binds to the Canvas area
             // store the results to the instance variable mGL
             mGL = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-
+            console.log("mGL: "+ mGL);
             if (mGL === null) {
                 document.write("<br><b>WebGL is not supported!</b>");
                 return;
             }
         };
 
+
+    var startScene = function(myGame) {
+        myGame.loadScene.call(myGame);
+        // Called in this way to keep correct context
+        //myGame.initialize.call(myGame);
+        // start the game loop after initialization
+        gEngine.GameLoop.start(myGame);
+    };
     var initializeEngineCore = function (htmlCanvasID, myGame) {
             _initializeWebGL(htmlCanvasID);
             gEngine.VertexBuffer.initialize();
@@ -36,14 +45,6 @@ gEngine.Core = (function() {
                 // myGame defined in index.html
                 startScene(myGame);
             });
-    };
-
-    var startScene = function(myGame) {
-        myGame.loadScene.call(myGame);
-        // Called in this way to keep correct context
-        //myGame.initialize.call(myGame);
-        // start the game loop after initialization
-        gEngine.GameLoop.start(myGame);
     };
 
     // Clears the draw area and draws one square
