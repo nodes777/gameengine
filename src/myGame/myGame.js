@@ -9,31 +9,25 @@
 "use strict";
 
 function MyGame(htmlCanvasID) {
-    // variables of the constant color shader
-    this.mConstColorShader = null;
-
-    // variables for the squares
-    this.mWhiteSq = null;        // these are the renderable objects
-    this.mRedSq = null;
+    // scene file name
+    this.kSceneFile = "assets/scene.xml";
+    // all squares as Renderables
+    this.mSqSet = new Array();
 
     // The camera to view the scene
     this.mCamera = null;
-
-    // Initialize the game
-    this.initialize();
 }
 
 MyGame.prototype.initialize = function() {
-    // Step A: set up the cameras
-    this.mCamera = new Camera(
-            vec2.fromValues(20, 60),   // position of the camera
-            20,                        // width of camera
-            [20, 40, 600, 300]         // viewport (orgX, orgY, width, height)
-            );
-    this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
-            // sets the background to dark gray
 
-    // Step  B: create the shader
+    var sceneParser = new SceneFileParser(this.kSceneFile);
+    // Step A: parse the camera
+    this.mCamera = sceneParser.parseCamera();
+
+    // Step  B: parse for all the squares
+    sceneParser.parseSquares(this.mSqSet);
+
+    
     this.mConstColorShader = gEngine.DefaultResources.getConstColorShader();
 
     // Step  C: Create the renderable objects:
@@ -58,7 +52,7 @@ MyGame.prototype.initialize = function() {
 
 MyGame.prototype.update = function() {
     // For this very simple game, let’s move the white square and pulse the red
-    var whiteXform = this.mWhiteSq.getXform();
+    var whiteXform = this.mSqSet[0].getXform();
     var deltaX = 0.05;
 
     // Step A: test for white square movement
@@ -72,7 +66,7 @@ MyGame.prototype.update = function() {
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Up))
         whiteXform.incRotationByDegree(1);
 
-    var redXform = this.mRedSq.getXform();
+    var redXform = this.mSqSet[1].getXform();
     // Step  C: test for pulsing the red square
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)) {
         if (redXform.getWidth() > 5)
@@ -88,9 +82,17 @@ MyGame.prototype.draw = function() {
     // Step  B: Activate the drawing Camera
     this.mCamera.setupViewProjection();
 
-    // Step  C: Activate the white shader to draw
-    this.mWhiteSq.draw(this.mCamera.getVPMatrix());
-
-    // Step  D: Activate the red shader to draw
-    this.mRedSq.draw(this.mCamera.getVPMatrix());
+    // Step  C: draw all the squares
+    for (var i = 0; i<this.mSqSet.length; i++) {
+        this.mSqSet[i].draw(this.mCamera.getVPMatrix());
+    }
 };
+
+MyGame.prototype.loadScene = function(){
+    gEngine.TextFileLoader.loadTextFile(this.kSceneFile, gEngine.TextFileLoader.eTextFileType.eXMLFile);
+};
+
+/**@function - delete mResourceMap[rName]*/
+MyGame.prototype.unloadScene = function(){
+    gEngine.TextFileLoader.unloadScene(this.kSceneFile);
+}

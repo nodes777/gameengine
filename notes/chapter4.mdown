@@ -33,7 +33,7 @@ Notice that when the loop is running quickly, it is entirely possible for the _r
 * To understand the difference between key state (if a key is released or pressed) and key event (when the key state changes)
 * To understand how to integrate the input component in the game loop
 
-## Resource Management
+## 4.3 Resource Management
 
 * To understand the handling of asynchronous loading
 * To build an infrastructure that supports future resource loading and accessing
@@ -55,3 +55,11 @@ Notice that when the loop is running quickly, it is entirely possible for the _r
 	** The diff is in textfileloader and resourcemap
 	*** textfileloader never had send req
 	*** resourcemap had funcs in the wrong order :(
+
+## 4.4 Scene File Loader
+	* Scene file as define by client - MyGame.js
+	* To introduce the protocol for supporting asynchronous loading of the resources of a game
+ 	* To develop the proper game engine support for the protocol
+	* To identify and define the public interface methods for a general game level
+	** Instead of hardcoding the initialize func, make it flexible by taking in an XML file of objects in the game scene
+	

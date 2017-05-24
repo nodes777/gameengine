@@ -1,10 +1,10 @@
 /*
- * File: Engine_ResourceMap.js 
+ * File: Engine_ResourceMap.js
  */
 /*jslint node: true, vars: true, evil: true */
 /*global gEngine: false, alert: false */
 
-"use strict"
+"use strict";
 
 var gEngine = gEngine || { };
 
@@ -25,7 +25,7 @@ gEngine.ResourceMap = (function(){
 	var asyncLoadRequested = function (rName){
 		// placeholder for the resource to be loaded
 		mResourceMap[rName] = new MapEntry(rName);
-		++mNumOutstandingLoads;
+		mNumOutstandingLoads++;
 	};
 
 	var asyncLoadCompleted = function(rName, loadedAsset){
@@ -33,7 +33,7 @@ gEngine.ResourceMap = (function(){
 			alert("gEngine.asyncLoadCompleted: [" + rName + "] not in map!");
 		}
 			mResourceMap[rName].mAsset = loadedAsset;
-			--mNumOutstandingLoads;
+			mNumOutstandingLoads--;
 			_checkForAllLoadCompleted();
 	};
 

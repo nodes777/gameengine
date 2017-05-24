@@ -17,7 +17,6 @@ gEngine.Core = (function() {
     // initialize the WebGL, the vertex buffer and compile the shaders
     var _initializeWebGL = function (htmlCanvasID) {
             var canvas = document.getElementById(htmlCanvasID);
-            console.log("_initializeWebGL called");
 
             // Get the standard or experimental webgl and binds to the Canvas area
             // store the results to the instance variable mGL
@@ -40,8 +39,9 @@ gEngine.Core = (function() {
     };
 
     var startScene = function(myGame) {
+        myGame.loadScene.call(myGame);
         // Called in this way to keep correct context
-        myGame.initialize.call(myGame);
+        //myGame.initialize.call(myGame);
         // start the game loop after initialization
         gEngine.GameLoop.start(myGame);
     };
