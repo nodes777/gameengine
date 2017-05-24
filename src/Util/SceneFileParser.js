@@ -12,7 +12,7 @@ function SceneFileParser(sceneFilePath) {
 
 SceneFileParser.prototype._getElm = function(tagElm) {
 	var theElm = this.mSceneXml.getElementsByTagName(tagElm);
-		if(theElm.length === 0){
+		if(theElm.length === 0) {
 			console.error("Warning: Level element:[" + tagElm + "]: is not found!"); 
 		}
 		return theElm;
@@ -66,5 +66,4 @@ SceneFileParser.prototype.parseSquares = function(sqSet) {
 	sq.getXform().setSize(w, h);
 	sqSet.push(sq);
 	}
-	console.log(sqSet);
 };

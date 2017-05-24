@@ -23,7 +23,6 @@ MyGame.prototype.initialize = function() {
     var sceneParser = new SceneFileParser(this.kSceneFile);
     // Step A: parse the camera
     this.mCamera = sceneParser.parseCamera();
-    console.log(this.mSqSet);
     // Step  B: parse for all the squares
     sceneParser.parseSquares(this.mSqSet);
 
@@ -32,7 +31,6 @@ MyGame.prototype.initialize = function() {
 MyGame.prototype.update = function() {
     // For this very simple game, let’s move the white square and pulse the red
     var whiteXform = this.mSqSet[0].getXform();
-        console.log(this.mSqSet);
     var deltaX = 0.05;
 
     // Step A: test for white square movement

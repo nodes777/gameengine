@@ -11,7 +11,6 @@ gEngine.Core = (function() {
 
     //Accessor of the webgl context
     var getGL = function() {
-        console.log("Called getGL: "+ mGL);
         return mGL;
     };
 
@@ -22,7 +21,6 @@ gEngine.Core = (function() {
             // Get the standard or experimental webgl and binds to the Canvas area
             // store the results to the instance variable mGL
             mGL = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-            console.log("mGL: "+ mGL);
             if (mGL === null) {
                 document.write("<br><b>WebGL is not supported!</b>");
                 return;
