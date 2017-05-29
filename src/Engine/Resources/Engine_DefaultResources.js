@@ -1,4 +1,5 @@
-/*jslint node: true, vars: true, evil: true */
+/*jslint node: true, vars: true, evil: true*/
+/*global SimpleShader: false,*/
 "use strict";
 
 var gEngine = gEngine || { };
