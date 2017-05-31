@@ -18,6 +18,8 @@ function MyGame(htmlCanvasID) {
     this.mCamera = null;
 }
 
+gEngine.Core.inheritPrototype(MyGame, Scene);
+
 MyGame.prototype.initialize = function() {
 
     var sceneParser = new SceneFileParser(this.kSceneFile);
@@ -51,6 +53,14 @@ MyGame.prototype.update = function() {
             redXform.setSize(2, 2);
         redXform.incSizeBy(0.05);
     }
+
+	if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
+        redXform.incXPosBy(-deltaX);
+        if (redXform.getXPos() < 11) {  // this is the left-bound
+         gEngine.GameLoop.stop();
+        }
+    }
+
 };
 
 MyGame.prototype.draw = function() {
@@ -72,5 +82,8 @@ MyGame.prototype.loadScene = function(){
 
 /**@function - delete mResourceMap[rName]*/
 MyGame.prototype.unloadScene = function(){
-    gEngine.TextFileLoader.unloadScene(this.kSceneFile);
+    //gEngine.TextFileLoader.unloadScene(this.kSceneFile);
+
+    var nextLevel = new BlueLevel();  // next level to be loaded
+    gEngine.Core.startScene(nextLevel);
 };

@@ -54,11 +54,25 @@ gEngine.Core = (function() {
         mGL.clear(mGL.COLOR_BUFFER_BIT);      
     };
 
+    /**
+    * inheritPrototype passes a reference to the prototype of one object to another. Allows subclass to inherit superclass's prototype functions
+    * @function
+    * @param {class} subClass - Class to gain prototype
+    * @param {class} superClass - Class to model prototype from
+    */
+    var inheritPrototype = function(subClass, superClass){
+        var prototype = Object.create(superClass.prototype);
+        prototype.constructor = subClass;
+        subClass.prototype = prototype;
+    };
+
     //Contains the functions and variables that will be accessible
     var mPublic = {
         getGL: getGL,
         initializeEngineCore: initializeEngineCore,
-        clearCanvas: clearCanvas
+        clearCanvas: clearCanvas,
+        inheritPrototype: inheritPrototype,
+        startScene: startScene
     };
 
     return mPublic;

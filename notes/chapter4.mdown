@@ -62,4 +62,11 @@ Notice that when the loop is running quickly, it is entirely possible for the _r
  	* To develop the proper game engine support for the protocol
 	* To identify and define the public interface methods for a general game level
 	** Instead of hardcoding the initialize func, make it flexible by taking in an XML file of objects in the game scene
+
+## 4.5 Scene Object
+	* Abstract superclass
+	* All client code must be encapsulated in subclasses of the Scene class
+	* Define the Scene object interface
+	* Support scene transitions
+	* Create scene specific loading and unloading support
 	
