@@ -69,4 +69,9 @@ Notice that when the loop is running quickly, it is entirely possible for the _r
 	* Define the Scene object interface
 	* Support scene transitions
 	* Create scene specific loading and unloading support
-	
+
+## 4.6 Audio
+	* To add audio support to the resource management system
+	* To provide an interface to play audio for games
+	* To optimize and facilitate resource sharing with reference counts of individual resources
+	* Web Audio Api

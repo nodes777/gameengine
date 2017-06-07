@@ -9,6 +9,8 @@
 "use strict";
 
 function MyGame(htmlCanvasID) {
+	this.kBgClip = "assets/sounds/BGClip.mp3";
+    this.kCue = "assets/sounds/MyGame_cue.wav";
     // scene file name
     this.kSceneFile = "assets/scene.xml";
     // all squares as Renderables
@@ -28,6 +30,8 @@ MyGame.prototype.initialize = function() {
     // Step  B: parse for all the squares
     sceneParser.parseSquares(this.mSqSet);
 
+    gEngine.AudioClips.playBackgroundAudio(this.kBgClip);
+
 };
 
 MyGame.prototype.update = function() {
@@ -37,6 +41,7 @@ MyGame.prototype.update = function() {
 
     // Step A: test for white square movement
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
+		gEngine.AudioClips.playACue(this.kCue);
         if (whiteXform.getXPos() > 30)  // the right-bound of the window
             whiteXform.setPosition(10, 60);
         whiteXform.incXPosBy(deltaX);
@@ -55,6 +60,7 @@ MyGame.prototype.update = function() {
     }
 
 	if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
+		gEngine.AudioClips.playACue(this.kCue);
         redXform.incXPosBy(-deltaX);
         if (redXform.getXPos() < 11) {  // this is the left-bound
          gEngine.GameLoop.stop();
@@ -78,12 +84,25 @@ MyGame.prototype.draw = function() {
 
 MyGame.prototype.loadScene = function(){
     gEngine.TextFileLoader.loadTextFile(this.kSceneFile, gEngine.TextFileLoader.eTextFileType.eXMLFile);
+    gEngine.AudioClips.loadAudio(this.kBgClip);
+    gEngine.AudioClips.loadAudio(this.kCue);
 };
 
 /**@function - delete mResourceMap[rName]*/
 MyGame.prototype.unloadScene = function(){
     //gEngine.TextFileLoader.unloadScene(this.kSceneFile);
 
-    var nextLevel = new BlueLevel();  // next level to be loaded
-    gEngine.Core.startScene(nextLevel);
+    // stop the background audio before unloading it
+    gEngine.AudioClips.stopBackgroundAudio();
+
+    // unload the scene resources
+    // gEngine.AudioClips.unloadAudio(this.kBgClip);
+	//      The above line is commented out on purpose because
+    //      you know this clip will be used elsewhere in the game
+    //      so you decide to not unload this clip!!
+    gEngine.AudioClips.unloadAudio(this.kCue);
+
+    // starts the next level
+    var nextLevel = new BlueLevel();  // next level to be loaded
+    gEngine.Core.startScene(nextLevel);
 };

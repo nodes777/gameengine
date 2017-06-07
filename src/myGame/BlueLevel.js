@@ -7,6 +7,8 @@
 "use strict";
 
 function BlueLevel() {
+	this.kBgClip = "assets/sounds/BGClip.mp3";
+    this.kCue = "assets/sounds/BlueLevel_cue.wav";
     // scene file name
     this.kSceneFile = "assets/BlueLevel.xml";
     // all squares
@@ -23,6 +25,8 @@ gEngine.Core.inheritPrototype(BlueLevel, Scene);
 
 BlueLevel.prototype.loadScene = function() {
     gEngine.TextFileLoader.loadTextFile(this.kSceneFile, gEngine.TextFileLoader.eTextFileType.eXMLFile);
+	gEngine.AudioClips.loadAudio(this.kBgClip);
+    gEngine.AudioClips.loadAudio(this.kCue);
 };
 BlueLevel.prototype.initialize = function() {
     // ... identical to MyGame.initialize from previous project ...
@@ -31,6 +35,8 @@ BlueLevel.prototype.initialize = function() {
     this.mCamera = sceneParser.parseCamera();
     // Step  B: parse for all the squares
     sceneParser.parseSquares(this.mSqSet);
+
+    gEngine.AudioClips.playBackgroundAudio(this.kBgClip);
 };
 BlueLevel.prototype.draw = function() {
     // ... identical to MyGame.draw from previous project ...
@@ -51,6 +57,7 @@ BlueLevel.prototype.update = function() {
 
     // Step A: test for white square movement
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
+	gEngine.AudioClips.playACue(this.kCue);
         if (whiteXform.getXPos() > 30)  // the right-bound of the window
             whiteXform.setPosition(10, 60);
         whiteXform.incXPosBy(deltaX);
@@ -70,6 +77,7 @@ BlueLevel.prototype.update = function() {
     // ... identical to MyGame.update from previous project ...
 
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
+		gEngine.AudioClips.playACue(this.kCue);
         redXform.incXPosBy(-deltaX);
         if (redXform.getXPos() < 11) { // this is the left-boundary
 			//stop the game loop
@@ -78,8 +86,12 @@ BlueLevel.prototype.update = function() {
     }
 };
 BlueLevel.prototype.unloadScene = function() {
+	gEngine.AudioClips.stopBackgroundAudio();
     // unload the scene flie
     gEngine.TextFileLoader.unloadTextFile(this.kSceneFile);
+
+	gEngine.AudioClips.unloadAudio(this.kBgClip);
+    gEngine.AudioClips.unloadAudio(this.kCue);
 
     var nextLevel = new MyGame();  // the next level
     gEngine.Core.startScene(nextLevel);
