@@ -18,9 +18,20 @@ gEngine.VertexBuffer = (function() {
         -0.5, -0.5, 0.0
     ];
 
+	// Second: define the corresponding texture cooridnates
+	var textureCoordinates = [
+	    1.0, 1.0,
+	    0.0, 1.0,
+	    1.0, 0.0,
+	    0.0, 0.0
+	];
+
     var mSquareVertexBuffer = null;
+	// reference to the texture positions for the square vertices in the gl context
+	var mTextureCoordBuffer = null;
 
     var getGLVertexRef = function() { return mSquareVertexBuffer; };
+	var getGLTexCoordRef = function() { return mTextureCoordBuffer; };
 
     var initialize = function() {
         var gl = gEngine.Core.getGL();
@@ -36,11 +47,22 @@ gEngine.VertexBuffer = (function() {
         // Step C: Loads verticesOfSquare into the vertexBuffer
 		// Copy the vertices data to the buffer
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesOfSquare),gl.STATIC_DRAW);
-    };
+
+		// Step D: Allocate and store texture coordinates
+	    // Create a buffer on the gGL context for our vertex positions
+	    mTextureCoordBuffer = gl.createBuffer();
+
+	    // Activate vertexBuffer
+	    gl.bindBuffer(gl.ARRAY_BUFFER, mTextureCoordBuffer);
+
+	    // Loads verticesOfSquare into the vertexBuffer
+	    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+	};
 
     var mPublic = {
         initialize: initialize,
-        getGLVertexRef: getGLVertexRef
+        getGLVertexRef: getGLVertexRef,
+		getGLTexCoordRef: getGLTexCoordRef
     };
     return mPublic;
 }());

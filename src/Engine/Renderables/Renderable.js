@@ -8,11 +8,11 @@
 "use strict";
 /**
 * @constructor
-* @param {shader} shader - Compiled shader from SimpleShader.js
-* @classdesc This is a description of the Renderable class.
+* @param {shader} shader - OLD - Compiled shader from SimpleShader.js
+* @classdesc mShader - refers to default constColorShader by default
 */
-function Renderable (shader){
-	this.mShader = shader;
+function Renderable (){
+	this.mShader = gEngine.DefaultResources.getConstColorShader();
 	/**
 	* Transform operator for the Renderable
 	*/
@@ -42,4 +42,6 @@ Renderable.prototype.draw = function(vpMatrix){
 Renderable.prototype.getXform = function(){return this.mXform;};
 Renderable.prototype.setColor = function(color){this.mColor = color;};
 Renderable.prototype.getColor = function(){return this.mColor;};
+Renderable.prototype._setShader = function(s){ this.mShader = s;};
+
 
