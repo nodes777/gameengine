@@ -9,6 +9,9 @@
 function BlueLevel() {
 	this.kBgClip = "assets/sounds/BGClip.mp3";
     this.kCue = "assets/sounds/BlueLevel_cue.wav";
+	// textures: jpg does not support transparency
+	this.kPortal = "assets/minion_portal.jpg";
+	this.kCollector = "assets/minion_collector.jpg";
     // scene file name
     this.kSceneFile = "assets/BlueLevel.xml";
     // all squares
@@ -27,6 +30,8 @@ BlueLevel.prototype.loadScene = function() {
     gEngine.TextFileLoader.loadTextFile(this.kSceneFile, gEngine.TextFileLoader.eTextFileType.eXMLFile);
 	gEngine.AudioClips.loadAudio(this.kBgClip);
     gEngine.AudioClips.loadAudio(this.kCue);
+	gEngine.Textures.loadTexture(this.kPortal);
+	gEngine.Textures.loadTexture(this.kCollector);
 };
 BlueLevel.prototype.initialize = function() {
     // ... identical to MyGame.initialize from previous project ...
@@ -37,6 +42,8 @@ BlueLevel.prototype.initialize = function() {
     sceneParser.parseSquares(this.mSqSet);
 
     gEngine.AudioClips.playBackgroundAudio(this.kBgClip);
+
+    sceneParser.parseTextureSquares(this.mSqSet);
 };
 BlueLevel.prototype.draw = function() {
     // ... identical to MyGame.draw from previous project ...
@@ -84,6 +91,15 @@ BlueLevel.prototype.update = function() {
             gEngine.GameLoop.stop();
         }
     }
+
+	//continuosly change texture tinting
+	// mSqSet[1} should be jpg but I think its a square that I didnt remove from previous project
+	var c = this.mSqSet[1].getColor();
+	var ca = c[3]+deltaX;
+	if (ca > 1) {
+      ca = 0;
+    }
+    c[3] = ca;
 };
 BlueLevel.prototype.unloadScene = function() {
 	gEngine.AudioClips.stopBackgroundAudio();
@@ -92,6 +108,9 @@ BlueLevel.prototype.unloadScene = function() {
 
 	gEngine.AudioClips.unloadAudio(this.kBgClip);
     gEngine.AudioClips.unloadAudio(this.kCue);
+
+	gEngine.Textures.unloadTexture(this.kPortal);
+	gEngine.Textures.unloadTexture(this.kCollector);
 
     var nextLevel = new MyGame();  // the next level
     gEngine.Core.startScene(nextLevel);

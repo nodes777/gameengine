@@ -25,27 +25,27 @@ var gEngine = gEngine || { };
 
 gEngine.Textures = (function(){
 
+	/**
+	* Loads a texture so that it can be drawn. If already in the map, will just inc reference count
+	* @function
+	* @param{string} textureName - Path to resource as a unique identifying name.
+	*/
+	var loadTexture = function(textureName) {
+	    if (!(gEngine.ResourceMap.isAssetLoaded(textureName)))  {
+	        // Create new Texture object.
+	       var img = new Image();
 
-/**
-* Loads a texture so that it can be drawn. If already in the map, will just inc reference count
-* @function
-* @param{string} textureName - Path to resource as a unique identifying name.
-*/
-var loadTexture = function(textureName) {
-    if (!(gEngine.ResourceMap.isAssetLoaded(textureName)))  {
-        // Create new Texture object.
-       var img = new Image();
+			// update resources in loading counter
+			gEngine.ResourceMap.asyncLoadRequested(textureName);
 
-		// update resources in loading counter
-		gEngine.ResourceMap.asyncLoadRequested(textureName);
-
-		img.onload = function(){
-			_processLoadedImage(textureName, img);
-		};
-		img.src = textureName;
-    } else {
-        gEngine.ResourceMap.incAssetRefCount(textureName);
-    }
+			img.onload = function(){
+				_processLoadedImage(textureName, img);
+			};
+			img.src = textureName;
+	    } else {
+	        gEngine.ResourceMap.incAssetRefCount(textureName);
+	    }
+	};
 
 	var unloadTexture = function(textureName){
 		var gl = gEngine.Core.getGL();
@@ -54,7 +54,12 @@ var loadTexture = function(textureName) {
 		gl.deleteTexture(texInfo.mGLTexID);
 		gEngine.ResourceMap.unloadAsset(textureName);
 	};
-
+	/**
+	* Convert the format of an image and store it in the WebGL context.
+	* @function
+	* @param{string} textureName - Path as a unique id.
+	* @param{object} image - Image object.
+	*/
 	var _processLoadedImage = function(textureName, image){
 		var gl = gEngine.Core.getGL();
 
@@ -86,10 +91,46 @@ var loadTexture = function(textureName) {
 		var texInfo = new TextureInfo(textureName, image.naturalWidth, image.naturalHeight, textureID);
 		gEngine.ResourceMap.asyncLoadCompleted(textureName, texInfo);
 	};
-};
 
+	var activateTexture = function(textureName){
+		var gl = gEngine.Core.getGL();
+		var texInfo = gEngine.ResourceMap.retrieveAsset(textureName);
 
-    var mPublic = { };
+		// Binds our texture reference to the current webGL texture functionality
+		gl.bindTexture(gl.TEXTURE_2D, texInfo.mGLTexID);
+
+		// Prevents texture wrappings, S and T are axes in textures
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+		// Handles how magnification and minimization filters will work
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+		// For pixel-graphics where you want the texture to look "sharp" //  enable
+		// gl.NEAREST: Returns the pixel that is closest to the coordinates,
+		// gl.LINEAR: Returns the weighted average of the 4 pixels surrounding the given coordinates.
+		// What about the mimap versions of these? Supposed to be "better"
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+	};
+
+	var deactivateTexture = function() {
+	   var gl = gEngine.Core.getGL();
+	   gl.bindTexture(gl.TEXTURE_2D, null);
+	};
+
+	var getTextureInfo = function(textureName){
+		return gEngine.ResourceMap.retrieveAsset(textureName);
+	};
+
+    var mPublic = {
+		loadTexture: loadTexture,
+    	unloadTexture: unloadTexture,
+    	activateTexture: activateTexture,
+    	deactivateTexture: deactivateTexture,
+    	getTextureInfo: getTextureInfo
+	};
     return mPublic;
 }());
 

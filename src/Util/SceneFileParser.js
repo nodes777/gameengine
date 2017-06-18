@@ -1,5 +1,5 @@
 /*jslint node: true, vars: true, evil: true */
-/*global gEngine: false, console: false, Camera: false, vec2: false, Renderable: false */
+/*global gEngine: false, console: false, Camera: false, vec2: false, Renderable: false, TextureRenderable: false, */
 
 "use strict";
 
@@ -48,12 +48,9 @@ var cam = new Camera(
     return cam;
 };
 
-//parses the XML file to create Renderable objects
-//sq to be placed in the array that is passed in as a parameter.
-
 /**
-* Get the camera element from XML, get the attributes, ensure background color is a number array.
-* Construct a new camera from those values and return it.
+* Parses the XML file to create Renderable objects
+* sq to be placed in the array that is passed in as a parameter.
 * @param {array} sqSet - Array that will hold the Renderables that are created in this function
 * @function
 */
@@ -80,4 +77,34 @@ SceneFileParser.prototype.parseSquares = function(sqSet) {
 	sq.getXform().setSize(w, h);
 	sqSet.push(sq);
 	}
+};
+
+
+/**
+* Parses the XML file to create Renderable Texture objects
+* sq to be placed in the array that is passed in as a parameter.
+* @param {array} sqSet - Array that will hold the Texture Renderables that are created in this function
+* @function
+*/
+SceneFileParser.prototype.parseTextureSquares = function (sqSet) {
+    var elm = this._getElm("TextureSquare");
+    var i, j, x, y, w, h, r, c, t, sq, i;
+    for (i = 0; i < elm.length; i++) {
+        x = Number(elm.item(i).attributes.getNamedItem("PosX").value);
+        y = Number(elm.item(i).attributes.getNamedItem("PosY").value);
+        w = Number(elm.item(i).attributes.getNamedItem("Width").value);
+        h = Number(elm.item(i).attributes.getNamedItem("Height").value);
+        r = Number(elm.item(i).attributes.getNamedItem("Rotation").value);
+        c = elm.item(i).attributes.getNamedItem("Color").value.split(" ");
+        t = elm.item(i).attributes.getNamedItem("Texture").value;
+        sq = new TextureRenderable(t);
+        // make sure color array contains numbers
+        for (j = 0; j < 4; j++)
+            c[j] = Number(c[j]);
+        sq.setColor(c);
+        sq.getXform().setPosition(x, y);
+        sq.getXform().setRotationInDegree(r); // In Degree
+        sq.getXform().setSize(w, h);
+        sqSet.push(sq);
+    }
 };

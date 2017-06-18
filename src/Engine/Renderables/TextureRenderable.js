@@ -20,7 +20,7 @@ function TextureRenderable(myTexture){
     this.mTexture = myTexture;
 }
 
-gEngine.Core.inheiritPrototype(TextureRenderable, Renderable);
+gEngine.Core.inheritPrototype(TextureRenderable, Renderable);
 
 TextureRenderable.prototype.draw = function(vpMatrix){
 	gEngine.Textures.activateTexture(this.mTexture);

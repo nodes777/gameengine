@@ -20,7 +20,7 @@ void main (void){
 	// tint the textured area. Leave transparent area as defined by the texture
 	// I can experiment here
 	vec3 r = vec3(c) * (1.0-uPixelColor.a) + vec3(uPixelColor) * uPixelColor.a;
-	vec result = vec4(r, c.a);
+	vec4 result = vec4(r, c.a);
 
 	gl_FragColor = result;
 }

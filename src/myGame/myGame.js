@@ -11,6 +11,15 @@
 function MyGame(htmlCanvasID) {
 	this.kBgClip = "assets/sounds/BGClip.mp3";
     this.kCue = "assets/sounds/MyGame_cue.wav";
+
+	// textures: ( Note: supports png with transparency )
+    this.kPortal = "assets/minion_portal.png";
+    this.kCollector = "assets/minion_collector.png";
+	// the hero and the support objects
+    this.mHero = null;
+    this.mPortal = null;
+	this.mCollector = null;
+
     // scene file name
     this.kSceneFile = "assets/scene.xml";
     // all squares as Renderables
@@ -30,7 +39,23 @@ MyGame.prototype.initialize = function() {
     // Step  B: parse for all the squares
     sceneParser.parseSquares(this.mSqSet);
 
-    gEngine.AudioClips.playBackgroundAudio(this.kBgClip);
+    //gEngine.AudioClips.playBackgroundAudio(this.kBgClip);
+    // Step B: Create the game objects
+    this.mPortal = new TextureRenderable(this.kPortal);
+    this.mPortal.setColor([1, 0, 0, 0.2]);  // tints red
+    this.mPortal.getXform().setPosition(25, 60);
+    this.mPortal.getXform().setSize(3, 3);
+
+    this.mCollector = new TextureRenderable(this.kCollector);
+    this.mCollector.setColor([0, 0, 0, 0]);  // No tinting
+    this.mCollector.getXform().setPosition(15, 60);
+    this.mCollector.getXform().setSize(3, 3);
+
+    // Step C: Create the hero object in blue
+    this.mHero = new Renderable();
+    this.mHero.setColor([0, 0, 1, 1]);
+    this.mHero.getXform().setPosition(20, 60);
+    this.mHero.getXform().setSize(2, 3);
 
 };
 
@@ -80,16 +105,25 @@ MyGame.prototype.draw = function() {
     for (var i = 0; i<this.mSqSet.length; i++) {
         this.mSqSet[i].draw(this.mCamera.getVPMatrix());
     }
+
+    this.mPortal.draw(this.mCamera.getVPMatrix());
+    this.mHero.draw(this.mCamera.getVPMatrix());
+    this.mCollector.draw(this.mCamera.getVPMatrix());
 };
 
 MyGame.prototype.loadScene = function(){
     gEngine.TextFileLoader.loadTextFile(this.kSceneFile, gEngine.TextFileLoader.eTextFileType.eXMLFile);
     gEngine.AudioClips.loadAudio(this.kBgClip);
     gEngine.AudioClips.loadAudio(this.kCue);
+	gEngine.Textures.loadTexture(this.kPortal);
+   gEngine.Textures.loadTexture(this.kCollector);
 };
 
 /**@function - delete mResourceMap[rName]*/
 MyGame.prototype.unloadScene = function(){
+	// Game loop not running, unload all assets
+    gEngine.Textures.unloadTexture(this.kPortal);
+    gEngine.Textures.unloadTexture(this.kCollector);
     //gEngine.TextFileLoader.unloadScene(this.kSceneFile);
 
     // stop the background audio before unloading it

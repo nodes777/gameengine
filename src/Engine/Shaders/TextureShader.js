@@ -18,10 +18,10 @@ function TextureShader(vertexShaderPath, fragmentShaderPath){
 	// reference to aTextureCoordinate from the shader
 	var gl = gEngine.Core.getGL();
 	this.mShaderTextureCoordAttribute = gl.getAttribLocation(this.mCompiledShader, "aTextureCoordinate");
-
-	// get all the prototype functions from SimpleShader
-	gEngine.Core.inheritPrototype(TextureShader, SimpleShader);
 }
+
+// get all the prototype functions from SimpleShader
+gEngine.Core.inheritPrototype(TextureShader, SimpleShader);
 
 TextureShader.prototype.activateShader = function(pixelColor, vpMatrix){
 	// first call the superclass activate
