@@ -116,7 +116,7 @@ MyGame.prototype.loadScene = function(){
     gEngine.AudioClips.loadAudio(this.kBgClip);
     gEngine.AudioClips.loadAudio(this.kCue);
 	gEngine.Textures.loadTexture(this.kPortal);
-   gEngine.Textures.loadTexture(this.kCollector);
+    gEngine.Textures.loadTexture(this.kCollector);
 };
 
 /**@function - delete mResourceMap[rName]*/

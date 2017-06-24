@@ -132,5 +132,5 @@ gEngine.Textures = (function(){
     	getTextureInfo: getTextureInfo
 	};
     return mPublic;
-}());
+})();
 
