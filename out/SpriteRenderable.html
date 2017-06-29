@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: SceneFileParser</title>
+    <title>JSDoc: Class: SpriteRenderable</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: SceneFileParser</h1>
+    <h1 class="page-title">Class: SpriteRenderable</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2>SceneFileParser</h2>
+        <h2>SpriteRenderable</h2>
         
-            <div class="class-description">The Scene File Parser takes the path of an XML file as a unique id to return an XML file from the resource map.</div>
+            <div class="class-description">A subclass of TextureRenderable.</div>
         
     
 </header>
@@ -44,7 +44,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="SceneFileParser"><span class="type-signature"></span>new SceneFileParser<span class="signature">(sceneFilePath)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SpriteRenderable"><span class="type-signature"></span>new SpriteRenderable<span class="signature">(myTexture)</span><span class="type-signature"></span></h4>
 
     
 
@@ -83,13 +83,13 @@
 
         <tr>
             
-                <td class="name"><code>sceneFilePath</code></td>
+                <td class="name"><code>myTexture</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">path</span>
 
 
             
@@ -99,7 +99,7 @@
 
             
 
-            <td class="description last">Path to file used as unique id to get to the value</td>
+            <td class="description last">path to the file that contains the texture image</td>
         </tr>
 
     
@@ -140,7 +140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="myGame_Util_SceneFileParser.js.html">myGame/Util/SceneFileParser.js</a>, <a href="myGame_Util_SceneFileParser.js.html#line11">line 11</a>
+        <a href="Engine_Renderables_SpriteRenderable.js.html">Engine/Renderables/SpriteRenderable.js</a>, <a href="Engine_Renderables_SpriteRenderable.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -178,6 +178,13 @@
      
 
     
+        <h3 class="subsection-title">Namespaces</h3>
+
+        <dl>
+            <dt><a href="SpriteRenderable.eTexCoordArray.html">eTexCoordArray</a></dt>
+            <dd></dd>
+        </dl>
+    
 
     
 
@@ -189,14 +196,14 @@
 
     
 
-    <h4 class="name" id="parseCamera"><span class="type-signature"></span>parseCamera<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="draw"><span class="type-signature"></span>draw<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Get the camera element from XML, get the attributes, ensure background color and viewport are number arrays.Construct a new camera from those values and return it.
+    Override the draw() function to load the specific texture coordinates values into WebGL context before the actual drawing.Sets then activates the current texture
 </div>
 
 
@@ -240,7 +247,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="myGame_Util_SceneFileParser.js.html">myGame/Util/SceneFileParser.js</a>, <a href="myGame_Util_SceneFileParser.js.html#line28">line 28</a>
+        <a href="Engine_Renderables_SpriteRenderable.js.html">Engine/Renderables/SpriteRenderable.js</a>, <a href="Engine_Renderables_SpriteRenderable.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -271,14 +278,14 @@
 
     
 
-    <h4 class="name" id="parseSquares"><span class="type-signature"></span>parseSquares<span class="signature">(sqSet)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setElementPixelPositions"><span class="type-signature"></span>setElementPixelPositions<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Parses the XML file to create Renderable objectssq to be placed in the array that is passed in as a parameter.
+    Specifies a sprite sheet element’s uv values with pixel positions (which is converted to uv values/texture coordinates).
 </div>
 
 
@@ -287,55 +294,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>sqSet</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Array that will hold the Renderables that are created in this function</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -371,7 +329,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="myGame_Util_SceneFileParser.js.html">myGame/Util/SceneFileParser.js</a>, <a href="myGame_Util_SceneFileParser.js.html#line57">line 57</a>
+        <a href="Engine_Renderables_SpriteRenderable.js.html">Engine/Renderables/SpriteRenderable.js</a>, <a href="Engine_Renderables_SpriteRenderable.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -402,14 +360,14 @@
 
     
 
-    <h4 class="name" id="parseTextureSquares"><span class="type-signature"></span>parseTextureSquares<span class="signature">(sqSet)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setElementUVCoordinate"><span class="type-signature"></span>setElementUVCoordinate<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Parses the XML file to create Renderable Texture objectssq to be placed in the array that is passed in as a parameter.
+    Specifies a sprite sheet element’s uv values in UV/texture coordinate space (normalized between 0 to 1)
 </div>
 
 
@@ -418,55 +376,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>sqSet</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Array that will hold the Texture Renderables that are created in this function</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -502,7 +411,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="myGame_Util_SceneFileParser.js.html">myGame/Util/SceneFileParser.js</a>, <a href="myGame_Util_SceneFileParser.js.html#line89">line 89</a>
+        <a href="Engine_Renderables_SpriteRenderable.js.html">Engine/Renderables/SpriteRenderable.js</a>, <a href="Engine_Renderables_SpriteRenderable.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
