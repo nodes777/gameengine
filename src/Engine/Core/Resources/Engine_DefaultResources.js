@@ -1,5 +1,5 @@
 /*jslint node: true, vars: true, evil: true*/
-/*global SimpleShader: false, TextureShader: false*/
+/*global SimpleShader: false, TextureShader: false, SpriteShader: false*/
 "use strict";
 
 var gEngine = gEngine || { };
@@ -14,6 +14,11 @@ gEngine.DefaultResources = (function() {
 	var kTextureFS = "src/GLSLShaders/TextureFS.glsl";  // Path to FragmentShader
 	var mTextureShader = null;
 
+	var mSpriteShader = null;
+	var getSpriteShader = function(){
+		return mSpriteShader;
+	};
+
 	var mConstColorShader = null;
 	var _getConstColorShader = function(){
 		return mConstColorShader;
@@ -23,6 +28,7 @@ gEngine.DefaultResources = (function() {
 	var _createShaders = function(callbackFunction){
 		mConstColorShader = new SimpleShader(kSimpleVS,kSimpleFS);
 		mTextureShader = new TextureShader(kTextureVS, kTextureFS);
+		mSpriteShader = new SpriteShader(kTextureVS, kTextureFS);
 		callbackFunction();
 	};
 
@@ -46,6 +52,7 @@ gEngine.DefaultResources = (function() {
 		initialize: _initialize,
 	    getConstColorShader: _getConstColorShader,
 		getTextureShader: getTextureShader,
+		getSpriteShader:getSpriteShader,
 	};
     return mPublic;
 }());

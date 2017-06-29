@@ -44,4 +44,11 @@ Engine_Core.js: This file is modified to configure WebGL to support drawing with
 Engine_Textures.js: This is a new file that defines the core engine component that is capable of loading, activating (for rendering), and unloading texture images.
 MyGame.js and BlueLevel.js: These game engine client files are modified to test the new texture mapping functionality.
 
-Create a shader that accepts both geometric (x,y) and texture (u,v) coordinates at each vertex. 
+Create a shader that accepts both geometric (x,y) and texture (u,v) coordinates at each vertex.
+
+## 5.2 Sprite Shaders - sprite sheets
+
+* To gain a deeper understanding for texture coordinates/UV values
+* To experience defining subregions within an image for texture mapping
+* To draw squares by mapping from sprite sheet elements
+* To prepare for working with sprite animation and bitmap fonts
