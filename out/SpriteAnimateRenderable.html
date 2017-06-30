@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Renderable</title>
+    <title>JSDoc: Class: SpriteAnimateRenderable</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Renderable</h1>
+    <h1 class="page-title">Class: SpriteAnimateRenderable</h1>
 
     
 
@@ -28,9 +28,7 @@
 
 <header>
     
-        <h2>Renderable</h2>
-        
-            <div class="class-description">mShader - refers to default constColorShader by default</div>
+        <h2>SpriteAnimateRenderable</h2>
         
     
 </header>
@@ -41,14 +39,16 @@
         
 
     
-    <h2>Constructor</h2>
-    
 
-    <h4 class="name" id="Renderable"><span class="type-signature"></span>new Renderable<span class="signature">(shader)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SpriteAnimateRenderable"><span class="type-signature"></span>new SpriteAnimateRenderable<span class="signature">(myTexture)</span><span class="type-signature"></span></h4>
 
     
 
 
+
+<div class="description">
+    Derived from SpriteRenderable, specifies animation of a sprite. All coordinates are in texture coordinate (UV between 0 to 1)
+</div>
 
 
 
@@ -83,13 +83,13 @@
 
         <tr>
             
-                <td class="name"><code>shader</code></td>
+                <td class="name"><code>myTexture</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">shader</span>
+<span class="param-type">texture</span>
 
 
             
@@ -99,7 +99,7 @@
 
             
 
-            <td class="description last">OLD - Compiled shader from SimpleShader.js</td>
+            <td class="description last">Path to sprite sheet</td>
         </tr>
 
     
@@ -140,7 +140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Engine_Renderables_Renderable.js.html">Engine/Renderables/Renderable.js</a>, <a href="Engine_Renderables_Renderable.js.html#line14">line 14</a>
+        <a href="Engine_Renderables_SpriteAnimateRenderable.js.html">Engine/Renderables/SpriteAnimateRenderable.js</a>, <a href="Engine_Renderables_SpriteAnimateRenderable.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -178,19 +178,26 @@
      
 
     
+        <h3 class="subsection-title">Namespaces</h3>
+
+        <dl>
+            <dt><a href="SpriteAnimateRenderable.eAnimationType.html">eAnimationType</a></dt>
+            <dd></dd>
+        </dl>
+    
 
     
         <h3 class="subsection-title">Members</h3>
 
         
             
-<h4 class="name" id="mColor"><span class="type-signature"></span>mColor<span class="type-signature"></span></h4>
+<h4 class="name" id="mCurrentAnimAdvance"><span class="type-signature"></span>mCurrentAnimAdvance<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Color for fragment shader
+    Current animation state
 </div>
 
 
@@ -228,7 +235,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Engine_Renderables_Renderable.js.html">Engine/Renderables/Renderable.js</a>, <a href="Engine_Renderables_Renderable.js.html#line23">line 23</a>
+        <a href="Engine_Renderables_SpriteAnimateRenderable.js.html">Engine/Renderables/SpriteAnimateRenderable.js</a>, <a href="Engine_Renderables_SpriteAnimateRenderable.js.html#line49">line 49</a>
     </li></ul></dd>
     
 
@@ -246,13 +253,13 @@
 
         
             
-<h4 class="name" id="mXform"><span class="type-signature"></span>mXform<span class="type-signature"></span></h4>
+<h4 class="name" id="mElmTop"><span class="type-signature"></span>mElmTop<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Transform operator for the Renderable
+    Top corner of the image
 </div>
 
 
@@ -290,7 +297,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Engine_Renderables_Renderable.js.html">Engine/Renderables/Renderable.js</a>, <a href="Engine_Renderables_Renderable.js.html#line19">line 19</a>
+        <a href="Engine_Renderables_SpriteAnimateRenderable.js.html">Engine/Renderables/SpriteAnimateRenderable.js</a>, <a href="Engine_Renderables_SpriteAnimateRenderable.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -307,81 +314,16 @@
 
 
         
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
             
+<h4 class="name" id="mElmWidth"><span class="type-signature"></span>mElmWidth<span class="type-signature"></span></h4>
 
-    
-
-    <h4 class="name" id="draw"><span class="type-signature"></span>draw<span class="signature">(vpMatrix)</span><span class="type-signature"></span></h4>
-
-    
 
 
 
 <div class="description">
-    Get the canvas, activate the shader, load the transforms, and then draw on canvas
+    Default sprite element size is the entire image
 </div>
 
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>vpMatrix</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="mat4.html">mat4</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">View Projection Matrix</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -417,7 +359,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Engine_Renderables_Renderable.js.html">Engine/Renderables/Renderable.js</a>, <a href="Engine_Renderables_Renderable.js.html#line30">line 30</a>
+        <a href="Engine_Renderables_SpriteAnimateRenderable.js.html">Engine/Renderables/SpriteAnimateRenderable.js</a>, <a href="Engine_Renderables_SpriteAnimateRenderable.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -433,10 +375,62 @@
 
 
 
+        
+            
+<h4 class="name" id="mFirstElmLeft"><span class="type-signature"></span>mFirstElmLeft<span class="type-signature"></span></h4>
 
 
 
 
+<div class="description">
+    Left corner of the image
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Engine_Renderables_SpriteAnimateRenderable.js.html">Engine/Renderables/SpriteAnimateRenderable.js</a>, <a href="Engine_Renderables_SpriteAnimateRenderable.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -444,6 +438,132 @@
 
 
         
+            
+<h4 class="name" id="mNumsElems"><span class="type-signature"></span>mNumsElems<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Number of elements in an animation
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Engine_Renderables_SpriteAnimateRenderable.js.html">Engine/Renderables/SpriteAnimateRenderable.js</a>, <a href="Engine_Renderables_SpriteAnimateRenderable.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="mUpdateInterval"><span class="type-signature"></span>mUpdateInterval<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    How often to advance
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Engine_Renderables_SpriteAnimateRenderable.js.html">Engine/Renderables/SpriteAnimateRenderable.js</a>, <a href="Engine_Renderables_SpriteAnimateRenderable.js.html#line46">line 46</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
     
 
     

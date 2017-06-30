@@ -80,7 +80,7 @@ SpriteRenderable.prototype.setElementPixelPositions = function (left, right, bot
 
 SpriteRenderable.prototype.getElementUVCoordinateArray = function () {
     return [
-        this.mTexRight,  this.mTexTop,          // x,y of top-right
+        this.mTexRight,  this.mTexTop, // x,y of top-right
         this.mTexLeft,   this.mTexTop,
         this.mTexRight,  this.mTexBottom,
         this.mTexLeft,   this.mTexBottom

@@ -167,7 +167,7 @@ MyGame.prototype.loadScene = function(){
     gEngine.Textures.loadTexture(this.kMinionSprite);
 };
 
-/**@function - delete mResourceMap[rName]*/
+/** Delete mResourceMap[rName]*/
 MyGame.prototype.unloadScene = function(){
 	// Game loop not running, unload all assets
     gEngine.Textures.unloadTexture(this.kPortal);

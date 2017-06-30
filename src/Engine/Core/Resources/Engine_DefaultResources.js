@@ -3,7 +3,10 @@
 "use strict";
 
 var gEngine = gEngine || { };
-
+/**
+ * Default Resources Module.
+ * @module Core/Resources/Engine_DefaultResources
+ */
 gEngine.DefaultResources = (function() {
 	/** @constant Simple Shader GLSL Shader file paths*/
 	var kSimpleVS = "src/GLSLShaders/SimpleVS.glsl";
