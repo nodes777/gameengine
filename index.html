@@ -6,6 +6,7 @@
         <title>Game Engine</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.1.0/mocha.css" rel="stylesheet" />
     </head>
     <body onload="var myGame = new MyGame('GLCanvas');
     gEngine.Core.initializeEngineCore('GLCanvas', myGame);
@@ -16,7 +17,7 @@
         Your browser does not support the HTML5 canvas.
         <!-- this message will show only if WebGL clearing failed -->
     </canvas>
-
+    <div id="mocha"></div>
 
     <script type="text/javascript" src="src/lib/gl-matrix.js"></script>
     <!-- Core of Engine -->
@@ -55,6 +56,15 @@
     <!-- Util -->
     <script type="text/javascript" src="src/myGame/Util/SceneFileParser.js"></script>
 
+    <!-- Testing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.1.0/mocha.js"></script>
+    <script src="http://chaijs.com/chai.js"></script>
 
+    <script>mocha.setup('bdd');</script>
+    <script type="text/javascript" src="tests/testScripts.js"></script>
+    <script>
+        mocha.checkLeaks();
+        mocha.run();
+    </script>
 </body>
 </html>
