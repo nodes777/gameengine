@@ -59,10 +59,17 @@ gEngine.VertexBuffer = (function() {
 	    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
 	};
 
+	var cleanUp = function(){
+		var gl = gEngine.Core.getGL();
+		gl.deleteBuffer(mSquareVertexBuffer);
+		gl.deleteBuffer(mTextureCoordBuffer);
+	};
+
     var mPublic = {
         initialize: initialize,
         getGLVertexRef: getGLVertexRef,
-		getGLTexCoordRef: getGLTexCoordRef
+		getGLTexCoordRef: getGLTexCoordRef,
+		cleanUp: cleanUp
     };
     return mPublic;
 }());

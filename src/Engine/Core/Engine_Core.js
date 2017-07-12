@@ -75,13 +75,19 @@ gEngine.Core = (function() {
         subClass.prototype = prototype;
     };
 
+    var cleanUp = function(){
+        gEngine.VertexBuffer.cleanUp();
+        gEngine.DefaultResources.cleanUp();
+    };
+
     //Contains the functions and variables that will be accessible
     var mPublic = {
         getGL: getGL,
         initializeEngineCore: initializeEngineCore,
         clearCanvas: clearCanvas,
         inheritPrototype: inheritPrototype,
-        startScene: startScene
+        startScene: startScene,
+        cleanUp: cleanUp
     };
 
     return mPublic;

@@ -27,6 +27,10 @@ gEngine.DefaultResources = (function() {
 		return mConstColorShader;
 	};
 
+	// Fonts
+	var kDefaultFont = "assets/fonts/system-default-font";
+	var getDefaultFont = function() { return kDefaultFont; };
+
 	/** @callback func after loading is done*/
 	var _createShaders = function(callbackFunction){
 		mConstColorShader = new SimpleShader(kSimpleVS,kSimpleFS);
@@ -45,10 +49,27 @@ gEngine.DefaultResources = (function() {
 		// texture shader:
 	    gEngine.TextFileLoader.loadTextFile(kTextureVS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 	    gEngine.TextFileLoader.loadTextFile(kTextureFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+		// Font
+		gEngine.Fonts.loadFont(kDefaultFont);
 
 		gEngine.ResourceMap.setLoadCompleteCallback(function() {
 			_createShaders(callbackFunction);
 		});
+	};
+
+	/** @function Removes resources from memory by deleting associated buffers from webGL and detaching shaders. And unloading text and font files. */
+	var cleanUp = function(){
+		mConstColorShader.cleanUp();
+		mTextureShader.cleanUp();
+		mSpriteShader.cleanUp();
+
+		gEngine.TextFileLoader.unloadTextFile(kSimpleVS);
+		gEngine.TextFileLoader.unloadTextFile(kSimpleFS);
+
+		gEngine.TextFileLoader.unloadTextFile(kTextureVS);
+		gEngine.TextFileLoader.unloadTextFile(kTextureFS);
+
+		gEngine.Fonts.unloadFont(kDefaultFont);
 	};
 
     var mPublic = {
@@ -56,6 +77,8 @@ gEngine.DefaultResources = (function() {
 	    getConstColorShader: _getConstColorShader,
 		getTextureShader: getTextureShader,
 		getSpriteShader:getSpriteShader,
+		getDefaultFont: getDefaultFont,
+		cleanUp: cleanUp
 	};
     return mPublic;
 }());

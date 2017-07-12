@@ -25,6 +25,9 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "jsdoc": "^3.4.3"
+    "chai": "^4.0.2",
+    "jsdoc": "^3.4.3",
+    "mocha": "^3.4.2",
+    "sinon": "^2.3.6"
   }
 }

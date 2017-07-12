@@ -59,3 +59,14 @@ Create a shader that accepts both geometric (x,y) and texture (u,v) coordinates 
 * To gain a deeper understanding of animated sprite sheets
 * To experience the creation of sprite animations
 * To define abstractions for implementing sprite animations
+
+## 5.4 Text and Font Rendering
+
+### Bitmap Fonts
+* A Bitmap font is a map describing which bit (or pixel) must be switched on to represent characters in the font. Combining all characters of a bitmap font into a single image and defining an accomppanying decoding description doc, provides a way to draw text output.
+* One image with all characters, XML files for decoding description.
+* Format used in this book is the AngelCode BMFont-compatible font in XML form.
+* BMFont is an open source software that converts vector fonts, such as TrueType and OpenType, into bitmap fonts.
+* .fnt and .png files are paired. .fnt decodes the png file
+* Parsing, decoding, and extracting of character information from the .fnt files is not covered.
+* .fnt file is an XML file and the .png file is a simple texture image???

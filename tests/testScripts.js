@@ -1,22 +1,26 @@
-var expect = chai.expect; // This makes the expect function available to us
+var expect = chai.expect;
 
-    var earth = {
-        isRound: true,
-        numberFromSun: 3,
-        density: 5.51
-    };
-
-    describe("Earth", function(){
-
-        it("is round", function(){
-            expect(earth.isRound).to.equal(true);
+    describe("gEngine.Fonts", function(){
+        it("has loadFont function", function(){
+            expect(gEngine.Fonts.loadFont).to.exist;
         });
 
-        it("is the third planet from the sun", function(){
-            expect(earth.numberFromSun).to.equal(3);
+        it("has unload function", function(){
+            expect(gEngine.Fonts.unloadFont).to.exist;
         });
 
-        it("is the densest of all the planets", function(){
-            expect(earth.density).to.be.at.least(5.51);
+        it("has getCharInfo function", function(){
+            expect(gEngine.Fonts.getCharInfo).to.exist;
+        });
+
+        it("doesn't make _storeLoadedFont public", function(){
+            expect(gEngine.Fonts._storeLoadedFont).to.not.exist;
+        });
+
+        describe("gEngine.Fonts.loadFont", function(){
+            it("calls asyncLoadRequested ", function(){
+
+            });
+
         });
     });

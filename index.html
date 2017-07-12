@@ -32,6 +32,7 @@
     <script type="text/javascript" src="src/Engine/Core/Resources/Engine_TextFileLoader.js"></script>
     <script type="text/javascript" src="src/Engine/Core/Resources/Engine_DefaultResources.js"></script>
     <script type="text/javascript" src="src/Engine/Core/Resources/Engine_AudioClips.js"></script>
+    <script type="text/javascript" src="src/Engine/Core/Resources/Engine_Fonts.js"></script>
 
 
     <script type="text/javascript" src="src/Engine/Scene.js"></script>
@@ -43,6 +44,7 @@
     <script type="text/javascript" src="src/Engine/Renderables/TextureRenderable.js"></script>
     <script type="text/javascript" src="src/Engine/Renderables/SpriteRenderable.js"></script>
     <script type="text/javascript" src="src/Engine/Renderables/SpriteAnimateRenderable.js"></script>
+    <script type="text/javascript" src="src/Engine/Renderables/FontRenderable.js"></script>
 
     <!-- Shaders -->
     <script type="text/javascript" src="src/Engine/Shaders/SimpleShader.js"></script>
@@ -50,15 +52,16 @@
     <script type="text/javascript" src="src/Engine/Shaders/SpriteShader.js"></script>
 
     <!-- Client game code -->
-    <script type="text/javascript" src="src/myGame/MyGame.js"></script>
-    <script type="text/javascript" src="src/MyGame/BlueLevel.js"></script>
+    <script type="text/javascript" src="src/myGame/myGame.js"></script>
+    <script type="text/javascript" src="src/myGame/BlueLevel.js"></script>
+    <script type="text/javascript" src="src/myGame/GameOver.js"></script>
 
     <!-- Util -->
     <script type="text/javascript" src="src/myGame/Util/SceneFileParser.js"></script>
 
     <!-- Testing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.1.0/mocha.js"></script>
-    <script src="http://chaijs.com/chai.js"></script>
+  <script src="./node_modules/mocha/mocha.js"></script>
+  <script src="./node_modules/chai/chai.js"></script>
 
     <script>mocha.setup('bdd');</script>
     <script type="text/javascript" src="tests/testScripts.js"></script>

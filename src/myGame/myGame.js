@@ -2,9 +2,11 @@
  * File: MyGame.js
  * This is the logic of our game.
  */
+
 /*jslint node: true, vars: true */
 /*global gEngine: false, Scene: false, SpriteRenderable: false, Camera: false, vec2: false,
-  TextureRenderable: false, Renderable: false, SpriteAnimateRenderable: false */
+  TextureRenderable: false, Renderable: false, SpriteAnimateRenderable: false, GameOver: false,
+  FontRenderable: false */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
@@ -12,92 +14,131 @@
 function MyGame() {
     // textures:
     this.kFontImage = "assets/Consolas-72.png";
-    this.kMinionSprite = "assets/minion_sprite.png";  // Portal and Collector are embedded here
+    this.kMinionSprite = "assets/minion_sprite.png";
+
+    // the fonts
+    this.kFontCon16 = "assets/fonts/Consolas-16";  // notice font names do not need extensions!
+    this.kFontCon24 = "assets/fonts/Consolas-24";
+    this.kFontCon32 = "assets/fonts/Consolas-32";  // this is also the default system font
+    this.kFontCon72 = "assets/fonts/Consolas-72";
+    this.kFontSeg96 = "assets/fonts/Segment7-96";
 
     // The camera to view the scene
     this.mCamera = null;
 
     // the hero and the support objects
     this.mHero = null;
-    this.mPortal = null;
-    this.mCollector = null;
     this.mFontImage = null;
-    this.mRightMinion = null;
-    this.mLeftMinion = null;
+    this.mMinion = null;
+
+    this.mTextSysFont = null;
+    this.mTextCon16 = null;
+    this.mTextCon24 = null;
+    this.mTextCon32 = null;
+    this.mTextCon72 = null;
+    this.mTextSeg96 = null;
+
+    this.mTextToWork = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
 MyGame.prototype.loadScene = function () {
-    // loads the textures
+    // Step A: loads the textures
     gEngine.Textures.loadTexture(this.kFontImage);
     gEngine.Textures.loadTexture(this.kMinionSprite);
+
+    // Step B: loads all the fonts
+    gEngine.Fonts.loadFont(this.kFontCon16);
+    gEngine.Fonts.loadFont(this.kFontCon24);
+    gEngine.Fonts.loadFont(this.kFontCon32);
+    gEngine.Fonts.loadFont(this.kFontCon72);
+    gEngine.Fonts.loadFont(this.kFontSeg96);
 };
 
 MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kFontImage);
     gEngine.Textures.unloadTexture(this.kMinionSprite);
+
+    // unload the fonts
+    gEngine.Fonts.unloadFont(this.kFontCon16);
+    gEngine.Fonts.unloadFont(this.kFontCon24);
+    gEngine.Fonts.unloadFont(this.kFontCon32);
+    gEngine.Fonts.unloadFont(this.kFontCon72);
+    gEngine.Fonts.unloadFont(this.kFontSeg96);
+
+    // Step B: starts the next level
+    var nextLevel = new GameOver();  // next level to be loaded
+    gEngine.Core.startScene(nextLevel);
 };
 
 MyGame.prototype.initialize = function () {
     // Step A: set up the cameras
     this.mCamera = new Camera(
-        vec2.fromValues(20, 60),   // position of the camera
-        20,                        // width of camera
-        [20, 40, 600, 300]         // viewport (orgX, orgY, width, height)
+        vec2.fromValues(50, 33),   // position of the camera
+        100,                       // width of camera
+        [0, 0, 600, 400]           // viewport (orgX, orgY, width, height)
     );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
 
-    // Step B: Create the support objects
-    this.mPortal = new SpriteRenderable(this.kMinionSprite);
-    this.mPortal.setColor([1, 0, 0, 0.2]);  // tints red
-    this.mPortal.getXform().setPosition(25, 60);
-    this.mPortal.getXform().setSize(3, 3);
-    this.mPortal.setElementPixelPositions(130, 310, 0, 180);
-
-    this.mCollector = new SpriteRenderable(this.kMinionSprite);
-    this.mCollector.setColor([0, 0, 0, 0]);  // No tinting
-    this.mCollector.getXform().setPosition(15, 60);
-    this.mCollector.getXform().setSize(3, 3);
-    this.mCollector.setElementPixelPositions(315, 495, 0, 180);
-
-    // Step C: Create the font and minion images using sprite
+    // Step B: Create the font and minion images using sprite
     this.mFontImage = new SpriteRenderable(this.kFontImage);
     this.mFontImage.setColor([1, 1, 1, 0]);
-    this.mFontImage.getXform().setPosition(13, 62);
-    this.mFontImage.getXform().setSize(4, 4);
+    this.mFontImage.getXform().setPosition(15, 50);
+    this.mFontImage.getXform().setSize(20, 20);
 
     // The right minion
-    this.mRightMinion = new SpriteAnimateRenderable(this.kMinionSprite);
-    this.mRightMinion.setColor([1, 1, 1, 0]);
-    this.mRightMinion.getXform().setPosition(26, 56.5);
-    this.mRightMinion.getXform().setSize(4, 3.2);
-    this.mRightMinion.setSpriteSequence(512, 0,     // first element pixel position: top-left 512 is top of image, 0 is left of image
-                                    204, 164,       // widthxheight in pixels
-                                    5,              // number of elements in this sequence
-                                    0);             // horizontal padding in between
-    this.mRightMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateRight);
-    this.mRightMinion.setAnimationSpeed(50);  // show each element for mAnimSpeed updates
-
-    // the left minion
-    this.mLeftMinion = new SpriteAnimateRenderable(this.kMinionSprite);
-    this.mLeftMinion.setColor([1, 1, 1, 0]);
-    this.mLeftMinion.getXform().setPosition(15, 56.5);
-    this.mLeftMinion.getXform().setSize(4, 3.2);
-    this.mLeftMinion.setSpriteSequence(348, 0,      // first element pixel position: top-right 164 from 512 is top of image, 0 is right of image
-                                    204, 164,       // widthxheight in pixels
-                                    5,              // number of elements in this sequence
-                                    0);             // horizontal padding in between
-    this.mLeftMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateRight);
-    this.mLeftMinion.setAnimationSpeed(50);
+    this.mMinion = new SpriteAnimateRenderable(this.kMinionSprite);
+    this.mMinion.setColor([1, 1, 1, 0]);
+    this.mMinion.getXform().setPosition(15, 25);
+    this.mMinion.getXform().setSize(24, 19.2);
+    this.mMinion.setSpriteSequence(512, 0,     // first element pixel position: top-left 512 is top of image, 0 is left of image
+                                    204, 164,    // widthxheight in pixels
+                                    5,          // number of elements in this sequence
+                                    0);         // horizontal padding in between
+    this.mMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateSwing);
+    this.mMinion.setAnimationSpeed(15);
                                 // show each element for mAnimSpeed updates
 
     // Step D: Create the hero object with texture from the lower-left corner
     this.mHero = new SpriteRenderable(this.kMinionSprite);
     this.mHero.setColor([1, 1, 1, 0]);
-    this.mHero.getXform().setPosition(20, 60);
-    this.mHero.getXform().setSize(2, 3);
+    this.mHero.getXform().setPosition(35, 50);
+    this.mHero.getXform().setSize(12, 18);
     this.mHero.setElementPixelPositions(0, 120, 0, 180);
+
+    //<editor-fold desc="Create the fonts!">
+    this.mTextSysFont = new FontRenderable("System Font: in Red");
+    this._initText(this.mTextSysFont, 50, 60, [1, 0, 0, 1], 3);
+
+    this.mTextCon16 = new FontRenderable("Consolas 16: in black");
+    this.mTextCon16.setFont(this.kFontCon16);
+    this._initText(this.mTextCon16, 50, 55, [0, 0, 0, 1], 2);
+
+    this.mTextCon24 = new FontRenderable("Consolas 24: in black");
+    this.mTextCon24.setFont(this.kFontCon24);
+    this._initText(this.mTextCon24, 50, 50, [0, 0, 0, 1], 3);
+
+    this.mTextCon32 = new FontRenderable("Consolas 32: in white");
+    this.mTextCon32.setFont(this.kFontCon32);
+    this._initText(this.mTextCon32, 40, 40, [1, 1, 1, 1], 4);
+
+    this.mTextCon72 = new FontRenderable("Consolas 72: in blue");
+    this.mTextCon72.setFont(this.kFontCon72);
+    this._initText(this.mTextCon72, 30, 30, [0, 0, 1, 1], 6);
+
+    this.mTextSeg96  = new FontRenderable("Segment7-92");
+    this.mTextSeg96.setFont(this.kFontSeg96);
+    this._initText(this.mTextSeg96, 30, 15, [1, 1, 0, 1], 7);
+    //</editor-fold>
+
+    this.mTextToWork = this.mTextCon16;
+};
+
+MyGame.prototype._initText = function (font, posX, posY, color, textH) {
+    font.setColor(color);
+    font.getXform().setPosition(posX, posY);
+    font.setTextHeight(textH);
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more
@@ -110,47 +151,44 @@ MyGame.prototype.draw = function () {
     this.mCamera.setupViewProjection();
 
     // Step  C: Draw everything
-    this.mPortal.draw(this.mCamera.getVPMatrix());
-    this.mCollector.draw(this.mCamera.getVPMatrix());
     this.mHero.draw(this.mCamera.getVPMatrix());
     this.mFontImage.draw(this.mCamera.getVPMatrix());
-    this.mRightMinion.draw(this.mCamera.getVPMatrix());
-    this.mLeftMinion.draw(this.mCamera.getVPMatrix());
+    this.mMinion.draw(this.mCamera.getVPMatrix());
+
+    // drawing the text output
+    this.mTextSysFont.draw(this.mCamera.getVPMatrix());
+    this.mTextCon16.draw(this.mCamera.getVPMatrix());
+    this.mTextCon24.draw(this.mCamera.getVPMatrix());
+    this.mTextCon32.draw(this.mCamera.getVPMatrix());
+    this.mTextCon72.draw(this.mCamera.getVPMatrix());
+    this.mTextSeg96.draw(this.mCamera.getVPMatrix());
 };
 
-// The update function, updates the application state. Make sure to _NOT_ draw
+//  updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
     // let's only allow the movement of hero,
     // and if hero moves too far off, this level ends, we will
     // load the next level
-    var deltaX = 0.05;
+    var deltaX = 0.5;
     var xform = this.mHero.getXform();
 
     // Support hero movements
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
         xform.incXPosBy(deltaX);
-        if (xform.getXPos() > 30) { // this is the right-bound of the window
-            xform.setPosition(12, 60);
+        if (xform.getXPos() > 100) { // this is the right-bound of the window
+            xform.setPosition(0, 50);
         }
     }
 
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
         xform.incXPosBy(-deltaX);
-        if (xform.getXPos() < 11) {  // this is the left-bound of the window
-            xform.setXPos(20);
+        if (xform.getXPos() < 0) {  // this is the left-bound of the window
+            gEngine.GameLoop.stop();
         }
     }
 
-    // continously change texture tinting
-    var c = this.mPortal.getColor();
-    var ca = c[3] + deltaX;
-    if (ca > 1) {
-        ca = 0;
-    }
-    c[3] = ca;
-
-    // New update code for changing the sub-texture regions being shown
+    // New update code for changing the sub-texture regions being shown"
     var deltaT = 0.001;
 
     // <editor-fold desc="The font image:">
@@ -178,40 +216,43 @@ MyGame.prototype.update = function () {
     );
     // </editor-fold>
 
-    // New code for controlling the sprite animation
-    // <editor-fold desc="controlling the sprite animation:">
-    // remember to update the minion's animation
-    this.mRightMinion.updateAnimation();
-    this.mLeftMinion.updateAnimation();
+    // remember to update this.mMinion's animation
+    this.mMinion.updateAnimation();
 
-    // Animate left on the sprite sheet
+    // interactive control of the display size
+
+    // choose which text to work on
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Zero)) {
+        this.mTextToWork = this.mTextCon16;
+    }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.One)) {
-        this.mRightMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateLeft);
-        this.mLeftMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateLeft);
+        this.mTextToWork = this.mTextCon24;
     }
-
-    // swing animation
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Two)) {
-        this.mRightMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateSwing);
-        this.mLeftMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateSwing);
-    }
-
-    // Animate right on the sprite sheet
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Three)) {
-        this.mRightMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateRight);
-        this.mLeftMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateRight);
+        this.mTextToWork = this.mTextCon32;
     }
-
-    // decrease the duration of showing each sprite element, thereby speeding up the animation
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Four)) {
-        this.mRightMinion.incAnimationSpeed(-2);
-        this.mLeftMinion.incAnimationSpeed(-2);
+        this.mTextToWork = this.mTextCon72;
     }
 
-    // increase the duration of showing each sprite element, thereby slowing down the animation
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Five)) {
-        this.mRightMinion.incAnimationSpeed(2);
-        this.mLeftMinion.incAnimationSpeed(2);
+    var deltaF = 0.005;
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Up)) {
+        if (gEngine.Input.isKeyPressed(gEngine.Input.keys.X)) {
+            this.mTextToWork.getXform().incWidthBy(deltaF);
+        }
+        if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Y)) {
+            this.mTextToWork.getXform().incHeightBy(deltaF);
+        }
+        this.mTextSysFont.setText(this.mTextToWork.getXform().getWidth().toFixed(2) + "x" + this.mTextToWork.getXform().getHeight().toFixed(2));
     }
-    // </editor-fold>
+
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)) {
+        if (gEngine.Input.isKeyPressed(gEngine.Input.keys.X)) {
+            this.mTextToWork.getXform().incWidthBy(-deltaF);
+        }
+        if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Y)) {
+            this.mTextToWork.getXform().incHeightBy(-deltaF);
+        }
+        this.mTextSysFont.setText(this.mTextToWork.getXform().getWidth().toFixed(2) + "x" + this.mTextToWork.getXform().getHeight().toFixed(2));
+    }
 };

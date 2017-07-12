@@ -64,3 +64,10 @@ SpriteShader.prototype.activateShader = function(pixelColor, vpMatrix){
 	gl.vertexAttribPointer(this.mShaderTextureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(this.mShaderTextureCoordAttribute);
 };
+
+SpriteShader.prototype.cleanUp = function(){
+	var gl = gEngine.Core.getGL();
+	gl.deleteBuffer(this.mTexCoordBuffer);
+
+	SimpleShader.prototype.cleanUp.call(this);
+};

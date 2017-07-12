@@ -28,13 +28,13 @@ function SimpleShader(vertexShaderPath, fragmentShaderPath) {
     var gl = gEngine.Core.getGL();
 
     // Step A: load and compile vertex and fragment shaders
-    var vertexShader = this._compileShader(vertexShaderPath, gl.VERTEX_SHADER);
-    var fragmentShader = this._compileShader(fragmentShaderPath, gl.FRAGMENT_SHADER);
+	this.mVertexShader = this._compileShader(vertexShaderPath, gl.VERTEX_SHADER);
+	this.mFragmentShader = this._compileShader(fragmentShaderPath, gl.FRAGMENT_SHADER);
 
     // Step B: Create and link the shaders into a program.
     this.mCompiledShader = gl.createProgram();
-    gl.attachShader(this.mCompiledShader, vertexShader);
-    gl.attachShader(this.mCompiledShader, fragmentShader);
+    gl.attachShader(this.mCompiledShader, this.mVertexShader);
+    gl.attachShader(this.mCompiledShader, this.mFragmentShader);
     gl.linkProgram(this.mCompiledShader);
 
     // Step C: check for error
@@ -122,3 +122,11 @@ SimpleShader.prototype.loadObjectTransform = function(modelTransform){
 };
 
 SimpleShader.prototype.getShader = function() { return this.mCompiledShader; };
+
+SimpleShader.prototype.cleanUp = function() {
+    var gl = gEngine.Core.getGL();
+    gl.detachShader(this.mCompiledShader, this.mVertexShader);
+	gl.detachShader(this.mCompiledShader, this.mFragmentShader);
+    gl.deleteShader(this.mVertexShader);
+    gl.deleteShader(this.mFragmentShader);
+}
