@@ -63,7 +63,7 @@ gEngine.Fonts = (function(){
 			var fontInfoSourceString = fontName + ".fnt";
 			var textureSourceString = fontName + ".png";
 
-			gEngine.Textures.unloadAsset(textureSourceString);
+			gEngine.Textures.unloadTexture(textureSourceString);
 			gEngine.TextFileLoader.unloadTextFile(fontInfoSourceString);
 		}
 
@@ -90,7 +90,7 @@ gEngine.Fonts = (function(){
         }
 
         returnInfo = new CharacterInfo();
-        var texInfo = gEngine.Textures.getTextureInfo(fontInfo.FontImage);
+        var texInfo = gEngine.Textures.getTextureInfo(fontInfo.fontImage);
         var leftPixel = Number(charInfo.getAttribute("x"));
         var rightPixel = leftPixel + Number(charInfo.getAttribute("width")) - 1;
         var topPixel = (texInfo.mHeight - 1) - Number(charInfo.getAttribute("y"));
