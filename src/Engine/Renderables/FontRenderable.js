@@ -32,8 +32,8 @@ FontRenderable.prototype.draw = function(vpMatrix){
 		charInfo = gEngine.Fonts.getCharInfo(this.mFont, aChar);
 
 		// set the texture coordinate
-		this.mOneChar.setElementUVCoordinate(charInfo.mTexCoordLeft, charInfo.mTextCoordRight,
-			charInfo.mTexCoordBottom, charInfo.mTexCoord);
+		this.mOneChar.setElementUVCoordinate(charInfo.mTexCoordLeft, charInfo.mTexCoordRight,
+			charInfo.mTexCoordBottom, charInfo.mTexCoordTop);
 
 		// now the size of the char
 		xSize = widthOfOneChar * charInfo.mCharWidth;
