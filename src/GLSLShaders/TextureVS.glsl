@@ -1,14 +1,10 @@
-//expects one vertex position, xyz
-attribute vec3 aSquareVertexPosition;
+attribute vec3 aSquareVertexPosition;   // Vertex shader expects one vertex position
+attribute vec2 aTextureCoordinate;      // This is the texture coordinate attribute
 
-//the uv coordinate
-attribute vec2 aTextureCoordinate;
-
-// texture coordinate that will map the entire image to the entire square
-// linearlly interpolated and passed to the fragment shader
+// texture coordinate that maps image to the square
 varying vec2 vTexCoord;
 
-// transform the vertex postion
+// to transform the vertex position
 uniform mat4 uModelTransform;
 uniform mat4 uViewProjTransform;
 

@@ -1,0 +1,32 @@
+Transparency Issue:
+
+It is not:
+TextureFS.glsl X
+TextureVS.glsl X
+
+Camera X
+Scene X
+Transform X
+
+SimpleShader X
+TextureShader X
+SpriteShader X
+
+Renderable X
+TextureRenderable X
+SpriteRenderable X
+SpriteAnimateRenderable X
+FontRenderable X
+
+Engine_Core X
+Engine_Fonts X
+Engine_Textures X
+Engine_VertexBuffers X
+Engine_DefaultResources X
+Engine_ResourceMap X
+Engine_GameLoop X
+Engine_TextFileLoader X
+
+SceneFileParser
+
+It was the actual asset, the png.

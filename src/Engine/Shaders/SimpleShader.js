@@ -129,4 +129,4 @@ SimpleShader.prototype.cleanUp = function() {
 	gl.detachShader(this.mCompiledShader, this.mFragmentShader);
     gl.deleteShader(this.mVertexShader);
     gl.deleteShader(this.mFragmentShader);
-}
+};

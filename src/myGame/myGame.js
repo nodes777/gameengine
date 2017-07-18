@@ -78,7 +78,7 @@ MyGame.prototype.initialize = function () {
         100,                       // width of camera
         [0, 0, 600, 400]           // viewport (orgX, orgY, width, height)
     );
-    this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
+    this.mCamera.setBackgroundColor([0.5, 0.5, 0.5, 1]);
             // sets the background to gray
 
     // Step B: Create the font and minion images using sprite
