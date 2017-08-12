@@ -52,10 +52,10 @@ SpriteShader.prototype.setTextureCoordinate = function(texCoord){
     * @param{array} texCoord - pixel color
     * @param{matrix} vpMatrix - view projection matrix
     */
-SpriteShader.prototype.activateShader = function(pixelColor, vpMatrix){
+SpriteShader.prototype.activateShader = function(pixelColor, aCamera){
 	// call superclass activate
 	//Simple Shader is used instead to avoid TextureShader's activating system's default texture coord buffer for rendering
-	SimpleShader.prototype.activateShader.call(this, pixelColor, vpMatrix);
+	SimpleShader.prototype.activateShader.call(this, pixelColor, aCamera);
 
 	// bind the proper texture coordinate buffer
 	var gl = gEngine.Core.getGL();

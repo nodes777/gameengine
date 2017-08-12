@@ -101,10 +101,10 @@ SimpleShader.prototype._compileShader = function(filepath, shaderType) {
     return compiledShader;
 };
 
-SimpleShader.prototype.activateShader = function(pixelColor, vpMatrix) {
+SimpleShader.prototype.activateShader = function(pixelColor, aCamera) {
     var gl = gEngine.Core.getGL();
     gl.useProgram(this.mCompiledShader);
-	gl.uniformMatrix4fv(this.mViewProjTransform, false, vpMatrix);
+	gl.uniformMatrix4fv(this.mViewProjTransform, false, aCamera.getVPMatrix());
     gl.enableVertexAttribArray(this.mShaderVertexPositionAttribute);
 	//uniform4fv (A WebGLUniformLocation object containing the location of the uniform, newVal for uniform)
 	gl.uniform4fv(this.mPixelColor, pixelColor);

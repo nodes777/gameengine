@@ -93,7 +93,7 @@ SpriteRenderable.prototype.getElementUVCoordinateArray = function () {
 * @param{color} pixelColor - color to draw
 * @param{matrix} vpMatrix - View Projection Matrix
 */
-SpriteRenderable.prototype.draw = function(pixelColor, vpMatrix){
+SpriteRenderable.prototype.draw = function(pixelColor, aCamera){
 	this.mShader.setTextureCoordinate(this.getElementUVCoordinateArray());
-	TextureRenderable.prototype.draw.call(this, pixelColor, vpMatrix);
+	TextureRenderable.prototype.draw.call(this, pixelColor, aCamera);
 };

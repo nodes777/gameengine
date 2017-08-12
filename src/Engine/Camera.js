@@ -58,7 +58,9 @@ Camera.prototype.getViewport = function() { return this.mViewport;};
 Camera.prototype.setBackgroundColor = function(newColor) { this.mBgColor = newColor; };
 Camera.prototype.getBackgroundColor = function() { return this.mBgColor; };
 
-Camera.prototype.getVPMatrix = function() { return this.mVPMatrix; };
+Camera.prototype.getVPMatrix = function () {
+    return this.mVPMatrix;
+};
 
 // Configures webGL and sets up View-Proj Transform
 Camera.prototype.setupViewProjection = function () {

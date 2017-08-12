@@ -25,13 +25,13 @@ function Renderable (){
 /**
 * Get the canvas, activate the shader, load the transforms, and then draw on canvas
 * @function
-* @param {mat4} vpMatrix - View Projection Matrix
+* @param {object} aCamera - a Camera object to be passed to the shader. The getVPMatrix() will be called there. //OLD: vpMatrix - View Projection Matrix
 */
-Renderable.prototype.draw = function(vpMatrix){
+Renderable.prototype.draw = function(aCamera){
 	//gets the web context
 	var gl = gEngine.Core.getGL();
 	//activate the shader before you draw
-	this.mShader.activateShader(this.mColor, vpMatrix);
+	this.mShader.activateShader(this.mColor, aCamera);
 	// vertices of the unit square are processed by the vertex shader
 	// Get the transforms from the Renderable's Transform first
 	this.mShader.loadObjectTransform(this.mXform.getXform());

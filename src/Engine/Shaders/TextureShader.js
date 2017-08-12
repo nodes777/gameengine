@@ -23,9 +23,9 @@ function TextureShader(vertexShaderPath, fragmentShaderPath){
 // get all the prototype functions from SimpleShader
 gEngine.Core.inheritPrototype(TextureShader, SimpleShader);
 
-TextureShader.prototype.activateShader = function(pixelColor, vpMatrix){
+TextureShader.prototype.activateShader = function(pixelColor, aCamera){
 	// first call the superclass activate
-	SimpleShader.prototype.activateShader.call(this, pixelColor, vpMatrix);
+	SimpleShader.prototype.activateShader.call(this, pixelColor, aCamera.getVPMatrix());
 
 	// now implement our own: enable texture coordinate array
 	var gl = gEngine.Core.getGL();
