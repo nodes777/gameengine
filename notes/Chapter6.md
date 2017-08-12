@@ -4,7 +4,7 @@
 * Generalize GameObject to support common behaviors like speed and movement direction
 * Develop an effective per-pixel accurate collision detection
 
-## Game Objects
+## 6.1 Game Objects
 
 * Cleans up initialize and update so that you're not writing ridiculous amounts of code per each renderable.
 
@@ -17,3 +17,5 @@ Modify Renderable and Shader Objects to Draw with a Camera - do it to all render
 Create GameObject Class to abstract out common funcs of objects in the game
 
 Create ObjectSet to manage all GameObjects in scene
+
+## 6.2 Chasing Game Object

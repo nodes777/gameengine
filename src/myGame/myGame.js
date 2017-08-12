@@ -44,9 +44,9 @@ MyGame.prototype.unloadScene = function () {
 MyGame.prototype.initialize = function () {
     // Step A: set up the cameras
     this.mCamera = new Camera(
-        vec2.fromValues(50, 33),   // position of the camera
+        vec2.fromValues(50, 37.5),   // position of the camera
         100,                       // width of camera
-        [0, 0, 600, 400]           // viewport (orgX, orgY, width, height)
+        [0, 0, 640, 480]           // viewport (orgX, orgY, width, height)
     );
     this.mCamera.setBackgroundColor([0.5, 0.5, 0.5, 1]);
             // sets the background to gray
@@ -89,7 +89,6 @@ MyGame.prototype.draw = function () {
     this.mCamera.setupViewProjection();
 
     // Step  C: draw everything
-    console.log(this.mCamera);
     this.mHero.draw(this.mCamera);
     this.mMinionSet.draw(this.mCamera);
     this.mDyePack.draw(this.mCamera);

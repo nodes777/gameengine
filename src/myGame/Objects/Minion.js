@@ -34,7 +34,7 @@ Minion.prototype.update = function(){
 	var xform = this.getXform();
 	xform.incXPosBy(-this.kDelta);
 
-	if(xform.getXform()<0){
+	if(xform.getXPos() < 0) {
 		xform.setXPos(100);
 		xform.setYPos(65* Math.random());
 	}
