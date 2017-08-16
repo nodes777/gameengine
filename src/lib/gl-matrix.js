@@ -6600,6 +6600,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            Math.abs(a1 - b1) <= glMatrix.EPSILON*Math.max(1.0, Math.abs(a1), Math.abs(b1)));
 	};
 
+	/**
+	 * Returns a rotated vector. I have no idea why there are 3 params. Added by Taylor.
+	 *
+	 * @param {vec2} out No idea.
+	 * @param {vec2} a The first vector.
+	 * @param {angle} c Angle to rotate
+	 * @returns {vec2} Rotated vector.
+	 */
+	vec2.rotate = function(out, a, c){
+		var r=[];
+	    // perform rotation
+	    r[0] = a[0]*Math.cos(c) - a[1]*Math.sin(c);
+	    r[1] = a[0]*Math.sin(c) + a[1]*Math.cos(c);
+	    out[0] = r[0];
+	    out[1] = r[1];
+	    return r;
+	};
+
 	module.exports = vec2;
 
 

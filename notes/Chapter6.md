@@ -18,4 +18,17 @@ Create GameObject Class to abstract out common funcs of objects in the game
 
 Create ObjectSet to manage all GameObjects in scene
 
-## 6.2 Chasing Game Object
+## 6.2 Chasing Game Object - Vectors
+
+Vector = (x²-x¹, y²-y¹)
+
+Size of vector = magnitude = length of vector = distance = difference
+
+vec2s in gl-lib, can be used to represent points in space.
+Normalized vectors(unit vector): Vectors with a size of 1
+vec2.normalized(V¹)
+
+Normalized vectors keep direction without regards to length
+
+Dot products return a number/scalar to find angle
+Cross products return a vector to determine clockwise or counterclockwise rotation

@@ -12,7 +12,7 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function MyGame() {
-    this.kMinionSprite = "assets/minion_sprite.png";
+     this.kMinionSprite = "assets/minion_sprite.png";
     // The camera to view the scene
     this.mCamera = null;
 
@@ -21,8 +21,13 @@ function MyGame() {
 
     // the hero and the support objects
     this.mHero = null;
-    this.mMinionSet = null;
-    this.mDyePack = null;
+    this.mBrain = null;
+
+    // mode of running: 
+    //   H: Player drive brain
+    //   J: Dye drive brain, immediate orientation change
+    //   K: Dye drive brain, gradual orientation change
+    this.mMode = 'H';
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
@@ -52,46 +57,31 @@ MyGame.prototype.initialize = function () {
             // sets the background to gray
 
     // Step B: The dye pack: simply another GameObject
-    this.mDyePack = new DyePack(this.kMinionSprite);
+    // Create the brain  
+    this.mBrain = new Brain(this.kMinionSprite);
 
-    this.mMinionSet = new GameObjectSet();
-    var i = 0, randomY, aMinion;
-    // create 5 minions at random Y values
-    for (i = 0; i <  5; i++) {
-        randomY = Math.random() * 65;
-        aMinion = new Minion(this.kMinionSprite, randomY);
-        this.mMinionSet.addToSet(aMinion);
-    }
+    //  Create the hero object 
+    this.mHero = new Hero(this.kMinionSprite);
 
-// Step D: Create the hero object
-    this.mHero = new Hero(this.kMinionSprite);
-
-    // Step E: Create and initialize message output
-    this.mMsg = new FontRenderable("Status Message");
-    this.mMsg.setColor([0, 0, 0, 1]);
-    this.mMsg.getXform().setPosition(1, 2);
-    this.mMsg.setTextHeight(3);
-};
-
-MyGame.prototype._initText = function (font, posX, posY, color, textH) {
-    font.setColor(color);
-    font.getXform().setPosition(posX, posY);
-    font.setTextHeight(textH);
+    // For echoing
+    this.mMsg = new FontRenderable("Status Message");
+    this.mMsg.setColor([0, 0, 0, 1]);
+    this.mMsg.getXform().setPosition(1, 2);
+    this.mMsg.setTextHeight(3);
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more
 // importantly, make sure to _NOT_ change any state.
 MyGame.prototype.draw = function () {
-    // Step A: clear the canvas
+   // Step A: clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
     // Step  B: Activate the drawing Camera
     this.mCamera.setupViewProjection();
 
-    // Step  C: draw everything
+    // Step  C: Draw everything
     this.mHero.draw(this.mCamera);
-    this.mMinionSet.draw(this.mCamera);
-    this.mDyePack.draw(this.mCamera);
+    this.mBrain.draw(this.mCamera);
     this.mMsg.draw(this.mCamera);
 
 };
@@ -99,7 +89,30 @@ MyGame.prototype.draw = function () {
 //  updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-  this.mHero.update();
-    this.mMinionSet.update();
-    this.mDyePack.update();
+    var msg = "Brain modes [H:keys, J:immediate, K:gradual]: ";
+    var rate = 1;
+
+    this.mHero.update();
+
+    switch (this.mMode) {
+    case 'H':
+        this.mBrain.update();  // player steers with arrow keys
+        break;
+    case 'K':
+        rate = 0.02;    // graduate rate
+        // When "K" is typed, the following should also be executed.
+    case 'J':
+        this.mBrain.rotateObjPointTo(this.mHero.getXform().getPosition(), rate);
+        GameObject.prototype.update.call(this.mBrain);
+        break;
+    }
+
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.H))
+        this.mMode = 'H';
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.J))
+        this.mMode = 'J';
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.K))
+        this.mMode = 'K';
+
+    this.mMsg.setText(msg + this.mMode);
 };
