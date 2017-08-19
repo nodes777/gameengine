@@ -51,6 +51,13 @@ Camera.prototype.setWCCenter = function(xPos,yPos){
 Camera.prototype.getWCCenter = function(){
 	return this.mWCCenter;
 };
+Camera.prototype.getWCWidth = function(){
+	return this.mWCWidth;
+};
+Camera.prototype.getWCHeight = function () {
+	 // viewportH/viewportW
+	return this.mWCWidth * this.mViewport[3] / this.mViewport[2];
+};
 
 Camera.prototype.setViewport = function(viewportArray) { this.mViewport = viewportArray; };
 Camera.prototype.getViewport = function() { return this.mViewport;};
@@ -60,6 +67,14 @@ Camera.prototype.getBackgroundColor = function() { return this.mBgColor; };
 
 Camera.prototype.getVPMatrix = function () {
     return this.mVPMatrix;
+};
+
+Camera.prototype.collideWCBound = function(aXform, zone){
+	var bbox = new BoundingBox(aXform.getPosition(), aXform.getWidth(), aXform.getHeight());
+	var w = zone * this.getWCWidth();
+	var h = zone * this.getWCHeight();
+	var cameraBound = new BoundingBox(this.getWCCenter, w, h);
+	return cameraBound.boundCollideStatus(bbox);
 };
 
 // Configures webGL and sets up View-Proj Transform

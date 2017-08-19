@@ -2,7 +2,7 @@
 * GameObject - Class for common funcs in GameObjs
 */
 /*jslint node: true, vars: true, evil: true*/
-/*global gEngine: false, vec2: false, vec3: false*/
+/*global gEngine: false, vec2: false, vec3: false, BoundingBox: false*/
 
 "use strict";
 
@@ -100,4 +100,10 @@ GameObject.prototype.rotateObjPointTo = function(p, rate){
     vec2.rotate(this.getCurrentFrontDir(), this.getCurrentFrontDir(), rad);
 	// set the rotation in the Transform of the Renderable
 	this.getXform().incRotationByRad(rad);
+};
+
+GameObject.prototype.getBBox = function() {
+	var xform = this.getXform();
+	var b = new BoundingBox(xform.getPosition(), xform.getWidth(), xform.getHeight());
+	return b;
 };
