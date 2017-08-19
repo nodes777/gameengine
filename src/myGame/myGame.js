@@ -5,14 +5,15 @@
 
 /*jslint node: true, vars: true */
 /*global gEngine: false, Scene: false, SpriteRenderable: false, Camera: false, vec2: false,
-  TextureRenderable: false, Renderable: false, SpriteAnimateRenderable: false, GameOver: false,
+  TextureRenderable: false, Renderable: false, SpriteAnimateRenderable: false, GameOver: false, GameObject: false,
+  Brain: false, Herp: false,
   FontRenderable: false */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function MyGame() {
-     this.kMinionSprite = "assets/minion_sprite.png";
+    this.kMinionSprite = "assets/minion_sprite.png";
     // The camera to view the scene
     this.mCamera = null;
 
@@ -23,7 +24,7 @@ function MyGame() {
     this.mHero = null;
     this.mBrain = null;
 
-    // mode of running: 
+    // mode of running:
     //   H: Player drive brain
     //   J: Dye drive brain, immediate orientation change
     //   K: Dye drive brain, gradual orientation change
@@ -57,10 +58,10 @@ MyGame.prototype.initialize = function () {
             // sets the background to gray
 
     // Step B: The dye pack: simply another GameObject
-    // Create the brain  
+    // Create the brain
     this.mBrain = new Brain(this.kMinionSprite);
 
-    //  Create the hero object 
+    //  Create the hero object
     this.mHero = new Hero(this.kMinionSprite);
 
     // For echoing
@@ -99,7 +100,7 @@ MyGame.prototype.update = function () {
         this.mBrain.update();  // player steers with arrow keys
         break;
     case 'K':
-        rate = 0.02;    // graduate rate
+        rate = 0.02;   // graduate rate
         // When "K" is typed, the following should also be executed.
     case 'J':
         this.mBrain.rotateObjPointTo(this.mHero.getXform().getPosition(), rate);
