@@ -32,3 +32,35 @@ Normalized vectors keep direction without regards to length
 
 Dot products return a number/scalar to find angle
 Cross products return a vector to determine clockwise or counterclockwise rotation
+
+## 6.3 Axis Aligned Bounding Boxes
+
+### Bitwise Or operator
+	Used to check if multiple sides have collisions.
+	Each enumerated value is different and has only one nonzero bit
+The bitwise OR assignment operator uses the binary representation of both operands, does a bitwise OR operation on them and assigns the result to the variable
+
+var bar = 5;
+bar |= 2; // 7
+// 5: 00000000000000000000000000000101
+// 2: 00000000000000000000000000000010
+// -----------------------------------
+// 7: 00000000000000000000000000000111
+
+	Example: eCollideLeft | eCollideTop = 4 | 1 = 5.
+BoundingBox.eboundCollideStatus = Object.freeze({
+    eCollideLeft: 1, // 00001
+    eCollideRight: 2, // 00010
+    eCollideTop: 4,	// 00100
+    eCollideBottom: 8, //01000
+    eInside : 16,	//10000
+    eOutside: 0
+});
+
+AND is 1 only if both of its inputs are 1.
+
+OR is 1 if one or more of its inputs are 1.
+
+XOR is 1 only if exactly one of its inputs are 1.
+
+NOT is 1 only if its input are 0.
