@@ -102,6 +102,10 @@ GameObject.prototype.rotateObjPointTo = function(p, rate){
 	this.getXform().incRotationByRad(rad);
 };
 
+/**
+* @func
+* @desc Returns the unrotated Renderable object
+*/
 GameObject.prototype.getBBox = function() {
 	var xform = this.getXform();
 	var b = new BoundingBox(xform.getPosition(), xform.getWidth(), xform.getHeight());

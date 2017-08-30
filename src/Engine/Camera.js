@@ -4,8 +4,7 @@
  */
 
 /*jslint node: true, vars: true */
-/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false */
-/* find out more about jslint: http://www.jslint.com/help.html */
+/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false, BoundingBox: false, */
 
 "use strict";
 
@@ -69,11 +68,17 @@ Camera.prototype.getVPMatrix = function () {
     return this.mVPMatrix;
 };
 
+/**
+* @func
+* @param {object} aXform - A transform
+* @param {object} zone - The "walls" from the camera edges. Defines the relative size of WC that should be used in the collision computation
+* @returns {boolean} returns the status of a given transform colliding with the camera edge, as adjusted by a zone.
+*/
 Camera.prototype.collideWCBound = function(aXform, zone){
 	var bbox = new BoundingBox(aXform.getPosition(), aXform.getWidth(), aXform.getHeight());
 	var w = zone * this.getWCWidth();
 	var h = zone * this.getWCHeight();
-	var cameraBound = new BoundingBox(this.getWCCenter, w, h);
+	var cameraBound = new BoundingBox(this.getWCCenter(), w, h);
 	return cameraBound.boundCollideStatus(bbox);
 };
 

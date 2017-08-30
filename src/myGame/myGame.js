@@ -1,13 +1,12 @@
 /*
- * File: MyGame.js
- * This is the logic of our game.
+ * File: MyGame.js 
+ * This is the logic of our game. 
  */
 
 /*jslint node: true, vars: true */
-/*global gEngine: false, Scene: false, SpriteRenderable: false, Camera: false, vec2: false,
-  TextureRenderable: false, Renderable: false, SpriteAnimateRenderable: false, GameOver: false, GameObject: false,
-  Brain: false, Herp: false,
-  FontRenderable: false */
+/*global gEngine: false, Scene: false, GameObjectSet: false, Camera: false, vec2: false,
+  FontRenderable: false, DyePack: false, Hero: false, Minion: false, Brain: false,
+  GameObject: false */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
@@ -24,7 +23,7 @@ function MyGame() {
     this.mHero = null;
     this.mBrain = null;
 
-    // mode of running:
+    // mode of running: 
     //   H: Player drive brain
     //   J: Dye drive brain, immediate orientation change
     //   K: Dye drive brain, gradual orientation change
@@ -33,18 +32,11 @@ function MyGame() {
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
 MyGame.prototype.loadScene = function () {
-    // Step A: loads the textures
     gEngine.Textures.loadTexture(this.kMinionSprite);
-
-    // Step B: loads all the fonts
 };
 
 MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kMinionSprite);
-
-    // Step B: starts the next level
-    var nextLevel = new GameOver();  // next level to be loaded
-    gEngine.Core.startScene(nextLevel);
 };
 
 MyGame.prototype.initialize = function () {
@@ -54,14 +46,13 @@ MyGame.prototype.initialize = function () {
         100,                       // width of camera
         [0, 0, 640, 480]           // viewport (orgX, orgY, width, height)
     );
-    this.mCamera.setBackgroundColor([0.5, 0.5, 0.5, 1]);
+    this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
 
-    // Step B: The dye pack: simply another GameObject
-    // Create the brain
+    // Create the brain  
     this.mBrain = new Brain(this.kMinionSprite);
 
-    //  Create the hero object
+    //  Create the hero object 
     this.mHero = new Hero(this.kMinionSprite);
 
     // For echoing
@@ -74,7 +65,7 @@ MyGame.prototype.initialize = function () {
 // This is the draw function, make sure to setup proper drawing environment, and more
 // importantly, make sure to _NOT_ change any state.
 MyGame.prototype.draw = function () {
-   // Step A: clear the canvas
+    // Step A: clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
     // Step  B: Activate the drawing Camera
@@ -84,36 +75,45 @@ MyGame.prototype.draw = function () {
     this.mHero.draw(this.mCamera);
     this.mBrain.draw(this.mCamera);
     this.mMsg.draw(this.mCamera);
-
 };
 
-//  updates the application state. Make sure to _NOT_ draw
+// The update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-    var msg = "Brain modes [H:keys, J:immediate, K:gradual]: ";
-    var rate = 1;
+    var msg = "Brain [H:keys J:imm K:gradual]: ";
+    var rate = 1;
 
     this.mHero.update();
 
-    switch (this.mMode) {
-    case 'H':
-        this.mBrain.update();  // player steers with arrow keys
-        break;
-    case 'K':
-        rate = 0.02;   // graduate rate
-        // When "K" is typed, the following should also be executed.
-    case 'J':
-        this.mBrain.rotateObjPointTo(this.mHero.getXform().getPosition(), rate);
-        GameObject.prototype.update.call(this.mBrain);
-        break;
-    }
+    // get the bounding box for collision
+    var hBbox = this.mHero.getBBox();
+    var bBbox = this.mBrain.getBBox();
+    switch (this.mMode) {
+    case 'H':
+        this.mBrain.update();  // player steers with arrow keys
+        break;
+    case 'K':
+        rate = 0.02;    // graduate rate
+        // no break here on purpose
+    case 'J':
+        if (!hBbox.intersectsBound(bBbox)) {  // stop the brain when it touches hero bound
+            this.mBrain.rotateObjPointTo(this.mHero.getXform().getPosition(), rate);
+            GameObject.prototype.update.call(this.mBrain);  // the default GameObject: only move forward
+        }
+        break;
+    }
 
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.H))
-        this.mMode = 'H';
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.J))
-        this.mMode = 'J';
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.K))
-        this.mMode = 'K';
+    // Check for hero going outside 80% of the WC Window bound
+    var status = this.mCamera.collideWCBound(this.mHero.getXform(), 0.8);
 
-    this.mMsg.setText(msg + this.mMode);
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.H)) {
+        this.mMode = 'H';
+    }
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.J)) {
+        this.mMode = 'J';
+    }
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.K)) {
+        this.mMode = 'K';
+    }
+    this.mMsg.setText(msg + this.mMode + " [Hero bound=" + status + "]");
 };

@@ -14,7 +14,7 @@
 * @param {number} h - Height of bounding box.
 */
 function BoundingBox(centerPos, w, h) {
-	this.mLL = vec2.fromValue(0,0); // Lower left corner
+	this.mLL = vec2.fromValues(0,0); // Lower left corner
 	this.setBounds(centerPos, w, h);
 }
 
