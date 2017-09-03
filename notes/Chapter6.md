@@ -64,3 +64,24 @@ OR is 1 if one or more of its inputs are 1.
 XOR is 1 only if exactly one of its inputs are 1.
 
 NOT is 1 only if its input are 0.
+
+## 6.4 Per Pixel Collisions
+
+* Demonstrate how to detect nontransparent pixel overlap
+
+1) check if the bounding boxes over lap
+2) check if the nontransparent pixels over lap
+
+Given two images, Image-A and Image-B
+If the bounds of the object of Image-A and Image-B collide then
+    For each Pixel-A in Image-A
+        pixelCameraSpace = Pixel-A position in camera space
+        Transform pixelCameraSpace to Image-B space
+        Read Pixel-B from Image-B
+            If Pixel-A and Pixel-B are not both completely transparent then
+                A collision has occurred
+
+Use the smaller image as Image-A, since you must iterate over each pixel.
+Each pixel within Image-A must be checked, so the runtime is O(N), where N is equal to the number of pixels in Image-A, or Image-A’s resolution
+
+The Engine_Texture component reads image files from the server file system, loads the images to the WebGL context, and processes the images into WebGL textures. In this way, there is no actual storage of the file texture in the game engine. To support per-pixel collision detection, the color information must be retrieved from the WebGL context.
