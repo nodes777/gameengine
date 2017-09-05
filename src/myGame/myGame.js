@@ -81,9 +81,9 @@ MyGame.prototype.update = function () {
     var msg = "No Collision";
 
     this.mCollector.update(gEngine.Input.keys.W, gEngine.Input.keys.S,
-        gEngine.Input.keys.A, gEngine.Input.keys.D);
+        gEngine.Input.keys.A, gEngine.Input.keys.D, gEngine.Input.keys.E);
     this.mPortal.update(gEngine.Input.keys.Up, gEngine.Input.keys.Down,
-        gEngine.Input.keys.Left, gEngine.Input.keys.Right);
+        gEngine.Input.keys.Left, gEngine.Input.keys.Right, gEngine.Input.keys.P);
 
     var h = [];
 

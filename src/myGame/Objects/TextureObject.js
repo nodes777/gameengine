@@ -10,6 +10,7 @@
 
 function TextureObject(texture, x, y, w, h) {
     this.kDelta = 0.2;
+    this.kRDelta = 0.1; // radian
 
     this.mRenderable = new TextureRenderable(texture);
     this.mRenderable.setColor([1, 1, 1, 0.1]);
@@ -19,7 +20,7 @@ function TextureObject(texture, x, y, w, h) {
 }
 gEngine.Core.inheritPrototype(TextureObject, GameObject);
 
-TextureObject.prototype.update = function (up, down, left, right) {
+TextureObject.prototype.update = function (up, down, left, right, rot) {
     var xform = this.getXform();
     if (gEngine.Input.isKeyPressed(up)) {
         xform.incYPosBy(this.kDelta);
@@ -32,5 +33,8 @@ TextureObject.prototype.update = function (up, down, left, right) {
     }
     if (gEngine.Input.isKeyPressed(right)) {
         xform.incXPosBy(this.kDelta);
+    }
+    if (gEngine.Input.isKeyPressed(rot)) {
+        xform.incRotationByRad(this.kRDelta);
     }
 };

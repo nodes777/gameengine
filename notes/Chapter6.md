@@ -85,3 +85,15 @@ Use the smaller image as Image-A, since you must iterate over each pixel.
 Each pixel within Image-A must be checked, so the runtime is O(N), where N is equal to the number of pixels in Image-A, or Image-A’s resolution
 
 The Engine_Texture component reads image files from the server file system, loads the images to the WebGL context, and processes the images into WebGL textures. In this way, there is no actual storage of the file texture in the game engine. To support per-pixel collision detection, the color information must be retrieved from the WebGL context.
+
+## 6.5 Generalized Collisions, (Rotated Images)
+
+* Two perpendicular directions can be used to decompase a vector into corresponding components
+* The normalized component vectors i and j decompose the vector V into components 2i and 3j
+* Given normalized component vectors you can find the rotated axes vectors L and M
+
+Goals:
+
+* To access pixels of a rotated image via vector decomposition
+* To support per-pixel accurate collision detection between two rotated textured objects
+

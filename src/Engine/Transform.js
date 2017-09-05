@@ -7,7 +7,7 @@
 "use strict";
 
  function Transform(){
- 	//vec.fromValues()???
+ 	//vec.fromValues(), create a vector from these 2 values
  	// Translation
  	this.mPosition = vec2.fromValues(0,0);
  	//Scaling
@@ -54,6 +54,8 @@ Transform.prototype.setSize = function(width,height){
 	this.setWidth(width);
 	this.setHeight(height);
 };
+
+Transform.prototype.getSize = function () { return this.mScale; };
 
 Transform.prototype.setWidth = function(width) {
 	this.mScale[0] = width;
