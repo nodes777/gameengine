@@ -19,6 +19,9 @@ TextureRenderable.prototype.setColorArray = function () {
 * @param{number} y - y position of pixel in texture
 */
 TextureRenderable.prototype._pixelAlphaValue = function(x,y){
+	// offset by the current element in the sprite sheet
+	y += this.mTexBottomIndex;
+    x += this.mTexLeftIndex;
 	x = x * 4;
 	y = y * 4;
 	// mColorArray is a one-dimensional array where colors of pixels are stored as four floats and organized by rows

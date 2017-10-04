@@ -97,3 +97,7 @@ Goals:
 * To access pixels of a rotated image via vector decomposition
 * To support per-pixel accurate collision detection between two rotated textured objects
 
+## 6.6 Sprite Pixel Collisions - For animated sprites
+ * Implement per-pixel collision detection for sprite and animated sprite objects
+
+ 

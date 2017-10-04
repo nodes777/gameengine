@@ -19,6 +19,8 @@ function SpriteRenderable(myTexture){
     this.mTexRight = 1.0;  //
     this.mTexTop = 1.0;    // 1 is top and 0 is bottom of image
     this.mTexBottom = 0.0; //
+
+    this._setTexInfo(); // Defines the dimension of the sprite element
 }
 gEngine.Core.inheritPrototype(SpriteRenderable, TextureRenderable);
 
@@ -57,6 +59,7 @@ SpriteRenderable.prototype.setElementUVCoordinate = function (left, right, botto
     this.mTexRight = right;
     this.mTexBottom = bottom;
     this.mTexTop = top;
+    this._setTexInfo(); // Defines the dimension of the sprite element for the new
 };
 /**
 * Specifies a sprite sheet element’s uv values with pixel positions (which is converted to uv values/texture coordinates).
@@ -76,6 +79,7 @@ SpriteRenderable.prototype.setElementPixelPositions = function (left, right, bot
     this.mTexRight = right / imageW;
     this.mTexBottom = bottom / imageH;
     this.mTexTop = top / imageH;
+    this._setTexInfo(); // Defines the dimension of the sprite element for the new
 };
 
 SpriteRenderable.prototype.getElementUVCoordinateArray = function () {
