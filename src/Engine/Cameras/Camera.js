@@ -155,3 +155,31 @@ Camera.prototype.setupViewProjection = function () {
 	*/
 	mat4.multiply(this.mVPMatrix, this.mProjMatrix, this.mViewMatrix);
 };
+
+/**
+* Ensure that the bounds of a transform, from a renderable or Game Object, stay within WC bounds. 
+* The camera will not be changed if the aXform bounds are completely outside the tested WC bounds area
+* @func
+* @param {object} aXform - A transform
+* @param {object} zone - The "walls" from the camera edges. Defines the relative size of WC that should be used in the collision computation
+* @returns {boolean} returns the status of a given transform colliding with the camera edge, as adjusted by a zone.
+*/
+Camera.prototype.clampAtBoundary = function (aXform, zone){
+	var status = this.collideWCBound(aXform, zone);
+	if( status !== BoundingBox.eboundCollideStatus.eInside){
+		var pos = aXform.getPosition();
+		if((status & BoundingBox.eboundCollideStatus.eCollideTop) !== 0){
+			pos[1] = (this.getWCCenter())[1] + (zone* this.getWCHeight()/2) - aXform.getHeight()/2;
+		}
+		if ((status & BoundingBox.eboundCollideStatus.eCollideBottom) !== 0){
+			pos[1] = (this.getWCCenter())[1] - (zone * this.getWCHeight() / 2) + (aXform.getHeight() / 2);
+		}
+		if ((status & BoundingBox.eboundCollideStatus.eCollideRight) !== 0){
+			pos[0] = (this.getWCCenter())[0] + (zone * this.getWCWidth() / 2) - (aXform.getWidth() / 2);
+		}
+        if ((status & BoundingBox.eboundCollideStatus.eCollideLeft) !== 0){
+			pos[0] = (this.getWCCenter())[0] - (zone * this.getWCWidth() / 2) + (aXform.getWidth() / 2);
+		}
+	}
+	return status;
+};

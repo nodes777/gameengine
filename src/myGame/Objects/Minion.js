@@ -10,7 +10,7 @@
 */
 function Minion(spriteTexture, atY){
 	this.kDelta = 0.2;
-	// why does this do this.mMInion and not mDye??
+	// why does this do this.mMInion and not mDye?? Dye is not animated
 	this.mMinion = new SpriteAnimateRenderable(spriteTexture);
 	this.mMinion.setColor([1,1,1,0]);
 	this.mMinion.getXform().setPosition(Math.random()*100, atY);
@@ -23,6 +23,10 @@ function Minion(spriteTexture, atY){
 	this.mMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateSwing);
 	this.mMinion.setAnimationSpeed(15);
 
+	// Call the GameObject class, then inheritProtoypes? Why do we do this?
+	// Calling game object here gives you the properties of the gameobject class
+	// But it does not give you the prototype methods, you must do this manually
+	// This is a classic JS issue
 	GameObject.call(this, this.mMinion);
 }
 

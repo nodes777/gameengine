@@ -101,54 +101,65 @@ MyGame.prototype.draw = function () {
 // The update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-    var msg = "L/R: Left or Right Minion; H: Dye; B: Brain]: ";
+    var zoomDelta = 0.05;
+    var msg = "L/R: Left or Right Minion; H: Dye; P: Portal]: ";
 
-    this.mLMinion.update();
+    this.mLMinion.update();  // for sprite animation
     this.mRMinion.update();
 
-    this.mHero.update();
+    this.mHero.update();     // for WASD movement
+    this.mPortal.update(     // for arrow movement
+        gEngine.Input.keys.Up,
+        gEngine.Input.keys.Down,
+        gEngine.Input.keys.Left,
+        gEngine.Input.keys.Right
+    );
 
-    this.mPortal.update(gEngine.Input.keys.Up, gEngine.Input.keys.Down,
-        gEngine.Input.keys.Left, gEngine.Input.keys.Right, gEngine.Input.keys.P);
-
+    // Brain chasing the hero
     var h = [];
-
-    // Portal intersects with which ever is selected
-    if (this.mPortal.pixelTouches(this.mCollide, h)) {
-        this.mPortalHit.setVisibility(true);
-        this.mPortalHit.getXform().setXPos(h[0]);
-        this.mPortalHit.getXform().setYPos(h[1]);
-    } else {
-        this.mPortalHit.setVisibility(false);
-    }
-
-    // hero always collide with Brain (Brain chases hero)
     if (!this.mHero.pixelTouches(this.mBrain, h)) {
-        this.mBrain.rotateObjPointTo(this.mHero.getXform().getPosition(), 0.05);
+        this.mBrain.rotateObjPointTo(this.mHero.getXform().getPosition(), 0.01);
         GameObject.prototype.update.call(this.mBrain);
-        this.mHeroHit.setVisibility(false);
-    } else {
-        this.mHeroHit.setVisibility(true);
-        this.mHeroHit.getXform().setPosition(h[0], h[1]);
     }
 
-    // decide which to collide
+    // Pan camera to object
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.L)) {
-        this.mCollide = this.mLMinion;
+        this.mFocusObj = this.mLMinion;
         this.mChoice = 'L';
+        this.mCamera.panTo(this.mLMinion.getXform().getXPos(), this.mLMinion.getXform().getYPos());
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.R)) {
-        this.mCollide = this.mRMinion;
+        this.mFocusObj = this.mRMinion;
         this.mChoice = 'R';
+        this.mCamera.panTo(this.mRMinion.getXform().getXPos(), this.mRMinion.getXform().getYPos());
     }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.B)) {
-        this.mCollide = this.mBrain;
-        this.mChoice = 'B';
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.P)) {
+        this.mFocusObj = this.mPortal;
+        this.mChoice = 'P';
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.H)) {
-        this.mCollide = this.mHero;
+        this.mFocusObj = this.mHero;
         this.mChoice = 'H';
     }
+
+    // zoom
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.N)) {
+        this.mCamera.zoomBy(1 - zoomDelta);
+    }
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.M)) {
+        this.mCamera.zoomBy(1 + zoomDelta);
+    }
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.J)) {
+        this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 - zoomDelta);
+    }
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.K)) {
+        this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 + zoomDelta);
+    }
+
+    // interaction with the WC bound
+    this.mCamera.clampAtBoundary(this.mBrain.getXform(), 0.9);
+    this.mCamera.clampAtBoundary(this.mPortal.getXform(), 0.8);
+    this.mCamera.panWith(this.mHero.getXform(), 0.9);
 
     this.mMsg.setText(msg + this.mChoice);
 };
