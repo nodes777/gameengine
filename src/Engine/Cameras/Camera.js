@@ -4,30 +4,18 @@
  */
 
 /*jslint node: true, vars: true */
-/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false, BoundingBox: false, */
+/*global gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false, BoundingBox: false, CameraState:false, vec2:false*/
 
 "use strict";
 
 /**
 * @constructor
 * @param {vec2} wcCenter - Center of the world coordinates
-* @param {number} wcWidth -Width of the user defined WC. Height of the user defined WC is implicitly defined by the viewport aspect ratio
-* @param {Object[]} viewportRect - an array of 4 elements
-* @param {number} viewportRect[].x - x position of lower left corner on the canvas (in pixels)
-* @param {number} viewportRect[].y - (x,y) position of lower left corner on the canvas (in pixels)
-* @param {number} viewportRect[].width - width of viewport
-* @param {number} viewportRect[].height - height of viewport
+* @param {number} wcWidth -Width of the user defined WC. Height of the user defined WC is implicitly defined by the viewport aspect ratio.  wcHeight = wcWidth * viewport[3]/viewport[2]
+* @param {Object[]} viewportRect - an array of 4 elements [x,y,width,height]
 */
 function Camera(wcCenter, wcWidth, viewportArray) {
-	/** World Coordinates and viewport position and size */
-	this.mWCCenter = wcCenter;
-	/** The height of the WC is always computed from the width.
-	* This guarantees a matching aspect ratio between WC and viewport
-	* wcHeight = wcWidth * viewport[3]/viewport[2]
-	*/
-	this.mWCWidth = wcWidth;
-	// [x,y,width,height]
-	// x and y are of lower left corner
+	this.mCameraState = new CameraState(wcCenter, wcWidth);
 	this.mViewport = viewportArray;
 	this.mNearPlane = 0;
 	this.mFarPlane = 1000;
@@ -41,22 +29,23 @@ function Camera(wcCenter, wcWidth, viewportArray) {
 	this.mBgColor = [0.8,0.8,0.8,1];
 }
 
-// Getters and Setters for instance vars
-Camera.prototype.setWCCenter = function(xPos,yPos){
-	this.mWCCenter[0] = xPos;
-	this.mWCCenter[1] = yPos;
-};
+Camera.eViewport = Object.freeze({
+    eOrgX: 0,
+    eOrgY: 1,
+    eWidth: 2,
+    eHeight: 3
+});
 
-Camera.prototype.getWCCenter = function(){
-	return this.mWCCenter;
+Camera.prototype.setWCCenter = function (xPos, yPos) {
+    var p = vec2.fromValues(xPos, yPos);
+    this.mCameraState.setCenter(p);
 };
-Camera.prototype.getWCWidth = function(){
-	return this.mWCWidth;
-};
-Camera.prototype.getWCHeight = function () {
-	 // viewportH/viewportW
-	return this.mWCWidth * this.mViewport[3] / this.mViewport[2];
-};
+// Getters and Setters for instance vars
+Camera.prototype.getWCCenter = function () { return this.mCameraState.getCenter(); };
+Camera.prototype.setWCWidth = function (width) { this.mCameraState.setWidth(width); };
+Camera.prototype.getWCWidth = function () { return this.mCameraState.getWidth(); };
+Camera.prototype.getWCHeight = function () { return this.mCameraState.getWidth() * this.mViewport[Camera.eViewport.eHeight] / this.mViewport[Camera.eViewport.eWidth]; };
+
 
 Camera.prototype.setViewport = function(viewportArray) { this.mViewport = viewportArray; };
 Camera.prototype.getViewport = function() { return this.mViewport;};
@@ -108,6 +97,7 @@ Camera.prototype.setupViewProjection = function () {
 	// Step B: define the View-Projection matrix
 
 	// Step B1:
+	var center = this.getWCCenter();
 	/**
 	* Define the view matrix, a given func from webGL lib
 	* @function lookAt
@@ -116,15 +106,15 @@ Camera.prototype.setupViewProjection = function () {
  	* @param {number} center - Look At Position, point the viewer is looking at
  	* @param {number} up - Orientation, vec3 pointing up
  	*/
-	mat4.lookAt(this.mViewMatrix,
-		[this.mWCCenter[0], this.mWCCenter[1], 10], // WC center
-		[this.mWCCenter[0], this.mWCCenter[1], 0], // look at position?
-		[0,1,0]); // orientation
+    mat4.lookAt(this.mViewMatrix,
+        [center[0], center[1], 10],   // WC center
+        [center[0], center[1], 0],    //
+        [0, 1, 0]);     // orientation
+
 
 	// Step B2: define the projection matrix
-	var halfWCWidth = 0.5 * this.mWCWidth;
-	// WCHeight = WCWidth * viewportHeight / viewportWidth, why????
-	var halfWCHeight = halfWCWidth * this.mViewport[3]/this.mViewport[2];
+	var halfWCWidth = 0.5 * this.getWCWidth();
+	var halfWCHeight = 0.5 * this.getWCHeight();
 
 	/**
 	* Generates a orthogonal projection matrix with the given bounds, a given func from webGL lib

@@ -17,3 +17,11 @@ setUpViewProjection encapsulates details and enables drawing of game obkects ins
 * To understand the mapping from manipulation operations to the corresponding camera parameter values that must be altered
 * To implement camera manipulation operations
 
+## Chapter 7.2 - Camera Manipulations
+
+Provide interpolation so the camera movements aren't as janky
+
+* To understand interpolated results between given values
+* To implement interpolation supporting gradual camera parameter changes
+* To experience interpolated changes in camera parameters
+
