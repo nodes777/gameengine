@@ -4,7 +4,7 @@
  */
 
 /*jslint node: true, vars: true */
-/*global Camera: false, vec2: false, gEngine: false, SimpleShader: false, Renderable: false, mat4: false, vec3: false, BoundingBox: false, */
+/*global Camera: false, vec2: false, gEngine: false, CameraShake: false, Renderable: false, mat4: false, vec3: false, BoundingBox: false, */
 
 "use strict";
 
@@ -86,9 +86,21 @@ Camera.prototype.zoomTowards = function (pos, zoom) {
 };
 
 Camera.prototype.update = function () {
+	if (this.mCameraShake !== null){
+		if(this.mCameraShake.shakeDone()){
+			this.mCameraShake = null;
+		} else {
+			this.mCameraShake.setRefCenter(this.getWCCenter());
+			this.mCameraShake.updateShakeState();
+		}
+	}
     this.mCameraState.updateCameraState();
 };
 
 Camera.prototype.configInterpolation = function (stiffness, duration) {
     this.mCameraState.configInterpolation(stiffness, duration);
+};
+
+Camera.prototype.shake = function(xDelta, yDelta, shakeFrequency, duration){
+	this.mCameraShake = new CameraShake(this.mCameraState, xDelta, yDelta, shakeFrequency, duration);
 };

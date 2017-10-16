@@ -115,6 +115,10 @@ MyGame.prototype.update = function () {
         gEngine.Input.keys.Right
     );
 
+
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
+        this.mCamera.shake(-2, -2, 20, 30);
+    }
     // Brain chasing the hero
     var h = [];
     if (!this.mHero.pixelTouches(this.mBrain, h)) {

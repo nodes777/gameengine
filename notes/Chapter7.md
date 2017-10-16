@@ -25,3 +25,13 @@ Provide interpolation so the camera movements aren't as janky
 * To implement interpolation supporting gradual camera parameter changes
 * To experience interpolated changes in camera parameters
 
+## Chapter 7.3 - Camera Shake
+
+Shake will be created with a damped harmonic function
+
+* To gain some insights into modeling displacements with simple mathematical functions
+* To experience with the camera shake effect
+* To implement camera shake as a pseudorandom damped simple harmonic motion
+
+Q key will shake
+

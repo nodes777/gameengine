@@ -16,6 +16,9 @@
 */
 function Camera(wcCenter, wcWidth, viewportArray) {
 	this.mCameraState = new CameraState(wcCenter, wcWidth);
+
+	this.mCameraShake = null;
+
 	this.mViewport = viewportArray;
 	this.mNearPlane = 0;
 	this.mFarPlane = 1000;
@@ -97,7 +100,12 @@ Camera.prototype.setupViewProjection = function () {
 	// Step B: define the View-Projection matrix
 
 	// Step B1:
-	var center = this.getWCCenter();
+	var center = [];
+	if(this.mCameraShake !== null){
+		center = this.mCameraShake.getCenter();
+	} else {
+		center = this.getWCCenter();
+	}
 	/**
 	* Define the view matrix, a given func from webGL lib
 	* @function lookAt
