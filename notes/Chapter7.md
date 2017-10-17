@@ -35,3 +35,12 @@ Shake will be created with a damped harmonic function
 
 Q key will shake
 
+## Chapter 7.3 - Multiple Cameras
+
+The camera object abstracts the World Coordinate window of the game to draw FROM and the viewport for the area to draw TO.
+We can have multiple views, each with a seperate Camera object with distinct World Coordinate windows and viewport configurations.
+
+* To understand the camera abstraction for presenting views into the game world
+* To experience working with multiple cameras in the same game level
+* To appreciate the importance of interpolation configuration for cameras with a specific purpose
+

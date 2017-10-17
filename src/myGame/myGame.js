@@ -18,6 +18,8 @@ function MyGame() {
 
     // The camera to view the scene
     this.mCamera = null;
+    this.mHeroCam = null;
+    this.mBrainCam = null;
     this.mBg = null;
 
     this.mMsg = null;
@@ -46,16 +48,42 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kBg);
 };
 
+MyGame.prototype.drawCamera = function (camera) {
+    camera.setupViewProjection();
+    this.mBg.draw(camera);
+    this.mHero.draw(camera);
+    this.mBrain.draw(camera);
+    this.mPortal.draw(camera);
+    this.mLMinion.draw(camera);
+    this.mRMinion.draw(camera);
+};
+
 MyGame.prototype.initialize = function () {
     // Step A: set up the cameras
     this.mCamera = new Camera(
-        vec2.fromValues(50, 37.5),   // position of the camera
+        vec2.fromValues(50, 6),   // position of the camera
         100,                       // width of camera
         [0, 0, 640, 480]           // viewport (orgX, orgY, width, height)
     );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
 
+    this.mHeroCam = new Camera(
+        vec2.fromValues(50,30), // target of camera. will be updated each cycle
+        20,
+        [490, 330, 150, 150], // x,y,width,height
+        2   //optional bound
+        );
+    this.mHeroCam.setBackgroundColor([0.5, 0.5, 0.5, 1]);
+
+    this.mBrainCam = new Camera(
+        vec2.fromValues(50, 30),  // will be updated at each cycle to point to the brain
+        10,
+        [0, 330, 150, 150],
+        2                         // viewport bounds
+    );
+    this.mBrainCam.setBackgroundColor([1, 1, 1, 1]);
+    this.mBrainCam.configInterpolation(0.7, 10);
     // Large background image
     var bgR = new SpriteRenderable(this.kBg);
     bgR.setElementPixelPositions(0, 1024, 0, 1024);
@@ -83,17 +111,11 @@ MyGame.prototype.draw = function () {
     // Step A: clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
-    // Step  B: Activate the drawing Camera
-    this.mCamera.setupViewProjection();
-
-    // Step  C: Draw everything
-    this.mBg.draw(this.mCamera);
-    this.mHero.draw(this.mCamera);
-    this.mBrain.draw(this.mCamera);
-    this.mPortal.draw(this.mCamera);
-    this.mLMinion.draw(this.mCamera);
-    this.mRMinion.draw(this.mCamera);
-    this.mMsg.draw(this.mCamera);
+// Step  B: Draw with all three cameras
+    this.drawCamera(this.mCamera);
+    this.mMsg.draw(this.mCamera);   // only draw status in the main camera
+    this.drawCamera(this.mHeroCam);
+    this.drawCamera(this.mBrainCam);
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
@@ -103,6 +125,8 @@ MyGame.prototype.update = function () {
     var msg = "L/R: Left or Right Minion; H: Dye; P: Portal]: ";
 
     this.mCamera.update();  // for smoother camera movements
+    this.mHeroCam.update();
+    this.mBrainCam.update();
 
     this.mLMinion.update();  // for sprite animation
     this.mRMinion.update();
@@ -159,6 +183,19 @@ MyGame.prototype.update = function () {
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.K)) {
         this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 + zoomDelta);
     }
+
+    this.mHeroCam.panTo(this.mHero.getXform().getXPos(),
+                        this.mHero.getXform().getYPos());
+    this.mBrainCam.panTo(this.mBrain.getXform().getXPos(),
+                        this.mBrain.getXform().getYPos());
+
+    // Move the hero cam viewport just to show it is possible
+    var v = this.mHeroCam.getViewport();
+    v[0] += 1;
+    if (v[0] > 500) {
+        v[0] = 0;
+    }
+    this.mHeroCam.setViewport(v);
 
     // interaction with the WC bound
     this.mCamera.clampAtBoundary(this.mBrain.getXform(), 0.9);
