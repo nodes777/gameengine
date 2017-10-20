@@ -29,14 +29,12 @@ GameObject.prototype.update = function(){
     vec2.scaleAndAdd(pos, pos, this.getCurrentFrontDir(), this.getSpeed());
 };
 
-GameObject.prototype.getRenderable = function(){
-	if (this.isVisible()){
-		return this.mRenderComponent;
-	}
-};
+GameObject.prototype.getRenderable = function(){ return this.mRenderComponent; };
 
 GameObject.prototype.draw = function(aCamera){
-	this.mRenderComponent.draw(aCamera);
+    if (this.isVisible()) {
+        this.mRenderComponent.draw(aCamera);
+    }
 };
 
 GameObject.prototype.setVisibility = function (f) { this.mVisible = f; };

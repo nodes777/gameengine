@@ -48,42 +48,31 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kBg);
 };
 
-MyGame.prototype.drawCamera = function (camera) {
-    camera.setupViewProjection();
-    this.mBg.draw(camera);
-    this.mHero.draw(camera);
-    this.mBrain.draw(camera);
-    this.mPortal.draw(camera);
-    this.mLMinion.draw(camera);
-    this.mRMinion.draw(camera);
-};
-
 MyGame.prototype.initialize = function () {
     // Step A: set up the cameras
     this.mCamera = new Camera(
-        vec2.fromValues(50, 6),   // position of the camera
+        vec2.fromValues(50, 36), // position of the camera
         100,                       // width of camera
-        [0, 0, 640, 480]           // viewport (orgX, orgY, width, height)
+        [0, 0, 640, 330]           // viewport (orgX, orgY, width, height)
     );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
 
     this.mHeroCam = new Camera(
-        vec2.fromValues(50,30), // target of camera. will be updated each cycle
+        vec2.fromValues(50, 30),    // will be updated at each cycle to point to hero
         20,
-        [490, 330, 150, 150], // x,y,width,height
-        2   //optional bound
-        );
-    this.mHeroCam.setBackgroundColor([0.5, 0.5, 0.5, 1]);
-
-    this.mBrainCam = new Camera(
-        vec2.fromValues(50, 30),  // will be updated at each cycle to point to the brain
-        10,
-        [0, 330, 150, 150],
-        2                         // viewport bounds
-    );
-    this.mBrainCam.setBackgroundColor([1, 1, 1, 1]);
-    this.mBrainCam.configInterpolation(0.7, 10);
+        [490, 330, 150, 150],
+        2                           // viewport bounds
+    );
+    this.mHeroCam.setBackgroundColor([0.85, 0.8, 0.8, 1]);
+    this.mBrainCam = new Camera(
+        vec2.fromValues(50, 30),    // will be updated at each cycle to point to the brain
+        10,
+        [0, 330, 150, 150],
+        2                           // viewport bounds
+    );
+    this.mBrainCam.setBackgroundColor([0.8, 0.8, 0.85, 1]);
+    this.mBrainCam.configInterpolation(0.7, 10);
     // Large background image
     var bgR = new SpriteRenderable(this.kBg);
     bgR.setElementPixelPositions(0, 1024, 0, 1024);
@@ -101,8 +90,19 @@ MyGame.prototype.initialize = function () {
 
     this.mMsg = new FontRenderable("Status Message");
     this.mMsg.setColor([1, 1, 1, 1]);
-    this.mMsg.getXform().setPosition(1, 2);
+    this.mMsg.getXform().setPosition(1, 14);
     this.mMsg.setTextHeight(3);
+};
+
+
+MyGame.prototype.drawCamera = function (camera) {
+    camera.setupViewProjection();
+    this.mBg.draw(camera);
+    this.mHero.draw(camera);
+    this.mBrain.draw(camera);
+    this.mPortal.draw(camera);
+    this.mLMinion.draw(camera);
+    this.mRMinion.draw(camera);
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more
@@ -111,11 +111,11 @@ MyGame.prototype.draw = function () {
     // Step A: clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
-// Step  B: Draw with all three cameras
-    this.drawCamera(this.mCamera);
-    this.mMsg.draw(this.mCamera);   // only draw status in the main camera
-    this.drawCamera(this.mHeroCam);
-    this.drawCamera(this.mBrainCam);
+    // Step  B: Draw with all three cameras
+    this.drawCamera(this.mCamera);
+    this.mMsg.draw(this.mCamera);   // only draw status in the main camera
+    this.drawCamera(this.mHeroCam);
+    this.drawCamera(this.mBrainCam);
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
@@ -126,7 +126,7 @@ MyGame.prototype.update = function () {
 
     this.mCamera.update();  // for smoother camera movements
     this.mHeroCam.update();
-    this.mBrainCam.update();
+    this.mBrainCam.update();
 
     this.mLMinion.update();  // for sprite animation
     this.mRMinion.update();
@@ -139,10 +139,6 @@ MyGame.prototype.update = function () {
         gEngine.Input.keys.Right
     );
 
-
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
-        this.mCamera.shake(-2, -2, 20, 30);
-    }
     // Brain chasing the hero
     var h = [];
     if (!this.mHero.pixelTouches(this.mBrain, h)) {
@@ -184,23 +180,43 @@ MyGame.prototype.update = function () {
         this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 + zoomDelta);
     }
 
-    this.mHeroCam.panTo(this.mHero.getXform().getXPos(),
-                        this.mHero.getXform().getYPos());
-    this.mBrainCam.panTo(this.mBrain.getXform().getXPos(),
-                        this.mBrain.getXform().getYPos());
-
-    // Move the hero cam viewport just to show it is possible
-    var v = this.mHeroCam.getViewport();
-    v[0] += 1;
-    if (v[0] > 500) {
-        v[0] = 0;
-    }
-    this.mHeroCam.setViewport(v);
-
     // interaction with the WC bound
     this.mCamera.clampAtBoundary(this.mBrain.getXform(), 0.9);
     this.mCamera.clampAtBoundary(this.mPortal.getXform(), 0.8);
     this.mCamera.panWith(this.mHero.getXform(), 0.9);
 
-    this.mMsg.setText(msg + this.mChoice);
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
+        this.mCamera.shake(-2, -2, 20, 30);
+    }
+
+    // set the hero and brain cams
+    this.mHeroCam.panTo(this.mHero.getXform().getXPos(), this.mHero.getXform().getYPos());
+    this.mBrainCam.panTo(this.mBrain.getXform().getXPos(), this.mBrain.getXform().getYPos());
+
+    msg = "";
+    // testing the mouse input
+    if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Left)) {
+        msg += "[L Down]";
+        if (this.mCamera.isMouseInViewport()) {
+            this.mPortal.getXform().setXPos(this.mCamera.mouseWCX());
+            this.mPortal.getXform().setYPos(this.mCamera.mouseWCY());
+        }
+    }
+
+    if (gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Middle)) {
+        if (this.mHeroCam.isMouseInViewport()) {
+            this.mHero.getXform().setXPos(this.mHeroCam.mouseWCX());
+            this.mHero.getXform().setYPos(this.mHeroCam.mouseWCY());
+        }
+    }
+    if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Right)) {
+        this.mPortal.setVisibility(false);
+    }
+
+    if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Middle)) {
+        this.mPortal.setVisibility(true);
+    }
+
+    msg += " X=" + gEngine.Input.getMousePosX() + " Y=" + gEngine.Input.getMousePosY();
+    this.mMsg.setText(msg);
 };

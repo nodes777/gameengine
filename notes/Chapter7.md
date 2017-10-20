@@ -35,7 +35,7 @@ Shake will be created with a damped harmonic function
 
 Q key will shake
 
-## Chapter 7.3 - Multiple Cameras
+## Chapter 7.4 - Multiple Cameras
 
 The camera object abstracts the World Coordinate window of the game to draw FROM and the viewport for the area to draw TO.
 We can have multiple views, each with a seperate Camera object with distinct World Coordinate windows and viewport configurations.
@@ -43,4 +43,24 @@ We can have multiple views, each with a seperate Camera object with distinct Wor
 * To understand the camera abstraction for presenting views into the game world
 * To experience working with multiple cameras in the same game level
 * To appreciate the importance of interpolation configuration for cameras with a specific purpose
+
+In Camera.configInterpolation, stiffness is keeping the center of camera on object, duration is how smoothly it scrolls to that object.
+
+## Chapter 7.5 Mouse Input Through Cameras
+
+Mouse can report information through canvas coordinate space. The game engine works in World Coordinate space. For game engine to work with mouse inputs, Canvas Space must be transformed to World Coordinate space.
+
+mouseDCX = mouseX-Vx
+
+mouseDeltaClickX = mouseClickX - ViewportX
+
+Device Coordinate (DC) space defines a pixel position within a viewport with offsets measured with respect to the lower-left corner of the viewport. DC = pixel space
+
+mouseWCX = minWCX + (mouseDCX * (WidthWorldCoord/WidthViewport))
+
+mouseX -> mouseDCX -> mouseWCX
+
+* To understand the Canvas Coordinate space to WC space transform
+* To appreciate mouse clicks are specific to individual viewports
+* To implement transformation between coordinate spaces and support mouse input
 
