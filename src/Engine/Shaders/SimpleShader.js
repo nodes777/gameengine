@@ -24,6 +24,9 @@ function SimpleShader(vertexShaderPath, fragmentShaderPath) {
 	this.mModelTransform = null;
 	// refence to View-Projection transform operator in SimpleVS.glsl
 	this.mViewProjTransform = null;
+	// Lighting adjustments
+	this.mGlobalAmbientColor = null;
+	this.mGlobalAmbientIntensity = null;
 
     var gl = gEngine.Core.getGL();
 
@@ -67,6 +70,8 @@ function SimpleShader(vertexShaderPath, fragmentShaderPath) {
 	this.mPixelColor = gl.getUniformLocation(this.mCompiledShader, "uPixelColor");
 	this.mModelTransform = gl.getUniformLocation(this.mCompiledShader, "uModelTransform");
 	this.mViewProjTransform = gl.getUniformLocation(this.mCompiledShader, "uViewProjTransform");
+	this.mGlobalAmbientColor = gl.getUniformLocation(this.mCompiledShader, "uGlobalAmbientColor");
+	this.mGlobalAmbientIntensity = gl.getUniformLocation(this.mCompiledShader, "uGlobalAmbientIntensity");
 }
 
 // Returns a complied shader from a shader in the dom.
@@ -105,9 +110,14 @@ SimpleShader.prototype.activateShader = function(pixelColor, aCamera) {
     var gl = gEngine.Core.getGL();
     gl.useProgram(this.mCompiledShader);
 	gl.uniformMatrix4fv(this.mViewProjTransform, false, aCamera.getVPMatrix());
+	// maybe check this function here, if getting bugs, there are two missing func calls, from the book
     gl.enableVertexAttribArray(this.mShaderVertexPositionAttribute);
 	//uniform4fv (A WebGLUniformLocation object containing the location of the uniform, newVal for uniform)
 	gl.uniform4fv(this.mPixelColor, pixelColor);
+	gl.uniform4fv(this.mGlobalAmbientColor,
+        gEngine.DefaultResources.getGlobalAmbientColor());
+    gl.uniform1f(this.mGlobalAmbientIntensity,
+        gEngine.DefaultResources.getGlobalAmbientIntensity());
 };
 
 // Loads a per-object model transform to the shader

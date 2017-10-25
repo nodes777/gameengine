@@ -1,5 +1,5 @@
 /*jslint node: true, vars: true, evil: true*/
-/*global SimpleShader: false, TextureShader: false, SpriteShader: false*/
+/*global SimpleShader: false, TextureShader: false, SpriteShader: false, vec4:false*/
 "use strict";
 
 var gEngine = gEngine || { };
@@ -11,6 +11,11 @@ gEngine.DefaultResources = (function() {
 	/** @constant Simple Shader GLSL Shader file paths*/
 	var kSimpleVS = "src/GLSLShaders/SimpleVS.glsl";
 	var kSimpleFS = "src/GLSLShaders/SimpleFS.glsl";
+
+
+	// Global Ambient color
+	var mGlobalAmbientColor = [0.3, 0.3, 0.3, 1];
+	var mGlobalAmbientIntensity = 1;
 
 		// Texture Shader
 	var kTextureVS = "src/GLSLShaders/TextureVS.glsl";  // Path to VertexShader
@@ -72,13 +77,24 @@ gEngine.DefaultResources = (function() {
 		gEngine.Fonts.unloadFont(kDefaultFont);
 	};
 
+	var getGlobalAmbientIntensity = function() { return mGlobalAmbientIntensity; };
+	var setGlobalAmbientIntensity = function(v) { mGlobalAmbientIntensity = v; };
+	var getGlobalAmbientColor = function() { return mGlobalAmbientColor; };
+	var setGlobalAmbientColor = function(v) {
+        mGlobalAmbientColor = vec4.fromValues(v[0], v[1], v[2], v[3]);
+	};
+
     var mPublic = {
 		initialize: _initialize,
 	    getConstColorShader: _getConstColorShader,
 		getTextureShader: getTextureShader,
 		getSpriteShader:getSpriteShader,
 		getDefaultFont: getDefaultFont,
-		cleanUp: cleanUp
+		cleanUp: cleanUp,
+		getGlobalAmbientColor: getGlobalAmbientColor,
+		getGlobalAmbientIntensity: getGlobalAmbientIntensity,
+		setGlobalAmbientColor: setGlobalAmbientColor,
+		setGlobalAmbientIntensity: setGlobalAmbientIntensity,
 	};
     return mPublic;
 }());

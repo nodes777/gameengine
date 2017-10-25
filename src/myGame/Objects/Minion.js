@@ -8,20 +8,18 @@
 * @constructor
 * @classdesc Class for the minion character. Derived from GameObject and mDye. Has Autonomous Behavior.
 */
-function Minion(spriteTexture, atY){
-	this.kDelta = 0.2;
-	// why does this do this.mMInion and not mDye?? Dye is not animated
-	this.mMinion = new SpriteAnimateRenderable(spriteTexture);
-	this.mMinion.setColor([1,1,1,0]);
-	this.mMinion.getXform().setPosition(Math.random()*100, atY);
-	this.mMinion.getXform().setSize(12, 9.6);
-	this.mMinion.setSpriteSequence(512, 0, // first element pixel
-									204, 164, // widthxheight in pixels
-									5, // number of elements
-									0 //padding in between
-									);
-	this.mMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateSwing);
-	this.mMinion.setAnimationSpeed(15);
+function Minion(spriteTexture, atY, atX){
+	    this.kDelta = 0.2;
+    this.mMinion = new SpriteAnimateRenderable(spriteTexture);
+    this.mMinion.setColor([1, 1, 1, 0]);
+    this.mMinion.getXform().setPosition(atX, atY);
+    this.mMinion.getXform().setSize(12, 9.6);
+    this.mMinion.setSpriteSequence(512, 0,      // first element pixel position: top-left 512 is top of image, 0 is left of image
+                                    204, 164,   // widthxheight in pixels
+                                    5,          // number of elements in this sequence
+                                    0);         // horizontal padding in between
+    this.mMinion.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateSwing);
+    this.mMinion.setAnimationSpeed(30);
 
 	// Call the GameObject class, then inheritProtoypes? Why do we do this?
 	// Calling game object here gives you the properties of the gameobject class
