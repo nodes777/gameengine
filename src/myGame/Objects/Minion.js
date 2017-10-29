@@ -2,7 +2,7 @@
 * Minion Class
 */
 /*jslint node: true, vars: true, evil: true */
-/*global gEngine: false, GameObject: false, SpriteRenderable: false, SpriteAnimateRenderable: false,*/
+/*global gEngine: false, GameObject: false, SpriteRenderable: false, SpriteAnimateRenderable: false, LightRenderable:false*/
 "use strict";
 /**
 * @constructor
@@ -10,7 +10,7 @@
 */
 function Minion(spriteTexture, atY, atX){
 	    this.kDelta = 0.2;
-    this.mMinion = new SpriteAnimateRenderable(spriteTexture);
+	this.mMinion= new LightRenderable(spriteTexture);
     this.mMinion.setColor([1, 1, 1, 0]);
     this.mMinion.getXform().setPosition(atX, atY);
     this.mMinion.getXform().setSize(12, 9.6);

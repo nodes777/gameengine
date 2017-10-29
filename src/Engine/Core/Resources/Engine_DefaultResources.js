@@ -1,5 +1,5 @@
 /*jslint node: true, vars: true, evil: true*/
-/*global SimpleShader: false, TextureShader: false, SpriteShader: false, vec4:false*/
+/*global SimpleShader: false, TextureShader: false, SpriteShader: false, vec4:false, LightShader: false*/
 "use strict";
 
 var gEngine = gEngine || { };
@@ -8,14 +8,21 @@ var gEngine = gEngine || { };
  * @module Core/Resources/Engine_DefaultResources
  */
 gEngine.DefaultResources = (function() {
-	/** @constant Simple Shader GLSL Shader file paths*/
-	var kSimpleVS = "src/GLSLShaders/SimpleVS.glsl";
-	var kSimpleFS = "src/GLSLShaders/SimpleFS.glsl";
-
 
 	// Global Ambient color
 	var mGlobalAmbientColor = [0.3, 0.3, 0.3, 1];
 	var mGlobalAmbientIntensity = 1;
+
+	var getGlobalAmbientIntensity = function() { return mGlobalAmbientIntensity; };
+	var setGlobalAmbientIntensity = function(v) { mGlobalAmbientIntensity = v; };
+	var getGlobalAmbientColor = function() { return mGlobalAmbientColor; };
+	var setGlobalAmbientColor = function(v) {
+        mGlobalAmbientColor = vec4.fromValues(v[0], v[1], v[2], v[3]);
+	};
+
+	/** @constant Simple Shader GLSL Shader file paths*/
+	var kSimpleVS = "src/GLSLShaders/SimpleVS.glsl";
+	var kSimpleFS = "src/GLSLShaders/SimpleFS.glsl";
 
 		// Texture Shader
 	var kTextureVS = "src/GLSLShaders/TextureVS.glsl";  // Path to VertexShader
@@ -32,15 +39,20 @@ gEngine.DefaultResources = (function() {
 		return mConstColorShader;
 	};
 
+	var kLightFS = "src/GLSLShaders/LightFS.glsl";
+	var mLightShader = null;
+
 	// Fonts
 	var kDefaultFont = "assets/fonts/system-default-font";
 	var getDefaultFont = function() { return kDefaultFont; };
 
 	/** @callback func after loading is done*/
 	var _createShaders = function(callbackFunction){
+		gEngine.ResourceMap.setLoadCompleteCallback(null);
 		mConstColorShader = new SimpleShader(kSimpleVS,kSimpleFS);
 		mTextureShader = new TextureShader(kTextureVS, kTextureFS);
 		mSpriteShader = new SpriteShader(kTextureVS, kTextureFS);
+		mLightShader = new LightShader(kTextureVS, kLightFS);
 		callbackFunction();
 	};
 
@@ -56,6 +68,8 @@ gEngine.DefaultResources = (function() {
 	    gEngine.TextFileLoader.loadTextFile(kTextureFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 		// Font
 		gEngine.Fonts.loadFont(kDefaultFont);
+		// Light shader
+        gEngine.TextFileLoader.loadTextFile(kLightFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 
 		gEngine.ResourceMap.setLoadCompleteCallback(function() {
 			_createShaders(callbackFunction);
@@ -75,14 +89,11 @@ gEngine.DefaultResources = (function() {
 		gEngine.TextFileLoader.unloadTextFile(kTextureFS);
 
 		gEngine.Fonts.unloadFont(kDefaultFont);
+
+        gEngine.TextFileLoader.unloadTextFile(kLightFS);
 	};
 
-	var getGlobalAmbientIntensity = function() { return mGlobalAmbientIntensity; };
-	var setGlobalAmbientIntensity = function(v) { mGlobalAmbientIntensity = v; };
-	var getGlobalAmbientColor = function() { return mGlobalAmbientColor; };
-	var setGlobalAmbientColor = function(v) {
-        mGlobalAmbientColor = vec4.fromValues(v[0], v[1], v[2], v[3]);
-	};
+	var getLightShader = function() {return mLightShader;};
 
     var mPublic = {
 		initialize: _initialize,
@@ -90,11 +101,12 @@ gEngine.DefaultResources = (function() {
 		getTextureShader: getTextureShader,
 		getSpriteShader:getSpriteShader,
 		getDefaultFont: getDefaultFont,
-		cleanUp: cleanUp,
 		getGlobalAmbientColor: getGlobalAmbientColor,
 		getGlobalAmbientIntensity: getGlobalAmbientIntensity,
 		setGlobalAmbientColor: setGlobalAmbientColor,
 		setGlobalAmbientIntensity: setGlobalAmbientIntensity,
+		getLightShader: getLightShader,
+		cleanUp: cleanUp,
 	};
     return mPublic;
 }());

@@ -40,6 +40,9 @@ function Camera(wcCenter, wcWidth, viewportArray, bound) {
 
 	// Background color
 	this.mBgColor = [0.8,0.8,0.8,1];
+
+	// per-rendering cached information
+    this.mRenderCache = new PerRenderCache();
 }
 
 Camera.eViewport = Object.freeze({
@@ -187,10 +190,15 @@ Camera.prototype.setupViewProjection = function () {
 	* @param {mat4} view matrix
 	*/
 	mat4.multiply(this.mVPMatrix, this.mProjMatrix, this.mViewMatrix);
+
+	// Step B4: compute and cache per-rendering information
+	this.mRenderCache.mWCToPixelRatio = this.mViewport[Camera.eViewport.eWidth] / this.getWCWidth();
+	this.mRenderCache.mCameraOrgX = center[0] - (this.getWCWidth()/2);
+	this.mRenderCache.mCameraOrgY = center[1] - (this.getWCHeight()/2);
 };
 
 /**
-* Ensure that the bounds of a transform, from a renderable or Game Object, stay within WC bounds. 
+* Ensure that the bounds of a transform, from a renderable or Game Object, stay within WC bounds.
 * The camera will not be changed if the aXform bounds are completely outside the tested WC bounds area
 * @func
 * @param {object} aXform - A transform
@@ -216,3 +224,14 @@ Camera.prototype.clampAtBoundary = function (aXform, zone){
 	}
 	return status;
 };
+/**
+* Since Camera funcs are implemented multiple times while rendering the LightShader object, some values do not need to be recomputed. Efficient.
+* This should be used for rendering purposes only. No functionality. These values don't change once a rendering begins. Used in Xform operations.
+* Needed for computing transforms for shaders. Updated each time in setupViewProjection()
+* @class
+*/
+function PerRenderCache(){
+	this.mWCToPixelRatio = 1; //WC to Pixel transform
+	this.mCameraOrgX = 1; //Lower left in WC
+	this.mCameraOrgY = 1;
+}
