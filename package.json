@@ -11,7 +11,7 @@
   "author": "Taylor",
   "contributors": [],
   "dependencies": {
-    "browser-sync": "^2.16.0",
+    "browser-sync": "^2.18.13",
     "gulp": "^3.9.1",
     "jsdoc": "^3.4.3"
   },
