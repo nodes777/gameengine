@@ -57,7 +57,7 @@ LightShader.prototype._loadToShader = function(aCamera){
 	gl.uniform1i(this.mIsOnRef, this.mLight.isLightOn());
 	if(this.mLight.isLightOn()){
 		var p = aCamera.wcPosToPixel(this.mLight.getPosition());
-		var r = aCamera.wcSizeToPixel(this.mLight.getRadius());
+		var r = aCamera.wcSizeToPixel(this.mLight.getRadius())
 		var c = this.mLight.getColor();
 
 		gl.uniform4fv(this.mColorRef, c);
