@@ -38,6 +38,7 @@
 
     <!-- Lights -->
     <script type="text/javascript" src="src/Engine/Lights/Light.js"></script>
+    <script type="text/javascript" src="src/Engine/Lights/LightSet.js"></script>
     <script type="text/javascript" src="src/Engine/Scene.js"></script>
 
     <!-- Cameras -->
@@ -71,9 +72,12 @@
     <script type="text/javascript" src="src/Engine/Shaders/TextureShader.js"></script>
     <script type="text/javascript" src="src/Engine/Shaders/SpriteShader.js"></script>
     <script type="text/javascript" src="src/Engine/Shaders/LightShader.js"></script>
+    <script type="text/javascript" src="src/Engine/Shaders/ShaderLightAtIndex.js"></script>
 
     <!-- Client game code -->
     <script type="text/javascript" src="src/myGame/myGame.js"></script>
+    <script type="text/javascript" src="src/myGame/MyGame_LightControl.js"></script>
+    <script type="text/javascript" src="src/myGame/MyGame_Lights.js"></script>
     <script type="text/javascript" src="src/myGame/BlueLevel.js"></script>
     <script type="text/javascript" src="src/myGame/GameOver.js"></script>
     <script type="text/javascript" src="src/myGame/Objects/DyePack.js"></script>
@@ -85,15 +89,15 @@
     <!-- Util -->
     <script type="text/javascript" src="src/myGame/Util/SceneFileParser.js"></script>
 
-    <!-- Testing -->
+    <!-- Testing
   <script src="./node_modules/mocha/mocha.js"></script>
   <script src="./node_modules/chai/chai.js"></script>
-
     <script>mocha.setup('bdd');</script>
     <script type="text/javascript" src="tests/testScripts.js"></script>
     <script>
         mocha.checkLeaks();
         mocha.run();
     </script>
+    -->
 </body>
 </html>

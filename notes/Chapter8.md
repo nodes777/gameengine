@@ -41,3 +41,13 @@ Goals:
 * To understand how to simulate the illumination effects from a point light
 * To experience illumination results from a point light
 * To implement a GLSL shader that supports point light illumination
+
+## Chapter 8.2 Multiple Lights
+
+Distance attenuation - Gradual fading of light at the edges
+Near Cutoff distance/Far Cutoff distance: where distance attenuation will begin and end.
+Light intensity to be added to Light object.
+
+To build the infrastructure for supporting multiple light sources in the engine and in GLSL shaders
+To understand and examine the distance attenuation effects of light
+To experience controlling and manipulating multiple light sources in a scene
