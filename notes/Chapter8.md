@@ -42,7 +42,7 @@ Goals:
 * To experience illumination results from a point light
 * To implement a GLSL shader that supports point light illumination
 
-## Chapter 8.2 Multiple Lights
+## Chapter 8.3 Multiple Lights
 
 Distance attenuation - Gradual fading of light at the edges
 Near Cutoff distance/Far Cutoff distance: where distance attenuation will begin and end.
@@ -51,3 +51,17 @@ Light intensity to be added to Light object.
 To build the infrastructure for supporting multiple light sources in the engine and in GLSL shaders
 To understand and examine the distance attenuation effects of light
 To experience controlling and manipulating multiple light sources in a scene
+
+## Chapter 8.4 Diffuse Reflection and Normal Mapping
+
+Illumination along boundries of squares changes uniformly (Not sure what this is describing or what I'm missing, seems fine to me. Double checked the master version as well). I'm observing boundry surfaces being illuminated by light sources that seem to be behind the surface. Illumination calculation does not consider geometric contours from image content (I get it now).
+
+Diffuse reflection and normal mapping will approx normal vectors of surfaces.
+
+
+Surface Normal Vector/surface normal/normal vector - Vector that is perpendicular to a give surface element.
+
+Proportion of light energy recieved and reflected by a diffuse surface normal is proportional to the cos of the angle between its normal and the light vector.
+
+Normal Texture/normal map will be added to color texture to apply light effects to show contours.
+Each texel of a normal map encodes the xyz values of a normal vector in the RGB channels. In lieu of displaying the normal map texels as you would with a color texture, the texels are used purely for calculating how the surface would interact with light
