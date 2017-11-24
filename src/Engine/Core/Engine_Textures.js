@@ -98,7 +98,7 @@ gEngine.Textures = (function(){
 		var texInfo = gEngine.ResourceMap.retrieveAsset(textureName);
 
 		// Bind Color to texture unit 0
-		gl.activateTexture(gl.TEXTURE0);
+		gl.activeTexture(gl.TEXTURE0);
 		// Binds our texture reference to the current webGL texture functionality
 		gl.bindTexture(gl.TEXTURE_2D, texInfo.mGLTexID);
 
@@ -123,7 +123,7 @@ gEngine.Textures = (function(){
 		var texInfo = gEngine.ResourceMap.retrieveAsset(textureName);
 
 		// Bind reference to WebGL texture functionality
-		gl.activateTexture(gl.TEXTURE1);
+		gl.activeTexture(gl.TEXTURE1);
 		gl.bindTexture(gl.TEXTURE_2D, texInfo.mGLTexID);
 
 		// To prevent texture wrappings

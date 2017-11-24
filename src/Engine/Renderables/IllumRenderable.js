@@ -20,8 +20,9 @@ function IllumRenderable(myTexture, myNormalMap){
 	LightRenderable.call(this, myTexture);
 	Renderable.prototype._setShader.call(this, gEngine.DefaultResources.getIllumShader());
 
-	this.myNormalMap = myNormalMap;
+	this.mNormalMap = myNormalMap;
 }
+gEngine.Core.inheritPrototype(IllumRenderable, LightRenderable);
 
 /**
 *
@@ -29,6 +30,6 @@ function IllumRenderable(myTexture, myNormalMap){
 * @func
 */
 IllumRenderable.prototype.draw = function(aCamera){
-	gEngine.Textures.activateNormalMap(this.myNormalMap);
+	gEngine.Textures.activateNormalMap(this.mNormalMap);
 	LightRenderable.prototype.draw.call(this, aCamera);
 };
