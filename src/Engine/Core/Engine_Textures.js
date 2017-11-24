@@ -97,6 +97,8 @@ gEngine.Textures = (function(){
 		var gl = gEngine.Core.getGL();
 		var texInfo = gEngine.ResourceMap.retrieveAsset(textureName);
 
+		// Bind Color to texture unit 0
+		gl.activateTexture(gl.TEXTURE0);
 		// Binds our texture reference to the current webGL texture functionality
 		gl.bindTexture(gl.TEXTURE_2D, texInfo.mGLTexID);
 
@@ -114,6 +116,23 @@ gEngine.Textures = (function(){
 		// What about the mimap versions of these? Supposed to be "better"
         // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+	};
+
+	var activateNormalMap = function(textureName){
+		var gl = gEngine.Core.getGL();
+		var texInfo = gEngine.ResourceMap.retrieveAsset(textureName);
+
+		// Bind reference to WebGL texture functionality
+		gl.activateTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, texInfo.mGLTexID);
+
+		// To prevent texture wrappings
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+	    // Handles how magnification and minimization filters will work.
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 	};
 
 	var deactivateTexture = function() {
@@ -159,6 +178,7 @@ gEngine.Textures = (function(){
 		loadTexture: loadTexture,
     	unloadTexture: unloadTexture,
     	activateTexture: activateTexture,
+		activateNormalMap: activateNormalMap,
     	deactivateTexture: deactivateTexture,
     	getTextureInfo: getTextureInfo,
 		getColorArray: getColorArray

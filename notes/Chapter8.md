@@ -64,4 +64,6 @@ Surface Normal Vector/surface normal/normal vector - Vector that is perpendicula
 Proportion of light energy recieved and reflected by a diffuse surface normal is proportional to the cos of the angle between its normal and the light vector.
 
 Normal Texture/normal map will be added to color texture to apply light effects to show contours.
-Each texel of a normal map encodes the xyz values of a normal vector in the RGB channels. In lieu of displaying the normal map texels as you would with a color texture, the texels are used purely for calculating how the surface would interact with light
+Each texel of a normal map encodes the xyz values of a normal vector in the RGB channels. In lieu of displaying the normal map texels as you would with a color texture, the texels are used purely for calculating how the surface would interact with light.
+
+WebGL texture units will be adjusted. Color texture binding to unit 0 and normal texture binding to unit 1.

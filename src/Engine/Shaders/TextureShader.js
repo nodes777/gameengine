@@ -15,9 +15,15 @@ function TextureShader(vertexShaderPath, fragmentShaderPath){
 	// Call the super class constructor
 	SimpleShader.call(this, vertexShaderPath, fragmentShaderPath);
 
+	// reference to aTextureCoordinate within the shader
+    this.mShaderTextureCoordAttribute = null;
+	// reference to the uSampler, when using only texture this is not necessary,
+	this.mSamplerRef = null;
+
 	// reference to aTextureCoordinate from the shader
 	var gl = gEngine.Core.getGL();
 	this.mShaderTextureCoordAttribute = gl.getAttribLocation(this.mCompiledShader, "aTextureCoordinate");
+	this.mSamplerRef = gl.getUniformLocation(this.mCompiledShader, "uSampler");
 }
 
 // get all the prototype functions from SimpleShader
@@ -35,11 +41,13 @@ TextureShader.prototype.activateShader = function(pixelColor, aCamera){
     * Describe the characteristic of the vertex position attribute
     * @function
     * @param{shaderCoord} index - mShaderTextureCoordAttribute
-    * @param{number} size - each element is a 2-float (x,y.z)
+    * @param{number} size - each element is a 2-float (x,y,z)
     * @param{gl.magic} type - data type is FLOAT
     * @param{boolean} normalized - if the content is normalized vectors
     * @param{number} stride - number of bytes to skip in between elements
     * @param{number} offset - offsets to the first element
     */
-	gl.vertexAttribPointer(this.mShaderTextureCoordAttribute, 2, gl.FLOAT, false,0,0);
+	gl.vertexAttribPointer(this.mShaderTextureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+	// binds to texture unit 0
+	gl.uniform1i(this.mSamplerRef, 0);
 };

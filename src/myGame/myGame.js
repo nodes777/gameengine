@@ -5,7 +5,7 @@
 
 /*jslint node: true, vars: true */
 /*global gEngine, Scene, GameObjectset, TextureObject, Camera, vec2,
-  Renderable, FontRenderable, SpriteRenderable, LightRenderable,
+  Renderable, FontRenderable, SpriteRenderable, LightRenderable, IllumRenderable,
   GameObject, Hero, Minion, Dye, Light */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
@@ -13,7 +13,9 @@
 
 function MyGame() {
     this.kMinionSprite = "assets/minion_sprite.png";
+    this.kMinionSpriteNormal = "assets/minion_sprite_normal.png";
     this.kBg = "assets/bg.png";
+    this.kBgNormal = "assets/bg_normal.png";
 
     // The camera to view the scene
     this.mCamera = null;
@@ -38,11 +40,15 @@ gEngine.Core.inheritPrototype(MyGame, Scene);
 MyGame.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kMinionSprite);
     gEngine.Textures.loadTexture(this.kBg);
+    gEngine.Textures.loadTexture(this.kBgNormal);
+    gEngine.Textures.loadTexture(this.kMinionSpriteNormal);
 };
 
 MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kMinionSprite);
     gEngine.Textures.unloadTexture(this.kBg);
+    gEngine.Textures.unloadTexture(this.kBgNormal);
+    gEngine.Textures.unloadTexture(this.kMinionSpriteNormal);
 };
 
 MyGame.prototype.initialize = function () {
@@ -59,7 +65,7 @@ MyGame.prototype.initialize = function () {
     this._initializeLights();   // defined in MyGame_Lights.js
 
     // the Background
-    var bgR = new LightRenderable(this.kBg);
+    var bgR = new IllumRenderable(this.kBg, this.kBgNormal);
     bgR.setElementPixelPositions(0, 1024, 0, 1024);
     bgR.getXform().setSize(100, 100);
     bgR.getXform().setPosition(50, 35);
@@ -71,18 +77,18 @@ MyGame.prototype.initialize = function () {
 
     // 
     // the objects
-    this.mHero = new Hero(this.kMinionSprite);
+    this.mHero = new Hero(this.kMinionSprite, this.kMinionSpriteNormal);
     this.mHero.getRenderable().addLight(this.mGlobalLightSet.getLightAt(0));   // hero light
     this.mHero.getRenderable().addLight(this.mGlobalLightSet.getLightAt(3));   // center light
     // Uncomment the following to see how light affects Dye
     //      this.mHero.getRenderable().addLight(this.mGlobalLightSet.getLightAt(1)); 
     //      this.mHero.getRenderable().addLight(this.mGlobalLightSet.getLightAt(2)); 
 
-    this.mLMinion = new Minion(this.kMinionSprite, 17, 15);
+    this.mLMinion = new Minion(this.kMinionSprite, this.kMinionSpriteNormal, 17, 15);
     this.mLMinion.getRenderable().addLight(this.mGlobalLightSet.getLightAt(1));   // LMinion light
     this.mLMinion.getRenderable().addLight(this.mGlobalLightSet.getLightAt(3));   // center light
 
-    this.mRMinion = new Minion(this.kMinionSprite, 87, 15);
+    this.mRMinion = new Minion(this.kMinionSprite, null, 87, 15);
     this.mRMinion.getRenderable().addLight(this.mGlobalLightSet.getLightAt(2));   // RMinion light
     this.mRMinion.getRenderable().addLight(this.mGlobalLightSet.getLightAt(3));   // center light
 
@@ -100,11 +106,11 @@ MyGame.prototype.initialize = function () {
     this.mBlock2.setColor([0, 1, 0, 1]);
     this.mBlock2.getXform().setSize(5, 5);
     this.mBlock2.getXform().setPosition(70, 50);
+
 };
 
 
 MyGame.prototype.drawCamera = function (camera) {
-
     // Step A: set up the View Projection matrix
     camera.setupViewProjection();
     // Step B: Now draws each primitive
@@ -127,10 +133,10 @@ MyGame.prototype.draw = function () {
     this.mMsg.draw(this.mCamera);   // only draw status in the main camera
 };
 
-// The Update function, updates the application state. Make sure to _NOT_ draw
+// The update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-    var msg = "Selected Light=" + this.mLgtIndex + " ";
+    var msg = "Light=" + this.mLgtIndex + " ";
 
     this.mCamera.update();  // to ensure proper interpolated movement effects
 

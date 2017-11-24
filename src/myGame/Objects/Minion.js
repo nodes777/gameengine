@@ -2,15 +2,20 @@
 * Minion Class
 */
 /*jslint node: true, vars: true, evil: true */
-/*global gEngine: false, GameObject: false, SpriteRenderable: false, SpriteAnimateRenderable: false, LightRenderable:false*/
+/*global gEngine: false, GameObject: false, SpriteRenderable: false, SpriteAnimateRenderable: false, LightRenderable:false, IllumRenderable:false*/
 "use strict";
 /**
 * @constructor
 * @classdesc Class for the minion character. Derived from GameObject and mDye. Has Autonomous Behavior.
 */
-function Minion(spriteTexture, atY, atX){
-	    this.kDelta = 0.2;
-	this.mMinion= new LightRenderable(spriteTexture);
+function Minion(spriteTexture, normalMap, atY, atX){
+	this.kDelta = 0.2;
+
+	if (normalMap === null) {
+        this.mMinion = new LightRenderable(spriteTexture);
+    } else {
+        this.mMinion = new IllumRenderable(spriteTexture, normalMap);
+    }
     this.mMinion.setColor([1, 1, 1, 0]);
     this.mMinion.getXform().setPosition(atX, atY);
     this.mMinion.getXform().setSize(12, 9.6);

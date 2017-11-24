@@ -1,5 +1,5 @@
 /*jslint node: true, vars: true, evil: true*/
-/*global SimpleShader: false, TextureShader: false, SpriteShader: false, vec4:false, LightShader: false*/
+/*global SimpleShader: false, TextureShader: false, SpriteShader: false, vec4:false, LightShader: false, IllumShader: false*/
 "use strict";
 
 var gEngine = gEngine || { };
@@ -29,6 +29,11 @@ gEngine.DefaultResources = (function() {
 	var kTextureFS = "src/GLSLShaders/TextureFS.glsl";  // Path to FragmentShader
 	var mTextureShader = null;
 
+	// Illumination Shader
+	var kIllumFS = "src/GLSLShaders/IllumFS.glsl";      // Path to the Illumination FragmentShader
+	var mIllumShader = null;
+	var getIllumShader = function(){ return mIllumShader; };
+
 	var mSpriteShader = null;
 	var getSpriteShader = function(){
 		return mSpriteShader;
@@ -53,6 +58,7 @@ gEngine.DefaultResources = (function() {
 		mTextureShader = new TextureShader(kTextureVS, kTextureFS);
 		mSpriteShader = new SpriteShader(kTextureVS, kTextureFS);
 		mLightShader = new LightShader(kTextureVS, kLightFS);
+		mIllumShader = new IllumShader(kTextureVS, kIllumFS);
 		callbackFunction();
 	};
 
@@ -71,6 +77,9 @@ gEngine.DefaultResources = (function() {
 		// Light shader
         gEngine.TextFileLoader.loadTextFile(kLightFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 
+        // IllumShader
+        gEngine.TextFileLoader.loadTextFile(kIllumFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+
 		gEngine.ResourceMap.setLoadCompleteCallback(function() {
 			_createShaders(callbackFunction);
 		});
@@ -81,6 +90,7 @@ gEngine.DefaultResources = (function() {
 		mConstColorShader.cleanUp();
 		mTextureShader.cleanUp();
 		mSpriteShader.cleanUp();
+        mIllumShader.cleanUp();
 
 		gEngine.TextFileLoader.unloadTextFile(kSimpleVS);
 		gEngine.TextFileLoader.unloadTextFile(kSimpleFS);
@@ -91,6 +101,8 @@ gEngine.DefaultResources = (function() {
 		gEngine.Fonts.unloadFont(kDefaultFont);
 
         gEngine.TextFileLoader.unloadTextFile(kLightFS);
+
+	    gEngine.TextFileLoader.unloadTextFile(kIllumFS);
 	};
 
 	var getLightShader = function() {return mLightShader;};
@@ -106,6 +118,7 @@ gEngine.DefaultResources = (function() {
 		setGlobalAmbientColor: setGlobalAmbientColor,
 		setGlobalAmbientIntensity: setGlobalAmbientIntensity,
 		getLightShader: getLightShader,
+		getIllumShader: getIllumShader,
 		cleanUp: cleanUp,
 	};
     return mPublic;
