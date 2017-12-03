@@ -67,3 +67,18 @@ Normal Texture/normal map will be added to color texture to apply light effects 
 Each texel of a normal map encodes the xyz values of a normal vector in the RGB channels. In lieu of displaying the normal map texels as you would with a color texture, the texels are used purely for calculating how the surface would interact with light.
 
 WebGL texture units will be adjusted. Color texture binding to unit 0 and normal texture binding to unit 1.
+
+## Chapter 8.5 Specular Reflection and Materials
+
+Shininess can be determined using angles and material values. N is shininess. N describes how rapidly specular light highlight will roll off. Larger N means that the cosine function decreases faster as alpha angle increases, the faster the specular highlight drops off and the glossier the material appears.
+
+Using halfway vector to model specular highlights. Saves on computation. (N * H)^n vs (V * R)^n
+
+Three Terms of Phong Illumination Model
+
+* Ambient term: K~a + I~aC~a
+* Diffuse term: I~lC~lK~d(N * L)
+* Specular term: I~lC~lK~s(N * H)
+
+
+Material Object to be created to handle material of a IllumRenderable.

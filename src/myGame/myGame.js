@@ -22,6 +22,7 @@ function MyGame() {
     this.mBg = null;
 
     this.mMsg = null;
+    this.mMatMsg = null;
 
     // the hero and the support objects
     this.mHero = null;
@@ -34,6 +35,7 @@ function MyGame() {
     this.mBlock2 = null;
 
     this.mLgtIndex = 0;    // the light to move
+    this.mSlectedCh = null; // the selected character
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
@@ -69,6 +71,10 @@ MyGame.prototype.initialize = function () {
     bgR.setElementPixelPositions(0, 1024, 0, 1024);
     bgR.getXform().setSize(100, 100);
     bgR.getXform().setPosition(50, 35);
+    // set background materal properties
+    bgR.getMaterial().setShininess(100);
+    bgR.getMaterial().setSpecular([0, 0, 1, 1]);
+    
     var i;
     for (i = 0; i < 4; i++) {
         bgR.addLight(this.mGlobalLightSet.getLightAt(i));   // all the lights
@@ -97,6 +103,11 @@ MyGame.prototype.initialize = function () {
     this.mMsg.getXform().setPosition(1, 2);
     this.mMsg.setTextHeight(3);
 
+    this.mMatMsg = new FontRenderable("Status Message");
+    this.mMatMsg.setColor([1, 1, 1, 1]);
+    this.mMatMsg.getXform().setPosition(1, 73);
+    this.mMatMsg.setTextHeight(3);
+
     this.mBlock1 = new Renderable();
     this.mBlock1.setColor([1, 0, 0, 1]);
     this.mBlock1.getXform().setSize(5, 5);
@@ -107,8 +118,10 @@ MyGame.prototype.initialize = function () {
     this.mBlock2.getXform().setSize(5, 5);
     this.mBlock2.getXform().setPosition(70, 50);
 
+    this.mSlectedCh = this.mHero;
+    this.mSelectedChMsg = "R:";
+    this.mMaterialCh = this.mSlectedCh.getRenderable().getMaterial().getDiffuse();  // to support interactive changing
 };
-
 
 MyGame.prototype.drawCamera = function (camera) {
     // Step A: set up the View Projection matrix
@@ -131,22 +144,39 @@ MyGame.prototype.draw = function () {
     // Step  B: Draw with all three cameras
     this.drawCamera(this.mCamera);
     this.mMsg.draw(this.mCamera);   // only draw status in the main camera
+    this.mMatMsg.draw(this.mCamera);
 };
 
 // The update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-    var msg = "Light=" + this.mLgtIndex + " ";
-
     this.mCamera.update();  // to ensure proper interpolated movement effects
-
     this.mLMinion.update(); // ensure sprite animation
     this.mRMinion.update();
-
     this.mHero.update();  // allow keyboard control to move
-
+    //
     // control the selected light
+    var msg = "L=" + this.mLgtIndex + " ";
     msg += this._lightControl();
-
     this.mMsg.setText(msg);
+
+    msg = this._selectCharacter();
+    msg += this.materialControl();
+    this.mMatMsg.setText(msg);
+};
+
+MyGame.prototype._selectCharacter = function () {
+    // select which character to work with
+
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Five)) {
+        this.mSlectedCh = this.mLMinion;
+        this.mMaterialCh = this.mSlectedCh.getRenderable().getMaterial().getDiffuse();
+        this.mSelectedChMsg = "L:";
+    }
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Six)) {
+        this.mSlectedCh = this.mHero;
+        this.mMaterialCh = this.mSlectedCh.getRenderable().getMaterial().getDiffuse();
+        this.mSelectedChMsg = "H:";
+    }
+    return this.mSelectedChMsg;
 };

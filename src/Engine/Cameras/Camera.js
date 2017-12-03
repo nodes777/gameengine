@@ -32,6 +32,7 @@ function Camera(wcCenter, wcWidth, viewportArray, bound) {
 
 	this.mNearPlane = 0;
 	this.mFarPlane = 1000;
+	this.kCameraZ = 10; // for illumination computation
 
 	// Transformation matrices
 	this.mViewMatrix = mat4.create();
@@ -195,7 +196,14 @@ Camera.prototype.setupViewProjection = function () {
 	this.mRenderCache.mWCToPixelRatio = this.mViewport[Camera.eViewport.eWidth] / this.getWCWidth();
 	this.mRenderCache.mCameraOrgX = center[0] - (this.getWCWidth()/2);
 	this.mRenderCache.mCameraOrgY = center[1] - (this.getWCHeight()/2);
+
+	var p = this.wcPosToPixel(this.getWCCenter());
+	this.mRenderCache.mCameraPosInPixelSpace[0] = p[0];
+	this.mRenderCache.mCameraPosInPixelSpace[1] = p[1];
+	this.mRenderCache.mCameraPosInPixelSpace[2] = this.fakeZInPixelSpace(this.kCameraZ);
 };
+
+Camera.prototype.getPosInPixelSpace = function(){ return this.mRenderCache.mCameraPosInPixelSpace;};
 
 /**
 * Ensure that the bounds of a transform, from a renderable or Game Object, stay within WC bounds.
@@ -234,4 +242,5 @@ function PerRenderCache(){
 	this.mWCToPixelRatio = 1; //WC to Pixel transform
 	this.mCameraOrgX = 1; //Lower left in WC
 	this.mCameraOrgY = 1;
+	this.mCameraPosInPixelSpace = vec3.fromValues(0, 0, 0);
 }
