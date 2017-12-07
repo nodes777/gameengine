@@ -34,14 +34,29 @@ Light.prototype.setYPos = function (y) { this.mPosition[1] = y; };
 Light.prototype.setZPos = function (z) { this.mPosition[2] = z; };
 Light.prototype.getPosition = function () { return this.mPosition; };
 
+Light.prototype.setDirection = function (d) { this.mDirection = vec3.clone(d); };
+Light.prototype.getDirection = function () { return this.mDirection; };
+
 Light.prototype.setNear = function (r) { this.mNear = r; };
 Light.prototype.getNear = function () { return this.mNear; };
 
 Light.prototype.setFar = function (r) { this.mFar = r; };
 Light.prototype.getFar = function () { return this.mFar; };
 
+Light.prototype.setInner = function (r) { this.mInner = r; };
+Light.prototype.getInner = function () { return this.mInner; };
+
+Light.prototype.setOuter = function (r) { this.mOuter = r; };
+Light.prototype.getOuter = function () { return this.mOuter; };
+
 Light.prototype.setIntensity = function (i) { this.mIntensity = i; };
 Light.prototype.getIntensity = function () { return this.mIntensity; };
+
+Light.prototype.setDropOff = function (d) { this.mDropOff = d; };
+Light.prototype.getDropOff = function () { return this.mDropOff; };
+
+Light.prototype.setLightType = function (t) { this.mLightType = t; };
+Light.prototype.getLightType = function () { return this.mLightType; };
 
 Light.prototype.setLightTo = function (on) { this.mIsOn = on; };
 Light.prototype.isLightOn = function () { return this.mIsOn; };
