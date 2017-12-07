@@ -82,3 +82,9 @@ Three Terms of Phong Illumination Model
 
 
 Material Object to be created to handle material of a IllumRenderable.
+
+## Chapter 8.6 Light Source Types - Point, Directional, Spotlight
+
+Point Light - What we've been modelling
+Directional - Like the Sun, multiple parallel light rays coming from the same direction. Has no distance drop off. Typically global lights.
+Spotlight - Point light encompassed by a cone pointing in a specific direction, the light direction, with angular attenuation parameters for the inner and outer cone angles

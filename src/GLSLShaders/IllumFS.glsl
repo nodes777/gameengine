@@ -8,6 +8,14 @@ precision mediump float;
 uniform sampler2D uSampler;
 uniform sampler2D uNormalSampler;
 
+
+#define ePointLight 0
+#define eDirectionalLight 1
+#define eSpotLight 2
+    // ******** WARNING ******
+    // The above enumerated values must be identical to
+    // Light.eLightType values defined in Light.js
+    // ******** WARNING ******
 // Color of pixel
 uniform vec4 uPixelColor;  
 uniform vec4 uGlobalAmbientColor; // this is shared globally
@@ -40,11 +48,16 @@ uniform Material uMaterial;
 
 struct Light  {
     vec3 Position;   // in pixel space!
-    vec4 Color;
-    float Near;     // distance in pixel space
-    float Far;     // distance in pixel space
-    float Intensity;
-    bool  IsOn;
+    vec4 Direction; // Light direction
+    vec4 Color;
+    float Near;
+    float Far;
+    float CosInner; // cosine of inner cone angle for spotlight
+    float CosOuter; // cosine of outer cone angle for spotlight
+    float Intensity;
+    float DropOff;  // for spotlight
+    bool  IsOn;
+    int LightType;  // One of ePointLight, eDirectionalLight, eSpotLight
 };
 uniform Light uLights[kGLSLuLightArraySize];  // Maximum array of lights this shader supports
 
@@ -52,8 +65,21 @@ uniform Light uLights[kGLSLuLightArraySize];  // Maximum array of lights this sh
 // interpolated and thus varies. 
 varying vec2 vTexCoord;
 
+float AngularDropOff (Light lgt, vec3 lgtDir, vec3 L){
+    float atten = 0.0;
+    float cosL = dot(lgtDir, L);
+    float num = cosL - lgt.CosOuter;
+    if (num > 0.0){
+        if (cosL > lgt.CosInner){ atten = 1.0;}
+    } else {
+        float denom = lgt.CosInner - lgt.CosOuter;
+        atten = smoothstep(0.0, 1.0, pow(num/denom, lgt.DropOff));
+    }
+    return atten;
+}
+
 // Computes the L-vector, and returns attenuation
-float LightAttenuation(Light lgt, float dist) {
+float DistanceDropOff(Light lgt, float dist) {
     float atten = 0.0;
     if (dist <= lgt.Far) {
         if (dist <= lgt.Near)
@@ -64,7 +90,6 @@ float LightAttenuation(Light lgt, float dist) {
             float d = lgt.Far - lgt.Near;
             atten = smoothstep(0.0, 1.0, 1.0-(n*n)/(d*d)); // blended attenuation
         }
-        
     }
     return atten;
 }
@@ -80,14 +105,29 @@ vec4 DiffuseResult(vec3 N, vec3 L, vec4 textureMapColor) {
 }
 
 vec4 ShadedResult(Light lgt, vec3 N, vec4 textureMapColor) {
-    vec3 L = lgt.Position.xyz - gl_FragCoord.xyz; 
-    float dist = length(L);
-    L = L / dist;
-    float atten = LightAttenuation(lgt, dist);
-    vec4  diffuse = DiffuseResult(N, L, textureMapColor);
-    vec4  specular = SpecularResult(N, L);
-    vec4 result = atten * lgt.Intensity * lgt.Color * (diffuse + specular);
-    return result;
+    float aAtten = 1.0, dAtten = 1.0;
+    vec3 lgtDir = -normalize(lgt.Direction.xyz);
+    vec3 L; // light vector
+    float dist; // distant to light
+    if (lgt.LightType == eDirectionalLight) {
+        L = lgtDir;
+    } else {
+        L = lgt.Position.xyz - gl_FragCoord.xyz;
+        dist = length(L);
+        L = L / dist;
+    }
+    if (lgt.LightType == eSpotLight) {
+        // spotlight: do angle dropoff
+        aAtten = AngularDropOff(lgt, lgtDir, L);
+    }
+    if (lgt.LightType != eDirectionalLight) {
+        // both spot and point light has distant dropoff
+        dAtten = DistanceDropOff(lgt, dist);
+    }
+    vec4  diffuse = DiffuseResult(N, L, textureMapColor);
+    vec4  specular = SpecularResult(N, L);
+    vec4 result = aAtten * dAtten * lgt.Intensity * lgt.Color * (diffuse + specular);
+    return result;
 }
 
 void main(void)  {

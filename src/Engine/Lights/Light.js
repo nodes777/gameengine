@@ -1,20 +1,25 @@
-/* 
+/*
  * File: Light.js
  * Defines a simple light source
  */
 
 /*jslint node: true, vars: true, bitwise: true */
 /*global vec3, vec4 */
-/* find out more about jslint: http://www.jslint.com/help.html */
+
 "use strict";
 
 // Constructor
 function Light() {
     this.mColor = vec4.fromValues(0.1, 0.1, 0.1, 1);  // light color
     this.mPosition = vec3.fromValues(0, 0, 5); // light position in WC
+    this.mDirection = vec3.fromValues(0, 0, -1); // in WC
     this.mNear = 5;  // effective distance in WC
     this.mFar = 10;  // within near is full on, outside far is off
+    this.mInner = 0.1; // in radians
+    this.mOuter = 0.3;
     this.mIntensity = 1;
+    this.mDropOff = 1;
+    this.mLightType = Light.eLightType.ePointLight;
     this.mIsOn = true;
 }
 
@@ -41,4 +46,12 @@ Light.prototype.getIntensity = function () { return this.mIntensity; };
 Light.prototype.setLightTo = function (on) { this.mIsOn = on; };
 Light.prototype.isLightOn = function () { return this.mIsOn; };
 
+// **** WARNING: The following enumerate values must be identical to
+// the values of ePointLight, eDirectionalLight, eSpotLight
+// defined in LightFS.glsl and IllumFS.glsl
+Light.eLightType = Object.freeze({
+    ePoint: 0,
+    eDirectionalLight: 1,
+    eSpotLight: 2
+});
 //</editor-fold>
