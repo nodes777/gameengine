@@ -37,10 +37,10 @@ Light.prototype.getPosition = function () { return this.mPosition; };
 Light.prototype.setDirection = function (d) { this.mDirection = vec3.clone(d); };
 Light.prototype.getDirection = function () { return this.mDirection; };
 
-Light.prototype.setNear = function (r) { this.mNear = r; };
+Light.prototype.setNear = function (n) { this.mNear = n; };
 Light.prototype.getNear = function () { return this.mNear; };
 
-Light.prototype.setFar = function (r) { this.mFar = r; };
+Light.prototype.setFar = function (f) { this.mFar = f; };
 Light.prototype.getFar = function () { return this.mFar; };
 
 Light.prototype.setInner = function (r) { this.mInner = r; };
@@ -58,15 +58,14 @@ Light.prototype.getDropOff = function () { return this.mDropOff; };
 Light.prototype.setLightType = function (t) { this.mLightType = t; };
 Light.prototype.getLightType = function () { return this.mLightType; };
 
-Light.prototype.setLightTo = function (on) { this.mIsOn = on; };
 Light.prototype.isLightOn = function () { return this.mIsOn; };
+Light.prototype.setLightTo = function (on) { this.mIsOn = on; };
 
 // **** WARNING: The following enumerate values must be identical to
 // the values of ePointLight, eDirectionalLight, eSpotLight
 // defined in LightFS.glsl and IllumFS.glsl
-Light.eLightType = Object.freeze({
-    ePoint: 0,
-    eDirectionalLight: 1,
-    eSpotLight: 2
+Light.eLightType = Object.freeze({
+    ePointLight: 0,
+    eDirectionalLight: 1,
+    eSpotLight: 2
 });
-//</editor-fold>

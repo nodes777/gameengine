@@ -2,7 +2,7 @@
 /*global initSquareBuffer: false, initSimpleShader: false, document: false,
   gSimpleShader: false, gShaderVertexPositionAttribute: false*/
 
-"use strict";  // Operate in Strict mode
+"use strict";
 
 var gEngine = gEngine || { };
 

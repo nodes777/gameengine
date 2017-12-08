@@ -3,7 +3,8 @@
  */
 
 /*jslint node: true, vars: true */
-/*global gEngine, MyGame */
+/*global gEngine, MyGame, vec3, Light */
+
 
 "use strict";
 
