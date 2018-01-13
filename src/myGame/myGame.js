@@ -1,9 +1,9 @@
 /*
- * File: MyGame.js 
- * This is the logic of our game. 
+ * File: MyGame.js
+ * This is the logic of our game.
  */
 
-/*jslint node: true, vars: true */
+/*jslint node: true, vars: true, white: true */
 /*global gEngine, Scene, GameObjectset, TextureObject, Camera, vec2,
   Renderable, FontRenderable, SpriteRenderable, LightRenderable, IllumRenderable,
   GameObject, Hero, Minion, Dye, Light */
@@ -38,6 +38,10 @@ function MyGame() {
 
     this.mLgtIndex = 0;
     this.mLgtRotateTheta = 0;
+
+    // shadow support
+    this.mBgShadow = null;
+    this.mMinionShadow = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
@@ -49,6 +53,8 @@ MyGame.prototype.loadScene = function () {
 };
 
 MyGame.prototype.unloadScene = function () {
+    gEngine.LayerManager.cleanUp();
+
     gEngine.Textures.unloadTexture(this.kMinionSprite);
     gEngine.Textures.unloadTexture(this.kBg);
     gEngine.Textures.unloadTexture(this.kBgNormal);
@@ -80,12 +86,13 @@ MyGame.prototype.initialize = function () {
     }
     this.mBg = new GameObject(bgR);
 
-    // 
+    //
     // the objects
-    this.mIllumHero = new Hero(this.kMinionSprite, this.kMinionSpriteNormal, 15, 50);
-    this.mLgtHero = new Hero(this.kMinionSprite, null, 80, 50);
-    this.mIllumMinion = new Minion(this.kMinionSprite, this.kMinionSpriteNormal, 17, 15);
-    this.mLgtMinion = new Minion(this.kMinionSprite, null, 87, 15);
+    this.mIllumHero = new Hero(this.kMinionSprite, this.kMinionSpriteNormal, 20, 30);
+    this.mLgtHero = new Hero(this.kMinionSprite, null, 60, 50);
+    this.mIllumMinion = new Minion(this.kMinionSprite, this.kMinionSpriteNormal, 25, 30);
+    this.mIllumMinion.getXform().incSizeBy(20);
+    this.mLgtMinion = new Minion(this.kMinionSprite, null, 65, 25);
     for (i = 0; i < 4; i++) {
         this.mIllumHero.getRenderable().addLight(this.mGlobalLightSet.getLightAt(i));
         this.mLgtHero.getRenderable().addLight(this.mGlobalLightSet.getLightAt(i));
@@ -116,20 +123,26 @@ MyGame.prototype.initialize = function () {
     this.mSlectedCh = this.mIllumHero;
     this.mMaterialCh = this.mSlectedCh.getRenderable().getMaterial().getDiffuse();
     this.mSelectedChMsg = "H:";
+
+    this._setupShadow();  // defined in MyGame_Shadow.js
 };
 
 
 MyGame.prototype.drawCamera = function (camera) {
-    // Step A: set up the View Projection matrix
+    // set up the View Projection matrix
     camera.setupViewProjection();
-    // Step B: Now draws each primitive
-    this.mBg.draw(camera);
+
+
+    // always draw shadow receivers first!
+    this.mBgShadow.draw(camera);        // also draws the receiver object
+    this.mMinionShadow.draw(camera);
+    this.mLgtMinionShadow.draw(camera);
+
     this.mBlock1.draw(camera);
-    this.mLgtMinion.draw(camera);
     this.mIllumHero.draw(camera);
     this.mBlock2.draw(camera);
     this.mLgtHero.draw(camera);
-    this.mIllumMinion.draw(camera);
+
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more
@@ -153,6 +166,7 @@ MyGame.prototype.update = function () {
     this.mLgtMinion.update();
 
     this.mIllumHero.update();  // allow keyboard control to move
+    this.mLgtHero.update();
 
     // control the selected light
     var msg = "L=" + this.mLgtIndex + " ";

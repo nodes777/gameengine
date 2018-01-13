@@ -88,3 +88,54 @@ Material Object to be created to handle material of a IllumRenderable.
 Point Light - What we've been modelling
 Directional - Like the Sun, multiple parallel light rays coming from the same direction. Has no distance drop off. Typically global lights.
 Spotlight - Point light encompassed by a cone pointing in a specific direction, the light direction, with angular attenuation parameters for the inner and outer cone angles
+
+
+## Chapter 8.7 Shadow Simulation
+
+Shadows convey relative sizes, depths, distances, orderings
+
+Computationally, this is an expensive operation because general visibility determination is an O(n) operation, where n is the number of objects in the scene. Algorithmically, this is a challenging problem because the visibility computation needs to occur within the fragment shader during illumination computation
+
+Dedicated shadow caster and reciever based on the WebGL stencil buffer.
+
+Shadow caster: This is the object that causes the shadow. In the Figure 8-23 example, the Hero object is the shadow caster.
+
+Shadow receiver: This is the object that the shadow appears on. In the Figure 8-23 example, the Minion object is the shadow receiver.
+
+Shadow caster geometry: This is the actual shadow, in other words, the darkness on the shadow receiver because of the occlusion of light. In the Figure 8-23 example, the dark imprint of the hero appearing on the minion behind the actual hero object is the shadow caster geometry.
+
+Shadow Simulation Algorithm:
+1) Compute shadow caster geometry
+2) Render shadow caster as usual
+3) Render shadow caster geometry as a dark shadow caster object over the receiver.
+4) Render shadow caster as usual
+
+
+For example, to render the shadow in Figure 8-23, the dark hero shadow caster geometry is first computed based on the positions of the light source, the Hero object (shadow caster), and the Minion object (shadow receiver).
+
+After that, the Minion object (shadow receiver) is first rendered as usual, followed by rendering the shadow caster geometry as the Hero object with a dark constant color, and lastly the Hero object (shadow caster) is rendered as usual.
+
+Problem occurs when the shadow caster geometry extends beyond the bounds of the shadow reciever.
+
+WebGL stencil buffer is designed specifically to resolve these types of situations
+
+Shadow Simulation Algorithm:
+Given a shadowReceiver
+    A: Draw the shadowReceiver to the canvas as usual
+
+    // Stencil operations to enable the region for drawing shadowCaster
+    B1: Initialize all stencil buffer pixels to off
+    B2: Switch on the stencil buffer pixels that correspond to the shadowReceiver object
+    B3: Enable stencil buffer checking
+
+    // Compute shadowCaster geometries and draw them on the shadowReceiver
+    C: For each shadowCaster of this shadowReceiver
+         D: For each shadow casting light source
+               D1: Compute the shadowCaster geometry
+               D2: Draw the shadowCaster geometry
+
+Goals
+Understand shadows can be simulated by rendering explicit geometries
+Appreciate the basic operations of the WebGL stencil buffer
+Understand the simulation of shadows with shadow caster and receiver
+Implement the shadow simulation algorithm based on the WebGL stencil buffer

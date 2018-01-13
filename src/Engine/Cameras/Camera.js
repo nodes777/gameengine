@@ -154,7 +154,7 @@ Camera.prototype.setupViewProjection = function () {
  	* @param {number} up - Orientation, vec3 pointing up
  	*/
     mat4.lookAt(this.mViewMatrix,
-        [center[0], center[1], 10],   // WC center
+        [center[0], center[1], this.kCameraZ],   // WC center
         [center[0], center[1], 0],    //
         [0, 1, 0]);     // orientation
 

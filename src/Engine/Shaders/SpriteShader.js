@@ -71,3 +71,9 @@ SpriteShader.prototype.cleanUp = function(){
 
 	SimpleShader.prototype.cleanUp.call(this);
 };
+
+// will be override by LightShader
+SpriteShader.prototype.setLights = function (l) { };
+
+// will be override by IllumShader
+SpriteShader.prototype.setMaterialAndCameraPos = function(m, p) { };

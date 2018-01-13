@@ -44,4 +44,15 @@ Renderable.prototype.setColor = function(color){this.mColor = color;};
 Renderable.prototype.getColor = function(){return this.mColor;};
 Renderable.prototype._setShader = function(s){ this.mShader = s;};
 
+/**
+* Allows Renderables to swap their shaders, used in ShadowCaster and ShadowReceiver
+* @function
+* @param {shader} shader - The shader that will be swapped in. Returns the old shader.
+*/
+Renderable.prototype.swapShader = function (s) {
+    var out = this.mShader;
+    this.mShader = s;
+    return out;
+};
+
 

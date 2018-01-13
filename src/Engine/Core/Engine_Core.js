@@ -21,7 +21,8 @@ gEngine.Core = (function() {
             // Get the standard or experimental webgl and binds to the Canvas area
             // store the results to the instance variable mGL
             // alpha object informs browser that canvas should be opaque, speeding up drawing of transparent content
-            mGL = canvas.getContext("webgl", {alpha:false}) || canvas.getContext("experimental-webgl", {alpha:false});
+            mGL = canvas.getContext("webgl", {alpha: false, depth: true, stencil: true}) ||
+                    canvas.getContext("experimental-webgl", {alpha: false, depth: true, stencil: true});
 
             // Allows transparency with textures
             mGL.blendFunc(mGL.SRC_ALPHA, mGL.ONE_MINUS_SRC_ALPHA);
@@ -29,6 +30,11 @@ gEngine.Core = (function() {
 
             //sets images to flip the y axis to match the texture coordinate space
             mGL.pixelStorei(mGL.UNPACK_FLIP_Y_WEBGL, true);
+
+            // Enable Depth Testing
+            mGL.enable(mGL.DEPTH_TEST);
+            mGL.depthFunc(mGL.LEQUAL);
+
             if (mGL === null) {
                 document.write("<br><b>WebGL is not supported!</b>");
                 return;
@@ -60,8 +66,8 @@ gEngine.Core = (function() {
     	// set the color to be cleared
         mGL.clearColor(color[0], color[1], color[2], color[3]);
 
-        // clear to the color previously set
-        mGL.clear(mGL.COLOR_BUFFER_BIT);      
+        // clear to the color, stencil bit, and depth buffer bits
+        mGL.clear(mGL.COLOR_BUFFER_BIT | mGL.STENCIL_BUFFER_BIT | mGL.DEPTH_BUFFER_BIT);     
     };
 
     /**

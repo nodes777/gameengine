@@ -14,6 +14,8 @@
  	this.mScale = vec2.fromValues(1,1);
  	//Rotation in radians
  	this.mRotationInRad = 0.0;
+
+    this.mZ = 0.0;
  }
 
  // Position getters and setters
@@ -97,19 +99,34 @@ Transform.prototype.getRotationInRad = function () {  return this.mRotationInRad
 Transform.prototype.getRotationInDegree = function () { return this.mRotationInRad * 180.0 / Math.PI; };
 
 //Return a TRS matrix
-Transform.prototype.getXform = function () {
-    // Creates a blank identity matrix
-    var matrix = mat4.create();
+Transform.prototype.getXform = function () {
+    // Creates a blank identity matrix
+    var matrix = mat4.create();
 
-    // The matrices that WebGL uses are transposed, thus the typical matrix
-    // operations must be in reverse.
+    // The matrices that WebGL uses are transposed, thus the typical matrix
+    // operations must be in reverse.
 
-    // Step A: compute translation, for now z is always at 0.0
-    mat4.translate(matrix, matrix, vec3.fromValues(this.getXPos(), this.getYPos(), 0.0));
-    // Step B: concatenate with rotation.
-    mat4.rotateZ(matrix, matrix, this.getRotationInRad());
-    // Step C: concatenate with scaling
-    mat4.scale(matrix, matrix, vec3.fromValues(this.getWidth(), this.getHeight(), 1.0));
+    // Step A: compute translation, for now z is the mHeight
+    mat4.translate(matrix, matrix, this.get3DPosition());
+    // Step B: concatenate with rotation.
+    mat4.rotateZ(matrix, matrix, this.getRotationInRad());
+    // Step C: concatenate with scaling
+    mat4.scale(matrix, matrix, vec3.fromValues(this.getWidth(), this.getHeight(), 1.0));
 
-    return matrix;
+    return matrix;
+};
+
+Transform.prototype.get3DPosition = function () {
+    return vec3.fromValues(this.getXPos(), this.getYPos(), this.getZPos());
+};
+
+Transform.prototype.setZPos = function (d) { this.mZ = d; };
+Transform.prototype.getZPos = function () { return this.mZ; };
+Transform.prototype.incZPosBy = function (delta) { this.mZ += delta; };
+
+Transform.prototype.cloneTo = function (aXform) {
+    aXform.mPosition = vec2.clone(this.mPosition);
+    aXform.mScale = vec2.clone(this.mScale);
+    aXform.mZ = this.mZ;
+    aXform.mRotationInRad = this.mRotationInRad;
 };

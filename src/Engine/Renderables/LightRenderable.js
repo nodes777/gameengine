@@ -28,3 +28,11 @@ LightRenderable.prototype.getLight = function(index){
 LightRenderable.prototype.addLight = function(l){
 	this.mLights.push(l);
 };
+
+LightRenderable.prototype.numLights = function () {
+    return this.mLights.length;
+};
+
+LightRenderable.prototype.getLightAt = function (index) {
+    return this.mLights[index];
+};

@@ -47,9 +47,16 @@ gEngine.DefaultResources = (function() {
 	var kLightFS = "src/GLSLShaders/LightFS.glsl";
 	var mLightShader = null;
 
+	// Shadow Shaders
+	var kShadowReceiverFS = "src/GLSLShaders/ShadowReceiverFS.glsl"
+	var mShadowReceiverShader = null;
+	var kShadowCasterFS = "src/GLSLShaders/ShadowCasterFS.glsl";  // Path to the FragmentShader
+	var mShadowCasterShader = null;
+
 	// Fonts
 	var kDefaultFont = "assets/fonts/system-default-font";
 	var getDefaultFont = function() { return kDefaultFont; };
+
 
 	/** @callback func after loading is done*/
 	var _createShaders = function(callbackFunction){
@@ -59,13 +66,17 @@ gEngine.DefaultResources = (function() {
 		mSpriteShader = new SpriteShader(kTextureVS, kTextureFS);
 		mLightShader = new LightShader(kTextureVS, kLightFS);
 		mIllumShader = new IllumShader(kTextureVS, kIllumFS);
+		mShadowReceiverShader = new SpriteShader(kTextureVS, kShadowReceiverFS);
+		mShadowCasterShader = new ShadowCasterShader(kTextureVS, kShadowCasterFS)
 		callbackFunction();
 	};
 
 	var getTextureShader = function() { return mTextureShader; };
+	var getShadowReceiverShader = function () { return mShadowReceiverShader; };
+    var getShadowCasterShader = function () { return mShadowCasterShader; };
 
 	/** initiate async loading of GLSL Shader files*/
-	var _initialize = function(callbackFunction){
+	var initialize = function(callbackFunction){
 		// constant color shader: SimpleVS, and SimpleFS
 	    gEngine.TextFileLoader.loadTextFile(kSimpleVS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 	    gEngine.TextFileLoader.loadTextFile(kSimpleFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
@@ -80,6 +91,10 @@ gEngine.DefaultResources = (function() {
         // IllumShader
         gEngine.TextFileLoader.loadTextFile(kIllumFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 
+		// Shadow caster and receiver shaders
+        gEngine.TextFileLoader.loadTextFile(kShadowReceiverFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+        gEngine.TextFileLoader.loadTextFile(kShadowCasterFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+
 		gEngine.ResourceMap.setLoadCompleteCallback(function() {
 			_createShaders(callbackFunction);
 		});
@@ -91,6 +106,8 @@ gEngine.DefaultResources = (function() {
 		mTextureShader.cleanUp();
 		mSpriteShader.cleanUp();
         mIllumShader.cleanUp();
+        mShadowReceiverShader.cleanUp();
+        mShadowCasterShader.cleanUp();
 
 		gEngine.TextFileLoader.unloadTextFile(kSimpleVS);
 		gEngine.TextFileLoader.unloadTextFile(kSimpleFS);
@@ -103,23 +120,30 @@ gEngine.DefaultResources = (function() {
         gEngine.TextFileLoader.unloadTextFile(kLightFS);
 
 	    gEngine.TextFileLoader.unloadTextFile(kIllumFS);
+
+	// Shadow shaders
+        gEngine.TextFileLoader.unloadTextFile(kShadowReceiverFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+        gEngine.TextFileLoader.unloadTextFile(kShadowCasterFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 	};
 
 	var getLightShader = function() {return mLightShader;};
 
     var mPublic = {
-		initialize: _initialize,
-	    getConstColorShader: _getConstColorShader,
-		getTextureShader: getTextureShader,
-		getSpriteShader:getSpriteShader,
-		getDefaultFont: getDefaultFont,
-		getGlobalAmbientColor: getGlobalAmbientColor,
-		getGlobalAmbientIntensity: getGlobalAmbientIntensity,
-		setGlobalAmbientColor: setGlobalAmbientColor,
-		setGlobalAmbientIntensity: setGlobalAmbientIntensity,
-		getLightShader: getLightShader,
-		getIllumShader: getIllumShader,
-		cleanUp: cleanUp,
+        initialize: initialize,
+        getConstColorShader: _getConstColorShader,
+        getTextureShader: getTextureShader,
+        getSpriteShader: getSpriteShader,
+        //getLineShader: getLineShader,
+        getLightShader: getLightShader,
+        getIllumShader: getIllumShader,
+        getShadowReceiverShader: getShadowReceiverShader,
+        getShadowCasterShader: getShadowCasterShader,
+        getDefaultFont: getDefaultFont,
+        getGlobalAmbientColor: getGlobalAmbientColor,
+        setGlobalAmbientColor: setGlobalAmbientColor,
+        getGlobalAmbientIntensity: getGlobalAmbientIntensity,
+        setGlobalAmbientIntensity: setGlobalAmbientIntensity,
+        cleanUp: cleanUp
 	};
     return mPublic;
 }());
