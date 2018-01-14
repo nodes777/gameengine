@@ -11,7 +11,7 @@ uniform vec4 uPixelColor;
 // interpolated and thus varies.
 varying vec2 vTexCoord;
 
-#define kSufficientlyOpaque 0.1
+#define kSufficientlyOpaque       0.1
 
 void main(void)
 {
