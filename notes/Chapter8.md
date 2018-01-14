@@ -139,3 +139,5 @@ Understand shadows can be simulated by rendering explicit geometries
 Appreciate the basic operations of the WebGL stencil buffer
 Understand the simulation of shadows with shadow caster and receiver
 Implement the shadow simulation algorithm based on the WebGL stencil buffer
+
+Final issue with getting shadows to render properly was in Hero.js and Minion.js
