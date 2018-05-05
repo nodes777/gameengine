@@ -24,7 +24,7 @@ gEngine.Core = (function() {
             mGL = canvas.getContext("webgl", {alpha: false, depth: true, stencil: true}) ||
                     canvas.getContext("experimental-webgl", {alpha: false, depth: true, stencil: true});
             // for webgl debugging
-            mGL = WebGLDebugUtils.makeDebugContext(mGL);
+           // mGL = WebGLDebugUtils.makeDebugContext(mGL);
 
             // Allows transparency with textures
             mGL.blendFunc(mGL.SRC_ALPHA, mGL.ONE_MINUS_SRC_ALPHA);
