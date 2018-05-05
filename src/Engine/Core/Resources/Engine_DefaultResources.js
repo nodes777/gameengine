@@ -47,6 +47,9 @@ gEngine.DefaultResources = (function() {
 	var kLightFS = "src/GLSLShaders/LightFS.glsl";
 	var mLightShader = null;
 
+	var kLineFS = "src/GLSLShaders/LineFS.glsl";        // Path to the Line FragmentShader
+    var mLineShader = null;
+
 	// Shadow Shaders
 	var kShadowReceiverFS = "src/GLSLShaders/ShadowReceiverFS.glsl"
 	var mShadowReceiverShader = null;
@@ -64,6 +67,7 @@ gEngine.DefaultResources = (function() {
 		mConstColorShader = new SimpleShader(kSimpleVS,kSimpleFS);
 		mTextureShader = new TextureShader(kTextureVS, kTextureFS);
 		mSpriteShader = new SpriteShader(kTextureVS, kTextureFS);
+		mLineShader =  new LineShader(kSimpleVS, kLineFS);
 		mLightShader = new LightShader(kTextureVS, kLightFS);
 		mIllumShader = new IllumShader(kTextureVS, kIllumFS);
 		mShadowReceiverShader = new SpriteShader(kTextureVS, kShadowReceiverFS);
@@ -75,6 +79,8 @@ gEngine.DefaultResources = (function() {
 	var getShadowReceiverShader = function () { return mShadowReceiverShader; };
     var getShadowCasterShader = function () { return mShadowCasterShader; };
 
+    var getLineShader = function () { return mLineShader; };
+
 	/** initiate async loading of GLSL Shader files*/
 	var initialize = function(callbackFunction){
 		// constant color shader: SimpleVS, and SimpleFS
@@ -83,6 +89,10 @@ gEngine.DefaultResources = (function() {
 		// texture shader:
 	    gEngine.TextFileLoader.loadTextFile(kTextureVS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 	    gEngine.TextFileLoader.loadTextFile(kTextureFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+
+		// Line Shader:
+        gEngine.TextFileLoader.loadTextFile(kLineFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+
 		// Font
 		gEngine.Fonts.loadFont(kDefaultFont);
 		// Light shader
@@ -105,6 +115,7 @@ gEngine.DefaultResources = (function() {
 		mConstColorShader.cleanUp();
 		mTextureShader.cleanUp();
 		mSpriteShader.cleanUp();
+		mLineShader.cleanUp();
         mIllumShader.cleanUp();
         mShadowReceiverShader.cleanUp();
         mShadowCasterShader.cleanUp();
@@ -133,7 +144,7 @@ gEngine.DefaultResources = (function() {
         getConstColorShader: _getConstColorShader,
         getTextureShader: getTextureShader,
         getSpriteShader: getSpriteShader,
-        //getLineShader: getLineShader,
+        getLineShader: getLineShader,
         getLightShader: getLightShader,
         getIllumShader: getIllumShader,
         getShadowReceiverShader: getShadowReceiverShader,

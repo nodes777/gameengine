@@ -9,7 +9,7 @@ RigidCircle.prototype.collidedCircCirc = function(c1, c2) {
     var rSum = c1.getRadius() + c2.getRadius();
     return (vec2.squaredLength(vecToCenter) < (rSum * rSum));
 };
-A
+
 
 RigidCircle.prototype.collided = function(otherShape) {
     var status = false;

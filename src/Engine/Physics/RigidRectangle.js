@@ -22,7 +22,7 @@ function RigidRectangle (xform, w, h){
 	this.mHeight = h;
 }
 
-gEngine.inheritPrototype(RigidRectangle, RigidShape);
+gEngine.Core.inheritPrototype(RigidRectangle, RigidShape);
 
 RigidRectangle.prototype.draw.call = function(aCamera){
 	if(!this.mDrawBounds){

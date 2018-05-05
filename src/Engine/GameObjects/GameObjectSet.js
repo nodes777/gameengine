@@ -16,6 +16,10 @@ GameObjectSet.prototype.size = function() {
 	return this.mSet.length;
 };
 
+GameObjectSet.prototype.getObjectAt = function (index) {
+    return this.mSet[index];
+};
+
 GameObjectSet.prototype.addToSet = function(obj){
 	this.mSet.push(obj);
 };
