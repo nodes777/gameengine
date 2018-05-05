@@ -24,7 +24,7 @@ function RigidRectangle (xform, w, h){
 
 gEngine.Core.inheritPrototype(RigidRectangle, RigidShape);
 
-RigidRectangle.prototype.draw.call = function(aCamera){
+RigidRectangle.prototype.draw = function(aCamera){
 	if(!this.mDrawBounds){
 		return
 	}
