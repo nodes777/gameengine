@@ -113,7 +113,7 @@ MyGame.prototype.draw = function () {
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-    debugger;
+    
     this.mCamera.update();  // to ensure proper interpolated movement effects
     this.mAllObjects.update();  // updates everything
  

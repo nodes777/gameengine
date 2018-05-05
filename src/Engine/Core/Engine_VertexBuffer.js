@@ -71,6 +71,8 @@ gEngine.VertexBuffer = (function() {
 
         // Connect the vertexBuffer to the ARRAY_BUFFER global gl binding point.
         gl.bindBuffer(gl.ARRAY_BUFFER, mLineVertexBuffer);
+		// Put the verticesOfSquare into the vertexBuffer, as non-changing drawing data (STATIC_DRAW)
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesOfLine), gl.STATIC_DRAW);
 	};
 
 	var cleanUp = function(){
