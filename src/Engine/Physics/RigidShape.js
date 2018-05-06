@@ -24,6 +24,13 @@ function RigidShape(xform){
 	this.kPadding = 0.25; // size of position mark
 	this.mPositionMark = new LineRenderable();
 	this.mDrawBounds = false; // defines whether the bounds should be drawn
+
+	// Physics properties
+	this.mInvMass = 1; //mass?
+	this.mRestitution = 0.8; //Bounciness
+	this.mVelocity = vec2.fromValues(0,0);
+	this.mFriction = 0.3;
+	this.mAcceleration = gEngine.Physics.getSystemAcceleration();
 }
 
 RigidShape.prototype.draw = function (aCamera){
