@@ -19,31 +19,44 @@ RigidRectangle.prototype.containsPos = function (pos) {
 };
 
 RigidRectangle.prototype.collidedRectRect = function(r1, r2) {
-    var r1Pos = r1.getPosition();
-    var r1MinX = r1Pos[0] - r1.getWidth() / 2;
-    var r1MaxX = r1Pos[0] + r1.getWidth() / 2;
-    var r1MinY = r1Pos[1] - r1.getHeight() / 2;
-    var r1MaxY = r1Pos[1] + r1.getHeight() / 2;
-
-    var r2Pos = r2.getPosition();
-    var r2MinX = r2Pos[0] - r2.getWidth() / 2;
-    var r2MaxX = r2Pos[0] + r2.getWidth() / 2;
-    var r2MinY = r2Pos[1] - r2.getHeight() / 2;
-    var r2MaxY = r2Pos[1] + r2.getHeight() / 2;
-
-    return ((r1MaxX > r2MinX) && (r1MinX < r2MaxX) &&
-            (r1MaxY > r2MinY) && (r1MinY < r2MaxY));
+    var vFrom1to2 = vec2.fromValues(0, 0);
+    vec2.sub(vFrom1to2, r2.getPosition(), r1.getPosition());
+    var xDepth = (r1.getWidth() / 2) + (r2.getWidth() / 2) - Math.abs(vFrom1to2[0]);
+    if (xDepth > 0) {
+        var yDepth = (r1.getHeight() / 2) + (r2.getHeight() / 2) - Math.abs(vFrom1to2[1]);
+        if (yDepth > 0)  {
+            //axis of least penetration
+            if (xDepth < yDepth) {
+                if (vFrom1to2[0] < 0) {
+                    collisionInfo.setNormal([-1, 0]);
+                } else {
+                    collisionInfo.setNormal([1, 0]);
+                }
+                collisionInfo.setDepth(xDepth);
+            } else {
+                if (vFrom1to2[1] < 0) {
+                    collisionInfo.setNormal([0, -1]);
+                } else {
+                    collisionInfo.setNormal([0, 1]);
+                }
+                collisionInfo.setDepth(yDepth);
+            }
+            return true;
+        }
+    }
+    return false;
 };
 
 
-RigidRectangle.prototype.collided = function(otherShape) {
+RigidRectangle.prototype.collided = function(otherShape, collisionInfo) {
     var status = false;
+    collisionInfo.setDepth(0);
     switch (otherShape.rigidType()) {
         case RigidShape.eRigidType.eRigidCircle:
-            status = this.collidedRectCirc(this, otherShape);
+            status = this.collidedRectCirc(this, otherShape, collisionInfo);
             break;
         case RigidShape.eRigidType.eRigidRectangle:
-            status = this.collidedRectRect(otherShape, this);
+            status = this.collidedRectRect(this, otherShape, collisionInfo);
             break;
     }
     return status;

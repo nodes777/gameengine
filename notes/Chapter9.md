@@ -33,5 +33,17 @@ dt is the step defined in the game loop update
 	* Mass
 	* Restituition (bounciness)
 	* Acceleration
+	* Friction
+	* Velocity
+	*
 
-2) Add rigidShapeBehavior.js
+2) Add rigidShapeBehavior.js with setters and gettings for those values
+
+Extracting Collision Information - To provide a proper collision resolution, you need to compute the collision depth (how hard of a collision) and collision normal (the angle)
+
+Collision depth: Smallest amount that the objects interpenetrated where the collision normal is the direction along which the collision depth is measured
+Any interpenetration can be resolved by moving the objects along the collision normal by collision depth distance. The RigidShape collision functions must be modified to compute for this information
+
+The normal vector is derived from vec, the result of clamping the components of the vFrom1to2 vector by the colliding side of the rectangle. Image 9-5
+
+When the circle center is inside the bounds of the rectangle, instead of clamping, you must extend corresponding vFrom1to2 components to compute the vec vector and reverse it, as the vFrom1to2 always goes to the center of the circle.
