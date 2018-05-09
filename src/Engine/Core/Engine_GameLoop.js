@@ -5,6 +5,14 @@ gEngine.GameLoop = (function(){
 	//milleseconds per frame = 16.66
 	var kMPF = 1000/kFPS;
 
+	// Used for getting delta time in physics calculations
+	var kFrameTime = 1 / kFPS;
+	var kMPF = 1000 * kFrameTime; // Milliseconds per frame.
+
+	var getUpdateIntervalInSeconds = function () {
+	    return kFrameTime;
+	};
+
 	// vars for timing game loop
 	var mPreviousTime;
 	var mLagTime;
@@ -75,7 +83,8 @@ gEngine.GameLoop = (function(){
 
 	var mPublic = {
 		start: start,
-		stop: stop
+		stop: stop,
+		getUpdateIntervalInSeconds: getUpdateIntervalInSeconds
 	};
 	return mPublic;
 })();

@@ -39,7 +39,7 @@ dt is the step defined in the game loop update
 
 2) Add rigidShapeBehavior.js with setters and gettings for those values
 
-Extracting Collision Information - To provide a proper collision resolution, you need to compute the collision depth (how hard of a collision) and collision normal (the angle)
+3) Extracting Collision Information - To provide a proper collision resolution, you need to compute the collision depth (how hard of a collision) and collision normal (the angle)
 
 Collision depth: Smallest amount that the objects interpenetrated where the collision normal is the direction along which the collision depth is measured
 Any interpenetration can be resolved by moving the objects along the collision normal by collision depth distance. The RigidShape collision functions must be modified to compute for this information
@@ -47,3 +47,17 @@ Any interpenetration can be resolved by moving the objects along the collision n
 The normal vector is derived from vec, the result of clamping the components of the vFrom1to2 vector by the colliding side of the rectangle. Image 9-5
 
 When the circle center is inside the bounds of the rectangle, instead of clamping, you must extend corresponding vFrom1to2 components to compute the vec vector and reverse it, as the vFrom1to2 always goes to the center of the circle.
+
+
+4) Add Core Engine_Physics.js
+
+Calculate the correction amount in the collision normal direction as a function of depth and mass of colliding objects.
+Objects with infinite mass will not be moved, as the correction amount is inversely proportional to the mass of the object and scaled by mPosCorrectionRate.
+
+5) Resolving a collision
+Steps A sets mHasOneCollision to true to ensure that that relaxation loop will continue.
+Steps B calls to _positionalCorrection() to apply positional correction to the objects to push them apart by 80 percent (by default) of the collision depth.
+Step C calls to _applyFriction() to dampen the tangent component of the object velocities.
+Step D calculates the relative velocity between the two objects by subtracting them. This relative velocity is important for computing the impulse that pushes the objects apart.
+Step E computes rVelocityInNormal, the component of the relative velocity vector that is in the collision normal direction. This component indicates how rapidly the two objects are moving toward or away from each other. If rVelocityInNormal is greater than zero, then the objects are moving away from each other and impulse response will not be necessary.
+Step F computes the impulse magnitude, j, based on rVelocityInNormal, restitution (bounciness), and the masses of the colliding objects. This impulse magnitude value will be used to modify both velocities to push them apart.

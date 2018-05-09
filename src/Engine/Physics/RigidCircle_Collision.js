@@ -21,7 +21,7 @@ RigidCircle.prototype.collidedCircCirc = function(c1, c2) {
     else //same position
     {
         collisionInfo.setDepth(rSum / 10);
-        collisionInfo.setNormal([0, 1]);
+        collisionInfo.setNormal([0, 1]); // sets normal to up y axis
     }
     return true;
 };
