@@ -12,7 +12,7 @@ RigidShape.prototype.clamp = function (value, min, max) {
     return Math.min(Math.max(value, min), max);
 };
 
-RigidShape.prototype.collidedRectCirc = function(rect1Shape, circ2Shape) {
+RigidShape.prototype.collidedRectCirc = function(rect1Shape, circ2Shape, collisionInfo) {
 	var rect1Pos = rect1Shape.getXform().getPosition();
     var circ2Pos = circ2Shape.getXform().getPosition();
     var vFrom1to2 = [0, 0];

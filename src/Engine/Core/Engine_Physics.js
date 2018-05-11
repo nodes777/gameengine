@@ -13,7 +13,7 @@ gEngine.Physics = (function(){
 	var mRelaxationCount = 15; // number of relaxtion iteration
 	var mRelaxationOffset = 1/mRelaxationCount; //proportion to apply when scaling friction
 	var mPosCorrectionRate = 0.8; // percentage of seperation to project objects
-	var mSystemtAcceleration = [0,-50]; //System wide acceleration
+	var mSystemAcceleration = [0,-50]; //System wide acceleration
 
 
 	var mRelaxationLoopCount = 0; // the current relaxation count
@@ -182,6 +182,22 @@ gEngine.Physics = (function(){
 	    }
 	};
 
+    // Rigid Shape interactions: a set against itself
+    var processSelfSet = function(set) {
+        var i, j, s1, s2;
+        beginRelaxation();
+        while (continueRelaxation()) {
+            for (i=0; i<set.size(); i++) {
+                s1 = set.getObjectAt(i).getPhysicsComponent();
+                for (j=i+1; j<set.size(); j++) {
+                    s2 = set.getObjectAt(j).getPhysicsComponent();
+                    if ((s1 !== s2) && (s1.collided(s2, mCollisionInfo))) {
+                        resolveCollision(s1, s2, mCollisionInfo);
+                    }
+                }
+            }
+        }
+    };
 	// Setters and Getters
 	var getSystemAcceleration = function() { return mSystemAcceleration; };
 	var setSystemAcceleration = function(g) { mSystemAcceleration = g; };
@@ -213,7 +229,8 @@ gEngine.Physics = (function(){
 	    setRelaxationLoopCount: setRelaxationLoopCount,
 	    processObjObj: processObjObj,
 	    processObjSet: processObjSet,
-	    processSetSet: processSetSet
+	    processSetSet: processSetSet,
+		processSelfSet: processSelfSet
 	 };
 	return mPublic;
 }());

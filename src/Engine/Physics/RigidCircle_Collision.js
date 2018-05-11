@@ -3,7 +3,7 @@ RigidCircle.prototype.containsPos = function(pos) {
     return (dist < this.getRadius());
 };
 
-RigidCircle.prototype.collidedCircCirc = function(c1, c2) {
+RigidCircle.prototype.collidedCircCirc = function(c1, c2, collisionInfo) {
     var vFrom1to2 = [0, 0];
     vec2.sub(vFrom1to2, c2.getPosition(), c1.getPosition());
     var rSum = c1.getRadius() + c2.getRadius();
@@ -27,7 +27,7 @@ RigidCircle.prototype.collidedCircCirc = function(c1, c2) {
 };
 
 
-RigidCircle.prototype.collided = function(otherShape) {
+RigidCircle.prototype.collided = function(otherShape, collisionInfo) {
     var status = false;
     var n;
     collisionInfo.setDepth(0);

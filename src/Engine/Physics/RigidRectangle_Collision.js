@@ -18,7 +18,7 @@ RigidRectangle.prototype.containsPos = function (pos) {
             (rMinY < pos[1] && rMaxY > pos[1]));
 };
 
-RigidRectangle.prototype.collidedRectRect = function(r1, r2) {
+RigidRectangle.prototype.collidedRectRect = function(r1, r2, collisionInfo) {
     var vFrom1to2 = vec2.fromValues(0, 0);
     vec2.sub(vFrom1to2, r2.getPosition(), r1.getPosition());
     var xDepth = (r1.getWidth() / 2) + (r2.getWidth() / 2) - Math.abs(vFrom1to2[0]);
