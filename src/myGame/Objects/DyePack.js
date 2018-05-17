@@ -23,3 +23,11 @@ function DyePack(spriteTexture){
 }
 
 gEngine.Core.inheritPrototype(DyePack, GameObject);
+
+DyePack.prototype.update = function () {
+    GameObject.prototype.update.call(this);
+    // remember to update this.mMinion's animation
+    this.mCycleLeft--;
+};
+
+DyePack.prototype.hasExpired = function() { return this.mCycleLeft <= 0; };
