@@ -61,3 +61,11 @@ Step C calls to _applyFriction() to dampen the tangent component of the object v
 Step D calculates the relative velocity between the two objects by subtracting them. This relative velocity is important for computing the impulse that pushes the objects apart.
 Step E computes rVelocityInNormal, the component of the relative velocity vector that is in the collision normal direction. This component indicates how rapidly the two objects are moving toward or away from each other. If rVelocityInNormal is greater than zero, then the objects are moving away from each other and impulse response will not be necessary.
 Step F computes the impulse magnitude, j, based on rVelocityInNormal, restitution (bounciness), and the masses of the colliding objects. This impulse magnitude value will be used to modify both velocities to push them apart.
+
+
+
+## 9.3 Particles and Particle Systems
+
+Understand the details of how to draw a particle and define its behaviors
+Experience implementing a particle system
+Build a particle engine component that supports interaction with RigidShape
