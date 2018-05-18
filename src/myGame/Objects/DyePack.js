@@ -8,21 +8,27 @@
 * @constructor
 * @classdesc Basic class for GameObjects. Object can be drawn only without any specific behaviors.
 */
-function DyePack(spriteTexture){
-	this.kRefWidth = 80;
-	this.kRefHeight = 130;
+function DyePack(texture, atX, atY) {
+    this.mCycleLeft = 300;
 
-	this.mDyePack = new SpriteRenderable(spriteTexture);
+    this.mDyePack = new TextureRenderable(texture);
 
-	this.mDyePack.setColor([1,1,1,0.1]);
-	this.mDyePack.getXform().setPosition(50,33);
-	this.mDyePack.getXform().setSize(this.kRefWidth/50, this.kRefHeight/50);
-	this.mDyePack.setElementPixelPositions(510, 595, 23, 153);
-	GameObject.call(this, this.mDyePack);
+    this.mDyePack.setColor([1, 1, 1, 0]);
+    this.mDyePack.getXform().setPosition(atX, atY);
+    this.mDyePack.getXform().setSize(4, 3);
+                                // show each element for mAnimSpeed updates
+    GameObject.call(this, this.mDyePack);
+    this.setSpeed(0.5);
+    this.setCurrentFrontDir([1, 0]);
 
+    var rigidShape = new RigidCircle(this.getXform(), 1.5);
+    rigidShape.setMass(0.1);
+    rigidShape.setAcceleration([0, 0]);
+    rigidShape.setDrawBounds(true);
+    this.setPhysicsComponent(rigidShape);
 }
-
 gEngine.Core.inheritPrototype(DyePack, GameObject);
+
 
 DyePack.prototype.update = function () {
     GameObject.prototype.update.call(this);

@@ -24,6 +24,12 @@ GameObjectSet.prototype.addToSet = function(obj){
 	this.mSet.push(obj);
 };
 
+GameObjectSet.prototype.removeFromSet = function (obj) {
+    var index = this.mSet.indexOf(obj);
+    if (index > -1)
+        this.mSet.splice(index, 1);
+};
+
 GameObjectSet.prototype.update = function(){
 	for(var i = 0; i< this.mSet.length; i++ ){
 		this.mSet[i].update();
