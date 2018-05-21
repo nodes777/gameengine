@@ -34,6 +34,11 @@ gEngine.DefaultResources = (function() {
 	var mIllumShader = null;
 	var getIllumShader = function(){ return mIllumShader; };
 
+	/** @constant Particle Shader GLSL Shader file paths*/
+	var kParticleFS = "src/GLSLShaders/ParticleFS.glsl";
+	var mParticleShader = null;
+	var getParticleShader = function () { return mParticleShader };
+
 	var mSpriteShader = null;
 	var getSpriteShader = function(){
 		return mSpriteShader;
@@ -71,7 +76,8 @@ gEngine.DefaultResources = (function() {
 		mLightShader = new LightShader(kTextureVS, kLightFS);
 		mIllumShader = new IllumShader(kTextureVS, kIllumFS);
 		mShadowReceiverShader = new SpriteShader(kTextureVS, kShadowReceiverFS);
-		mShadowCasterShader = new ShadowCasterShader(kTextureVS, kShadowCasterFS)
+		mShadowCasterShader = new ShadowCasterShader(kTextureVS, kShadowCasterFS);
+		mParticleShader = new TextureShader(kTextureVS, kParticleFS);
 		callbackFunction();
 	};
 
@@ -105,6 +111,9 @@ gEngine.DefaultResources = (function() {
         gEngine.TextFileLoader.loadTextFile(kShadowReceiverFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
         gEngine.TextFileLoader.loadTextFile(kShadowCasterFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
 
+        // Particle Shader
+        gEngine.TextFileLoader.loadTextFile(kParticleFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+
 		gEngine.ResourceMap.setLoadCompleteCallback(function() {
 			_createShaders(callbackFunction);
 		});
@@ -132,9 +141,10 @@ gEngine.DefaultResources = (function() {
 
 	    gEngine.TextFileLoader.unloadTextFile(kIllumFS);
 
-	// Shadow shaders
         gEngine.TextFileLoader.unloadTextFile(kShadowReceiverFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
         gEngine.TextFileLoader.unloadTextFile(kShadowCasterFS, gEngine.TextFileLoader.eTextFileType.eTextFile);
+
+		gEngine.TextFileLoader.unloadTextFile(kParticleFS);
 	};
 
 	var getLightShader = function() {return mLightShader;};
@@ -154,6 +164,7 @@ gEngine.DefaultResources = (function() {
         setGlobalAmbientColor: setGlobalAmbientColor,
         getGlobalAmbientIntensity: getGlobalAmbientIntensity,
         setGlobalAmbientIntensity: setGlobalAmbientIntensity,
+        getParticleShader: getParticleShader,
         cleanUp: cleanUp
 	};
     return mPublic;
