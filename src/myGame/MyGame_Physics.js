@@ -33,4 +33,5 @@ MyGame.prototype._physicsSimulation = function() {
     gEngine.Particle.processObjSet(this.mHero, this.mAllParticles);
     gEngine.Particle.processSetSet(this.mAllMinions, this.mAllParticles);
     gEngine.Particle.processSetSet(this.mAllPlatforms, this.mAllParticles);
+
 };

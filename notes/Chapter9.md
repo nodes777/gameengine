@@ -56,12 +56,16 @@ Objects with infinite mass will not be moved, as the correction amount is invers
 
 5) Resolving a collision
 Steps A sets mHasOneCollision to true to ensure that that relaxation loop will continue.
-Steps B calls to _positionalCorrection() to apply positional correction to the objects to push them apart by 80 percent (by default) of the collision depth.
-Step C calls to _applyFriction() to dampen the tangent component of the object velocities.
-Step D calculates the relative velocity between the two objects by subtracting them. This relative velocity is important for computing the impulse that pushes the objects apart.
-Step E computes rVelocityInNormal, the component of the relative velocity vector that is in the collision normal direction. This component indicates how rapidly the two objects are moving toward or away from each other. If rVelocityInNormal is greater than zero, then the objects are moving away from each other and impulse response will not be necessary.
-Step F computes the impulse magnitude, j, based on rVelocityInNormal, restitution (bounciness), and the masses of the colliding objects. This impulse magnitude value will be used to modify both velocities to push them apart.
 
+Steps B calls to (underscore)positionalCorrection() to apply positional correction to the objects to push them apart by 80 percent (by default) of the collision depth.
+
+Step C calls to (underscore)applyFriction() to dampen the tangent component of the object velocities.
+
+Step D calculates the relative velocity between the two objects by subtracting them. This relative velocity is important for computing the impulse that pushes the objects apart.
+
+Step E computes rVelocityInNormal, the component of the relative velocity vector that is in the collision normal direction. This component indicates how rapidly the two objects are moving toward or away from each other. If rVelocityInNormal is greater than zero, then the objects are moving away from each other and impulse response will not be necessary.
+
+Step F computes the impulse magnitude, j, based on rVelocityInNormal, restitution (bounciness), and the masses of the colliding objects. This impulse magnitude value will be used to modify both velocities to push them apart.
 
 
 ## 9.3 Particles and Particle Systems
@@ -72,3 +76,5 @@ Build a particle engine component that supports interaction with RigidShape
 
 
 Additive Blending: Recall that the default gl.blendFunc() setting utilizes the alpha channel value to implement transparency. This is referred to as alpha blending. In this case, the gl.blendFunc() setting results in a simple accumulation of colors without considering the alpha channel. This is referred to as additive blending.
+
+## 9.4 Particle Emitters

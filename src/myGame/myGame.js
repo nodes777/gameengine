@@ -1,12 +1,12 @@
 /*
- * File: MyGame.js
- * This is the logic of our game.
+ * File: MyGame.js 
+ * This is the logic of our game. 
  */
 
 /*jslint node: true, vars: true, white: true */
 /*global gEngine, Scene, GameObjectSet, TextureObject, Camera, vec2,
-  FontRenderable, ParticleGameObjectSet,
-  GameObject, Hero, Minion, Dye, Platform, Wall, DyePack, ParticleGameObject */
+  FontRenderable, ParticleGameObjectSet, ParticleEmitter
+  GameObject, Hero, Minion, Dye, Platform, Wall, DyePack, Particle */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
@@ -26,7 +26,7 @@ function MyGame() {
 
     // the hero and the support objects
     this.mHero = null;
-
+    
     this.mCollidedObj = null;
     this.mAllPlatforms = new GameObjectSet();
     this.mAllMinions = new GameObjectSet();
@@ -43,7 +43,7 @@ MyGame.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kParticleTexture);
 };
 
-MyGame.prototype.unloadScene = function () {
+MyGame.prototype.unloadScene = function () {    
     gEngine.Textures.unloadTexture(this.kMinionSprite);
     gEngine.Textures.unloadTexture(this.kPlatformTexture);
     gEngine.Textures.unloadTexture(this.kWallTexture);
@@ -60,9 +60,9 @@ MyGame.prototype.initialize = function () {
     );
     this.mCamera.setBackgroundColor([0.7, 0.7, 0.7, 1]);
             // sets the background to gray
-
+    
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
-
+    
     // create a few objects ...
     var i, j, rx, ry, obj, dy, dx;
     dx = 80;
@@ -71,43 +71,43 @@ MyGame.prototype.initialize = function () {
         rx = 20 + Math.random() * 160;
         obj = new Minion(this.kMinionSprite, rx, ry);
         this.mAllMinions.addToSet(obj);
-
+        
         for (j=0; j<2; j++) {
             rx = 20 + (j*dx) + Math.random() * dx;
             dy = 10 * Math.random() - 5;
             obj = new Platform(this.kPlatformTexture, rx, ry+dy);
             this.mAllPlatforms.addToSet(obj);
         }
-
+        
         ry = ry + 20 + Math.random() * 10;
     }
-
+    
     // the floor and ceiling
     rx = -15;
     for (i = 0; i<9; i++) {
         obj = new Platform(this.kPlatformTexture, rx, 2);
         this.mAllPlatforms.addToSet(obj);
-
+        
         obj = new Platform(this.kPlatformTexture, rx, 112);
         this.mAllPlatforms.addToSet(obj);
         rx += 30;
     }
-
+    
     // the left and right walls
     ry = 12;
     for (i = 0; i<8; i++) {
         obj = new Wall(this.kWallTexture, 5, ry);
         this.mAllPlatforms.addToSet(obj);
-
+        
         obj = new Wall(this.kWallTexture, 195, ry);
         this.mAllPlatforms.addToSet(obj);
         ry += 16;
     }
-
-    //
+    
+    // 
     // the important objects
-    this.mHero = new Hero(this.kMinionSprite, 20, 30);
-
+    this.mHero = new Hero(this.kMinionSprite, 20, 30);   
+    
     this.mMsg = new FontRenderable(this.kPrompt);
     this.mMsg.setColor([0, 0, 0, 1]);
     this.mMsg.getXform().setPosition(10, 110);
@@ -120,7 +120,7 @@ MyGame.prototype.draw = function () {
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
     this.mCamera.setupViewProjection();
-
+    
     this.mAllPlatforms.draw(this.mCamera);
     this.mAllMinions.draw(this.mCamera);
     this.mAllDyePacks.draw(this.mCamera);
@@ -132,15 +132,17 @@ MyGame.prototype.draw = function () {
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-
+    
+    var func = function(x, y) { this.createParticle.call(this, x, y); };
+    
     this.mCamera.update();  // to ensure proper interpolated movement effects
-
+    
     this.mAllPlatforms.update();
     this.mAllMinions.update();
-    this.mHero.update(this.mAllDyePacks);
+    this.mHero.update(this.mAllDyePacks, this.mAllParticles, this.createParticle);
     this.mAllDyePacks.update();
     this.mAllParticles.update();
-
+    
     // create dye pack and remove the expired ones ...
     if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Left)) {
         if (this.mCamera.isMouseInViewport()) {
@@ -148,16 +150,15 @@ MyGame.prototype.update = function () {
             this.mAllDyePacks.addToSet(d);
         }
     }
-
+    
     // create particles
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Z)) {
         if (this.mCamera.isMouseInViewport()) {
-            var p = this._createParticle(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
+            var p = this.createParticle(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
             this.mAllParticles.addToSet(p);
-            console.log(this.mAllParticles)
         }
     }
-
+    
     // Cleanup DyePacks
     var i, obj;
     for (i=0; i<this.mAllDyePacks.size(); i++) {
@@ -166,38 +167,36 @@ MyGame.prototype.update = function () {
             this.mAllDyePacks.removeFromSet(obj);
         }
     }
-
+    
     // physics simulation
     this._physicsSimulation();
-
+    
     this.mMsg.setText(this.kPrompt + ": DyePack=" + this.mAllDyePacks.size() +
             " Particles=" + this.mAllParticles.size());
 };
 
-MyGame.prototype._createParticle = function(atX, atY) {
+MyGame.prototype.createParticle = function(atX, atY) {
     var life = 30 + Math.random() * 200;
-    var p = new ParticleGameObject(this.kParticleTexture, atX, atY, life);
-
+    var p = new ParticleGameObject("assets/particle.png", atX, atY, life);
     p.getRenderable().setColor([1, 0, 0, 1]);
-
+    
     // size of the particle
-    var r = 5.5 + Math.random() * 0.5;
+    var r = 3.5 + Math.random() * 2.5;
     p.getXform().setSize(r, r);
-
+    
     // final color
     var fr = 3.5 + Math.random();
     var fg = 0.4 + 0.1 * Math.random();
     var fb = 0.3 + 0.1 * Math.random();
     p.setFinalColor([fr, fg, fb, 0.6]);
-
+    
     // velocity on the particle
-    var fx = 10 - 20 * Math.random();
+    var fx = 10 * Math.random() - 20 * Math.random();
     var fy = 10 * Math.random();
-
     p.getPhysicsComponent().setVelocity([fx, fy]);
-
+    
     // size delta
     p.setSizeDelta(0.98);
-
+    
     return p;
 };

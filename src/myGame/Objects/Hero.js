@@ -5,8 +5,8 @@
  * simple Dye behavior
  */
 
-/*jslint node: true, vars: true */
-/*global gEngine, GameObject, SpriteRenderable, RigidCircle, RigidRectangle */
+/*jslint node: true, vars: true, white: true */
+/*global gEngine, GameObject, SpriteRenderable, RigidCircle, RigidRectangle, Particle */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
@@ -29,7 +29,7 @@ function Hero(spriteTexture, atX, atY) {
 }
 gEngine.Core.inheritPrototype(Hero, GameObject);
 
-Hero.prototype.update = function (dyePacks) {
+Hero.prototype.update = function (dyePacks, allParticles, func) {
     // must call super class update
     GameObject.prototype.update.call(this);
 
@@ -49,15 +49,16 @@ Hero.prototype.update = function (dyePacks) {
     }
     
     // now interact with the dyePack ...
-    var i, obj;
-    var heroBounds = this.getBBox();
+    var i, obj, collisionPt = [0, 0];
+    
     var p = this.getXform().getPosition();
     for (i=0; i<dyePacks.size(); i++) {
         obj = dyePacks.getObjectAt(i);
         // chase after hero
         obj.rotateObjPointTo(p, 0.8);
-        if (obj.getBBox().intersectsBound(heroBounds)) {
+        if (obj.pixelTouches(this, collisionPt)) {
             dyePacks.removeFromSet(obj);
+            allParticles.addEmitterAt(collisionPt, 200, func);
         }
     }
 };
