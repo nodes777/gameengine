@@ -29,43 +29,8 @@ MyGame.prototype._physicsSimulation = function() {
     // Hero DyePack
     gEngine.Physics.processObjSet(this.mHero, this.mAllDyePacks);
 
-    // all rigid shapes
-    gEngine.Physics.processSetSet(this.mAllRigidShapes, this.mAllPlatforms);
-    gEngine.Physics.processSelfSet(this.mAllRigidShapes);
-
-    // add rigid shapes if keys are pressed
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Z)) {
-        var c = new Minion(this.kMinionSprite, this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
-        var p = c.getPhysicsComponent();
-        p.setAcceleration(gEngine.Physics.getSystemAcceleration());
-        p.setColor([1, 1, 1, 1]);
-        this.mAllRigidShapes.addToSet(c);
-    }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.C)) {
-        // Give all rigid shape a random velocity
-        var i = 0, s, v;
-        for (i=0; i<this.mAllRigidShapes.size(); i++) {
-            s = this.mAllRigidShapes.getObjectAt(i).getPhysicsComponent();
-            v = s.getVelocity();
-            v[0] += (Math.random()-0.5)*10;
-            v[1] += (Math.random()-0.5)*10;
-        }
-    }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.V)) {
-        this.mAllRigidShapes = new GameObjectSet();
-    }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.X)) {
-        // find the current rigid shape under the mouse and move it with the mouse
-        var i = 0, s;
-        var pos = vec2.fromValues(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
-        var found = false;
-        while ((i<this.mAllRigidShapes.size()) && (!found)) {
-            s = this.mAllRigidShapes.getObjectAt(i).getPhysicsComponent();
-            found = s.containsPos(pos);
-            i++;
-        }
-        if (found) {
-            s.setPosition(pos[0], pos[1]);
-        }
-    }
+    // Particle system collisions
+    gEngine.Particle.processObjSet(this.mHero, this.mAllParticles);
+    gEngine.Particle.processSetSet(this.mAllMinions, this.mAllParticles);
+    gEngine.Particle.processSetSet(this.mAllPlatforms, this.mAllParticles);
 };

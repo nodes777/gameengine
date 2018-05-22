@@ -53,3 +53,23 @@ Particle.prototype.update = function(){
     vec2.scale(this.mVelocity, this.mVelocity, this.mDrag);
     vec2.scaleAndAdd(p, p, this.mVelocity, dt);
 }
+
+Particle.prototype.setColor = function (color) {
+    this.mPositionMark.setColor(color);
+};
+Particle.prototype.getColor = function () { return this.mPositionMark1.getColor(); };
+Particle.prototype.setDrawBounds = function(d) { this.mDrawBounds = d; };
+Particle.prototype.getDrawBounds = function() { return this.mDrawBounds; };
+
+Particle.prototype.setPosition = function (xPos, yPos) { this.setXPos(xPos); this.setYPos(yPos); };
+Particle.prototype.getPosition = function () { return this.mPosition; };
+Particle.prototype.getXPos = function () { return this.mPosition[0]; };
+Particle.prototype.setXPos = function (xPos) { this.mPosition[0] = xPos; };
+Particle.prototype.getYPos = function () { return this.mPosition[1]; };
+Particle.prototype.setYPos = function (yPos) { this.mPosition[1] = yPos; };
+Particle.prototype.setVelocity = function (f) { this.mVelocity = f; };
+Particle.prototype.getVelocity = function () { return this.mVelocity; };
+Particle.prototype.setAcceleration = function (g) { this.mAcceleration = g; };
+Particle.prototype.getAcceleration = function () { return this.mAcceleration; };
+Particle.prototype.setDrag = function (d) { this.mDrag = d; };
+Particle.prototype.getDrag = function () { return this.mDrag; };

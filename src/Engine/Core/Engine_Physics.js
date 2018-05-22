@@ -1,6 +1,6 @@
 /*
- * File: EngineCore_Physics.js 
- * Physics engine supporting projection and impulse collision resolution. 
+ * File: EngineCore_Physics.js
+ * Physics engine supporting projection and impulse collision resolution.
  */
 /*jslint node: true, vars: true, white: true */
 /*global vec2, CollisionInfo */
@@ -112,7 +112,7 @@ gEngine.Physics = (function(){
 
 		var impulse = [0, 0];
 		vec2.scale(impulse, collisionInfo.getNormal(), j);
-		
+
 		var newImpulse = [0, 0];
         vec2.scale(newImpulse, impulse, s1.getInvMass());
         vec2.sub(s1V, s1V, newImpulse);

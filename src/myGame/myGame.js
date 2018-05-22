@@ -5,8 +5,8 @@
 
 /*jslint node: true, vars: true, white: true */
 /*global gEngine, Scene, GameObjectSet, TextureObject, Camera, vec2,
-  FontRenderable,
-  GameObject, Hero, Minion, Dye, Platform, Wall, DyePack */
+  FontRenderable, ParticleGameObjectSet,
+  GameObject, Hero, Minion, Dye, Platform, Wall, DyePack, ParticleGameObject */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
@@ -16,6 +16,7 @@ function MyGame() {
     this.kPlatformTexture = "assets/platform.png";
     this.kWallTexture = "assets/wall.png";
     this.kDyePackTexture = "assets/dye_pack.png";
+    this.kParticleTexture = "assets/particle.png";
     this.kPrompt = "RigidBody Physics!";
 
     // The camera to view the scene
@@ -30,9 +31,7 @@ function MyGame() {
     this.mAllPlatforms = new GameObjectSet();
     this.mAllMinions = new GameObjectSet();
     this.mAllDyePacks = new GameObjectSet();
-
-    // for testing of stability
-    this.mAllRigidShapes = new GameObjectSet();
+    this.mAllParticles = new ParticleGameObjectSet();
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
@@ -41,6 +40,7 @@ MyGame.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kPlatformTexture);
     gEngine.Textures.loadTexture(this.kWallTexture);
     gEngine.Textures.loadTexture(this.kDyePackTexture);
+    gEngine.Textures.loadTexture(this.kParticleTexture);
 };
 
 MyGame.prototype.unloadScene = function () {
@@ -48,6 +48,7 @@ MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kPlatformTexture);
     gEngine.Textures.unloadTexture(this.kWallTexture);
     gEngine.Textures.unloadTexture(this.kDyePackTexture);
+    gEngine.Textures.unloadTexture(this.kParticleTexture);
 };
 
 MyGame.prototype.initialize = function () {
@@ -57,7 +58,7 @@ MyGame.prototype.initialize = function () {
         200,                         // width of camera
         [0, 0, 1280, 720]            // viewport (orgX, orgY, width, height)
     );
-    this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
+    this.mCamera.setBackgroundColor([0.7, 0.7, 0.7, 1]);
             // sets the background to gray
 
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
@@ -123,8 +124,8 @@ MyGame.prototype.draw = function () {
     this.mAllPlatforms.draw(this.mCamera);
     this.mAllMinions.draw(this.mCamera);
     this.mAllDyePacks.draw(this.mCamera);
-    this.mAllRigidShapes.draw(this.mCamera);
     this.mHero.draw(this.mCamera);
+    this.mAllParticles.draw(this.mCamera);
     this.mMsg.draw(this.mCamera);
 };
 
@@ -138,13 +139,22 @@ MyGame.prototype.update = function () {
     this.mAllMinions.update();
     this.mHero.update(this.mAllDyePacks);
     this.mAllDyePacks.update();
-    this.mAllRigidShapes.update();
+    this.mAllParticles.update();
 
     // create dye pack and remove the expired ones ...
     if (gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Left)) {
         if (this.mCamera.isMouseInViewport()) {
             var d = new DyePack(this.kDyePackTexture, this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
             this.mAllDyePacks.addToSet(d);
+        }
+    }
+
+    // create particles
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Z)) {
+        if (this.mCamera.isMouseInViewport()) {
+            var p = this._createParticle(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
+            this.mAllParticles.addToSet(p);
+            console.log(this.mAllParticles)
         }
     }
 
@@ -156,8 +166,38 @@ MyGame.prototype.update = function () {
             this.mAllDyePacks.removeFromSet(obj);
         }
     }
+
     // physics simulation
     this._physicsSimulation();
 
-    this.mMsg.setText(this.kPrompt + ": DyePack=" + this.mAllDyePacks.size());
+    this.mMsg.setText(this.kPrompt + ": DyePack=" + this.mAllDyePacks.size() +
+            " Particles=" + this.mAllParticles.size());
+};
+
+MyGame.prototype._createParticle = function(atX, atY) {
+    var life = 30 + Math.random() * 200;
+    var p = new ParticleGameObject(this.kParticleTexture, atX, atY, life);
+
+    p.getRenderable().setColor([1, 0, 0, 1]);
+
+    // size of the particle
+    var r = 5.5 + Math.random() * 0.5;
+    p.getXform().setSize(r, r);
+
+    // final color
+    var fr = 3.5 + Math.random();
+    var fg = 0.4 + 0.1 * Math.random();
+    var fb = 0.3 + 0.1 * Math.random();
+    p.setFinalColor([fr, fg, fb, 0.6]);
+
+    // velocity on the particle
+    var fx = 10 - 20 * Math.random();
+    var fy = 10 * Math.random();
+
+    p.getPhysicsComponent().setVelocity([fx, fy]);
+
+    // size delta
+    p.setSizeDelta(0.98);
+
+    return p;
 };

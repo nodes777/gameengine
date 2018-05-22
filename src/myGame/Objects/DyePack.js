@@ -1,13 +1,14 @@
-/*
-* Dye Pack
-*/
-/*jslint node: true, vars: true, evil: true */
-/*global gEngine: false, GameObject: false, SpriteRenderable: false,*/
-"use strict";
-/**
-* @constructor
-* @classdesc Basic class for GameObjects. Object can be drawn only without any specific behaviors.
-*/
+/* File: DyePack.js 
+ *
+ * Creates a DyePack object
+ */
+
+/*jslint node: true, vars: true, white: true */
+/*global gEngine, GameObject, TextureRenderable, RigidCircle*/
+/* find out more about jslint: http://www.jslint.com/help.html */
+
+"use strict";  // Operate in Strict mode such that variables must be declared before used!
+
 function DyePack(texture, atX, atY) {
     this.mCycleLeft = 300;
 
@@ -24,7 +25,7 @@ function DyePack(texture, atX, atY) {
     var rigidShape = new RigidCircle(this.getXform(), 1.5);
     rigidShape.setMass(0.1);
     rigidShape.setAcceleration([0, 0]);
-    rigidShape.setDrawBounds(true);
+    // rigidShape.setDrawBounds(true);
     this.setPhysicsComponent(rigidShape);
 }
 gEngine.Core.inheritPrototype(DyePack, GameObject);

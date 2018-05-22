@@ -1,6 +1,6 @@
 /* File: Platform.js 
  *
- * Creates and initializes a platform object
+ * Creates and initializes a ploatform object
  */
 
 /*jslint node: true, vars: true */

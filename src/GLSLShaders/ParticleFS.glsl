@@ -1,5 +1,8 @@
+// Performs additive blending
+// this is the fragment (or pixel) shader
+
 precision mediump float;
-// sets the precision for floating point computation
+    // sets the precision for floating point computation
 
 // The object that fetches data from texture.
 // Must be set outside the shader.
@@ -12,11 +15,13 @@ uniform vec4 uPixelColor;
 // interpolated and thus varies.
 varying vec2 vTexCoord;
 
-void main(void){
-	// texel color look up based on interpolated UV value in vTexCoord
-	vec4 c = texture2D(uSampler, vec2(vTexCoord.s, vTexCoord.t));
-	vec3 r = vec3(c) * c.a * vec3(uPixelColor);
-	vec4 result = vec4(r, uPixelColor.a)
+void main(void)  {
+    // texel color look up based on interpolated UV value in vTexCoord
+    vec4 c = texture2D(uSampler, vec2(vTexCoord.s, vTexCoord.t));
+    //
 
-	gl_FragColor = result;
+    vec3 r = vec3(c) * c.a * vec3(uPixelColor);
+    vec4 result = vec4(r, uPixelColor.a);
+
+    gl_FragColor = result;
 }

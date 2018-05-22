@@ -25,19 +25,19 @@ gEngine.Core.inheritPrototype(ParticleGameObjectSet, GameObjectSet);
 ParticleGameObjectSet.prototype.draw = function(aCamera){
 	var gl = gEngine.Core.getGL();
 	gl.blendFunc(gl.ONE, gl.ONE); // For additive blending
-	GameObjectSet.prototype.call(this, aCamera);
+    GameObjectSet.prototype.draw.call(this, aCamera);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);// Restore alpha blending
-}	
+}
 
-ParticleGameObjectSet.prototype.update = function () {
-	GameObjectSet.prototype.update.call(this);
+ParticleGameObjectSet.prototype.update = function () {
+    GameObjectSet.prototype.update.call(this);
 
-    // Cleanup Particles
-    var i, obj;
-    for (i=0; i<this.size(); i++) {
-        obj = this.getObjectAt(i);
-        if (obj.hasExpired()) {
-            this.removeFromSet(obj);
-        }
-    }
+    // Cleanup Particles
+    var i, obj;
+    for (i=0; i<this.size(); i++) {
+        obj = this.getObjectAt(i);
+        if (obj.hasExpired()) {
+            this.removeFromSet(obj);
+        }
+    }
 };

@@ -1,13 +1,13 @@
-/* File: Wall.js
+/* File: Wall.js 
  *
  * Creates and initializes a Wall object
  */
 
 /*jslint node: true, vars: true */
 /*global gEngine, GameObject, TextureRenderable, RigidRectangle */
+/* find out more about jslint: http://www.jslint.com/help.html */
 
-
-"use strict";
+"use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Wall(texture, atX, atY) {
     this.mWall = new TextureRenderable(texture);

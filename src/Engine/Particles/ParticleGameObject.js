@@ -17,6 +17,7 @@ function ParticleGameObject (texture, atX, atY, cyclesToLive) {
 	GameObject.call(this, renderableObj);
 
 	var p = new Particle(xf.getPosition());
+
 	this.setPhysicsComponent(p);
 
 	this.mDeltaColor = [0, 0, 0, 0];
