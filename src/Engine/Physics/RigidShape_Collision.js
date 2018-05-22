@@ -72,3 +72,16 @@ RigidShape.prototype.collidedRectCirc = function(rect1Shape, circ2Shape, collis
     collisionInfo.setDepth(depth);
     return true;
 };
+
+RigidShape.prototype.resolveParticleCollision = function(aParticle) {
+    var status = false;
+    switch (this.rigidType()) {
+        case RigidShape.eRigidType.eRigidCircle:
+            status = gEngine.Particle.resolveCirclePos(this, aParticle);
+            break;
+        case RigidShape.eRigidType.eRigidRectangle:
+            status = gEngine.Particle.resolveRectPos(this, aParticle);
+            break;
+    }
+    return status;
+};

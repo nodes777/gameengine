@@ -69,3 +69,6 @@ Step F computes the impulse magnitude, j, based on rVelocityInNormal, restitutio
 Understand the details of how to draw a particle and define its behaviors
 Experience implementing a particle system
 Build a particle engine component that supports interaction with RigidShape
+
+
+Additive Blending: Recall that the default gl.blendFunc() setting utilizes the alpha channel value to implement transparency. This is referred to as alpha blending. In this case, the gl.blendFunc() setting results in a simple accumulation of colors without considering the alpha channel. This is referred to as additive blending.
