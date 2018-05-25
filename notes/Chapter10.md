@@ -10,3 +10,8 @@ To compute the required tiling, determine the tile position that covers the lowe
 
 Experience working with multiple layers of background
 Implement the tiling of background objects for camera WC window bounds
+
+## 10.2 Parallax Scrolling 
+
+Understand and appreciate motion parallax
+Simulate motion parallax with parallax scrolling
