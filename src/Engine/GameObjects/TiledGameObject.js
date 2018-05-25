@@ -53,7 +53,7 @@ TiledGameObject.prototype._drawTile = function(aCamera){
 
 	// Step B: Get the world position and dimensions of the drawing camera
 	var wcPos = aCamera.getWCCenter();
-	var wcLeft = wcPos[0] - (aCamera.getWidth() /2);
+	var wcLeft = wcPos[0] - (aCamera.getWCWidth() /2);
 	var wcRight = wcLeft + aCamera.getWCWidth();
     var wcBottom = wcPos[1] - (aCamera.getWCHeight() / 2);
     var wcTop = wcBottom + aCamera.getWCHeight();

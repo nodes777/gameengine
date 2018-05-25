@@ -4,15 +4,15 @@
 
 /*jslint node: true, vars: true */
 /*global gEngine, MyGame, vec3, Light */
+/* find out more about jslint: http://www.jslint.com/help.html */
 
-
-"use strict";
+"use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 MyGame.prototype._lightControl = function () {
     var dirDelta = 0.005;
     var delta = 0.2;
     var msg = "";
-    // player select which light to work
+    // player select which light to work 
     this._selectLight();
 
     // manipulate the light

@@ -31,7 +31,7 @@ MyGame.prototype._initializeLights = function () {
 
     var l = this._createALight(Light.eLightType.ePointLight,
             [20, 25, 10],         // position
-            [0, 0, -1],          // Direction
+            [0, 0, -1],          // Direction 
             [0.6, 1.0, 0.0, 1],  // some color
             8, 20,               // near and far distances
             0.1, 0.2,            // inner and outer cones
@@ -42,7 +42,7 @@ MyGame.prototype._initializeLights = function () {
 
     l = this._createALight(Light.eLightType.eDirectionalLight,
             [15, 50, 10],           // position (not used by directional)
-            [0.4, 0.4, -1],         // Pointing direction
+            [0, 0, -1],         // Pointing direction 
             [0.7, 0.7, 0.0, 1],     // color
             500, 500,               // near anf far distances: essentially switch this off
             0.1, 0.2,               // inner and outer cones
@@ -63,7 +63,7 @@ MyGame.prototype._initializeLights = function () {
     this.mGlobalLightSet.addToSet(l);
 
     l = this._createALight(Light.eLightType.eSpotLight,
-            [60, 50, 12],            // Center of camera
+            [60, 50, 12],            // Center of camera 
             [0.02, -0.02, -1],
             [0.8, 0.8, 0.2, 1],      //  color
             20, 40,                   // near and far distances
