@@ -81,3 +81,5 @@ FontRenderable.prototype.setTextHeight = function(h){
 	var w = h * charInfo.mCharAspectRatio;
 	this.getXform().setSize(w * this.mText.length, h);
 };
+
+FontRenderable.prototype.update = function () {};

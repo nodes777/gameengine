@@ -26,9 +26,19 @@ GameObjectSet.prototype.addToSet = function(obj){
 
 GameObjectSet.prototype.removeFromSet = function (obj) {
     var index = this.mSet.indexOf(obj);
-    if (index > -1)
+    if (index > -1) {
         this.mSet.splice(index, 1);
+    }
 };
+
+/**
+* Ensures that this object is drawn last, on top
+* @func
+*/
+GameObjectSet.prototype.moveToLast = function(obj){
+	this.removeFromSet(obj);
+	this.addToSet(obj);
+}
 
 GameObjectSet.prototype.update = function(){
 	for(var i = 0; i< this.mSet.length; i++ ){

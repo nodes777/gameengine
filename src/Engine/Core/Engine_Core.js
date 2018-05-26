@@ -57,6 +57,7 @@ gEngine.Core = (function() {
             gEngine.Input.initialize(htmlCanvasID);
             gEngine.AudioClips.initAudioContext();
             gEngine.Physics.initialize();
+            gEngine.LayerManager.initialize();
             // init default resources, when done do this callback
             gEngine.DefaultResources.initialize(function() { 
                 // myGame defined in index.html

@@ -55,4 +55,6 @@ Renderable.prototype.swapShader = function (s) {
     return out;
 };
 
+Renderable.prototype.update = function () {};
+
 
