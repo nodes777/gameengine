@@ -11,7 +11,7 @@
   "author": "Taylor",
   "contributors": [],
   "dependencies": {
-    "browser-sync": "^2.18.13",
+    "browser-sync": "^2.24.7",
     "gulp": "^3.9.1",
     "jsdoc": "^3.4.3"
   },
@@ -27,7 +27,7 @@
   "devDependencies": {
     "chai": "^4.0.2",
     "gulp-concat": "^2.6.1",
-    "gulp-uglify": "^3.0.0",
+    "gulp-uglify": "^3.0.1",
     "jsdoc": "^3.4.3",
     "mocha": "^3.4.2",
     "sinon": "^2.3.6"
